@@ -30,7 +30,7 @@ export const fournisseursColumnsData = [
         value: 'Email',
     },
     {
-        value: 'Téléphone',
+        value: 'N° de Téléphone',
     },
     {
         value: 'RIB',
@@ -48,7 +48,7 @@ export const clientsColumnsData = [
         value: 'Email',
     },
     {
-        value: 'Téléphone',
+        value: 'N° de Téléphone',
     },
     {
         value: 'RIB',
