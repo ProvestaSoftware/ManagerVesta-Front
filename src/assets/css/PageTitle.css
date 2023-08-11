@@ -1,0 +1,8 @@
+.page-title {
+    color: var(--primary-dark-1, #242731);
+    text-align: left;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}

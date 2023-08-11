@@ -1,0 +1,16 @@
+.sidebar-btn {
+  display: flex;
+  align-items: center;
+  color: #5F6165;
+  transition: all ease-in-out 0.3s!important;
+  height: 45px;
+  padding: 7px 8px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.sidebar-btn:hover {
+  color: #ffffff!important;
+  background-color: #6ea8cc!important;
+  transition: all ease-in-out 0.3s!important;
+}

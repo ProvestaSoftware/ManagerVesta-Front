@@ -1,0 +1,9 @@
+.stat-icon {
+    display: block;
+    align-items: center;
+    align-content: center;
+    align-self: center;
+    margin: 0 auto 22px auto;
+    width: 40px;
+    height: auto;
+}

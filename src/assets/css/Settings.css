@@ -1,0 +1,50 @@
+.settings-btn-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 200px;
+  margin: 0 auto;
+  grid-gap: 10px;
+  margin: 22px 0;
+}
+
+.settings-form-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 100%;
+  /* margin: 0 auto; */
+  grid-gap: 10px;
+}
+
+.password-form-container {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  max-width: 400px;
+  /* margin: 0 auto; */
+  grid-gap: 10px;
+}
+
+.link-wrapper {
+  display: flex;
+  margin-top: 20px;
+}
+
+.check-form {
+  margin-bottom: 20px;
+}
+
+@media screen and (max-width: 1200px) {
+  
+}
+
+@media screen and (max-width: 768px) {
+  .settings-form-container {
+    grid-template-columns: 1fr;
+  }
+  .settings-btn {
+    margin-top: 10px !important;
+  }
+  .settings-btn-wrapper {
+    grid-template-columns: 1fr;
+    margin: 22px auto;
+  }
+}
