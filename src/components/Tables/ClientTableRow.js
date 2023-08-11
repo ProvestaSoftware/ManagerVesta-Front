@@ -3,6 +3,17 @@ import React from 'react'
 
 const ClientTableRow = ({ item, index, color }) => {
 
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: false
+    };
+
+    const created_at = new Date(item.created_at);
+
     return (
         <>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -22,7 +33,7 @@ const ClientTableRow = ({ item, index, color }) => {
                     {item.email}
                 </td>
                 <td class="px-6 py-4">
-                    {item.phone}
+                    {item.numTel}
                 </td>
                 <td style={{
                     margin: 'auto'
@@ -40,11 +51,11 @@ const ClientTableRow = ({ item, index, color }) => {
                         alignContent: 'center',
                         margin: '10px auto 0 auto'
                     }}>
-                        {item.bank}
+                        {item.banque}
                     </div>
                 </td>
                 <td class="px-6 py-4">
-                    {item.createdAt}
+                    {created_at.toLocaleString("en-US", options)}
                 </td>
                 <td class="px-6 py-4">
                     {item.dueDate}

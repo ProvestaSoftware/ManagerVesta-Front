@@ -1,7 +1,7 @@
 import React from 'react'
 import CheckTableRow from './CheckTableRow'
 
-const ChecksTable = ({ columns, rows }) => {
+const ChecksTable = ({ columns, rows, fournisseurs }) => {
     return (
         <div style={{
             width: '100%',
@@ -69,6 +69,7 @@ const ChecksTable = ({ columns, rows }) => {
                             <CheckTableRow
                                 key={index}
                                 item={item}
+                                fournisseurs={fournisseurs}
                             />
                         </>
                     ))}

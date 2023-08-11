@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react'
 import ContentWrapper from '../components/ContentWrapper'
 import PageTitle from '../components/PageTitle'
 import '../assets/css/Print.css'
@@ -10,8 +11,18 @@ import { BsCheckLg } from 'react-icons/bs'
 import RegularLink from '../components/RegularLink'
 import RegularDivider from '../components/RegularDivider'
 import CheckForm from '../components/Forms/CheckForm'
+import { useDispatch, useSelector } from 'react-redux'
+import { getFournisseurs } from '../actions/fournisseurs'
 
 const Print = () => {
+
+  const fournisseurs = useSelector((state) => state.fournisseurs);
+
+  const dispatch = useDispatch();
+
+  useEffect(async () => {
+    await dispatch(getFournisseurs());
+  }, []);
 
   const [checkData, setCheckData] = useState({
     fournisseur: '',
@@ -61,7 +72,7 @@ const Print = () => {
             <Select
               label="Fournisseur:"
               title="Recherche fournisseurs"
-              options={fournisseursData}
+              options={fournisseurs}
               name="fournisseur"
               onChange={handleChange}
             />

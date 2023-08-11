@@ -4,6 +4,21 @@ import { FaArrowsAltV } from "react-icons/fa";
 import { ImDroplet } from "react-icons/im";
 import profileImage from '../assets/images/fourat.jpg';
 
+export const checkTypeData = [
+    {
+        id: '1',
+        nom: 'Tous',
+    },
+    {
+        id: '2',
+        nom: 'Chèque',
+    },
+    {
+        id: '3',
+        nom: 'Traite',
+    },
+]
+
 export const fournisseursData = [
     {
         id: '1',

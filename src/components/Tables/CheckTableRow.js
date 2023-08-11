@@ -5,7 +5,24 @@ import RegularButton from '../Buttons/RegularButton'
 import Select from '../Inputs/Select'
 import { dropdownCheckStatusData } from '../../data/MenuData'
 
-const CheckTableRow = ({ item }) => {
+const CheckTableRow = ({ item, fournisseurs }) => {
+
+    const options = {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: false
+    };
+
+    const created_at = new Date(item.created_at);
+
+    const associatedFournisseur = fournisseurs.filter(
+        (fournisseur) =>
+            fournisseur.id === item.fournisseur_id
+    );
+
     return (
         <>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -22,7 +39,7 @@ const CheckTableRow = ({ item }) => {
                     {item.montant} dt
                 </td>
                 <td class="px-6 py-4">
-                    {item.fournisseur}
+                    {associatedFournisseur[0]?.nom}
                 </td>
                 <td class="px-6 py-4">
                     <div style={{
@@ -38,7 +55,7 @@ const CheckTableRow = ({ item }) => {
                     </div>
                 </td>
                 <td class="px-6 py-4">
-                    {item.createdAt}
+                    {created_at.toLocaleString("en-US", options)}
                 </td>
                 <td class="px-6 py-4">
                     {item.dueDate}

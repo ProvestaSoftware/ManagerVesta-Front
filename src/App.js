@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Layout from './components/Layout';
 import Accueil from './pages/Accueil';
@@ -15,21 +15,21 @@ import { statsData } from './data/MockData';
 function App() {
   return (
     <div className="App">
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<Navigate to="/accueil" />} />
-          <Route path="/accueil" element={<Accueil />} />
-          <Route path="/imprimer" element={<Print />} />
-          <Route path="/cheques-fournisseurs" element={<CheckFournisseur />} />
-          <Route path="/calendrier" element={<Calendrier />} />
-          <Route path="/fournisseurs" element={<Fournisseurs />} />
-          <Route path="/cheques-clients" element={<CheckClient />} />
-          <Route path="/clients" element={<Clients />} />
-          <Route path="/stats" element={<Stats data={statsData} />} />
-          <Route path="/parametres" element={<Settings />} />
-          {/* <Route path="/performance" element={user ? <Performance /> : <Navigate to="/login" replace />} /> */}
-        </Route>
-        {/* <Route
+      <BrowserRouter froceRefresh={true}>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route index element={<Accueil />} />
+            <Route path="/accueil" element={<Accueil />} />
+            <Route path="/imprimer" element={<Print />} />
+            <Route path="/cheques-fournisseurs" element={<CheckFournisseur />} />
+            <Route path="/calendrier" element={<Calendrier />} />
+            <Route path="/fournisseurs" element={<Fournisseurs />} />
+            <Route path="/cheques-clients" element={<CheckClient />} />
+            <Route path="/clients" element={<Clients />} />
+            <Route path="/stats" element={<Stats data={statsData} />} />
+            <Route path="/parametres" element={<Settings />} />
+            {/* <Route path="/performance" element={user ? <Performance /> : <Navigate to="/login" replace />} /> */}
+            {/* <Route
           path="*"
           element={
             <div>
@@ -37,7 +37,9 @@ function App() {
             </div>
           }
         /> */}
-      </Routes>
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
