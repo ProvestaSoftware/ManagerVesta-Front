@@ -3,7 +3,7 @@ import {
     FETCH_ALL_CHECKS,
     // CREATE,
     // DELETE,
-    // UPDATE
+    UPDATE
 } from '../constants/actionTypes.js';
 
 export const getChecks = () => async (dispatch) => {
@@ -27,16 +27,16 @@ export const getChecks = () => async (dispatch) => {
 //     }
 // };
 
-// export const updateCheck = (id, check) => async (dispatch) => {
-//     try {
-//         const { data } = await api.updateCheck(id, check);
+export const updateCheck = (id, check) => async (dispatch) => {
+    try {
+        const { data } = await api.updateCheck(id, check);
 
-//         dispatch({ type: UPDATE, payload: data });
+        dispatch({ type: UPDATE, payload: data });
 
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 // export const deleteCheck = (id) => async (dispatch) => {
 //     try {

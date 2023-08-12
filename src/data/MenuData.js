@@ -83,17 +83,14 @@ export const dropdownMenuData = [
 export const dropdownCheckStatusData = [
     {
         id: '1',
-        value: 'Payé',
-        label: 'Payé'
+        nom: 'Payé',
     },
     {
         id: '2',
-        value: 'En Attente',
-        label: 'En Attente'
+        nom: 'En Attente',
     },
     {
         id: '3',
-        value: 'Impayé',
-        label: 'Impayé'
+        nom: 'Impayé',
     },
 ]

@@ -10,5 +10,11 @@ API.interceptors.request.use((req) => {
 });
 
 export const fetchFournisseurs = () => API.get('/api/fournisseur');
+
+
 export const fetchClients = () => API.get('/api/client');
+
+
 export const fetchChecks = () => API.get('/api/check');
+export const updateCheck = (id, updatedCheck) => API.put(`/api/check/${id}/update`, updatedCheck);
+
