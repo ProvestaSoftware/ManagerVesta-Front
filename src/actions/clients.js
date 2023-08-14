@@ -1,8 +1,8 @@
 import * as api from '../api/index.js';
 import {
     FETCH_ALL_CLIENTS,
-    // CREATE,
-    // DELETE,
+    CREATE,
+    DELETE,
     // UPDATE
 } from '../constants/actionTypes.js';
 
@@ -16,16 +16,16 @@ export const getClients = () => async (dispatch) => {
     }
 };
 
-// export const createClient = (client) => async (dispatch) => {
-//     try {
-//         const { data } = await api.createClient(client);
+export const createClient = (client) => async (dispatch) => {
+    try {
+        const { data } = await api.createClient(client);
 
-//         dispatch({ type: CREATE, payload: data });
+        dispatch({ type: CREATE, payload: data });
 
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 // export const updateClient = (id, client) => async (dispatch) => {
 //     try {
@@ -38,13 +38,13 @@ export const getClients = () => async (dispatch) => {
 //     }
 // };
 
-// export const deleteClient = (id) => async (dispatch) => {
-//     try {
-//         await await api.deleteClient(id);
+export const deleteClient = (id) => async (dispatch) => {
+    try {
+        await await api.deleteClient(id);
 
-//         dispatch({ type: DELETE, payload: id });
+        dispatch({ type: DELETE, payload: id });
 
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
+    } catch (error) {
+        console.log(error);
+    }
+};

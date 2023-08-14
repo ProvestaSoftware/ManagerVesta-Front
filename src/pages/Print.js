@@ -13,10 +13,17 @@ import RegularDivider from '../components/RegularDivider'
 import CheckForm from '../components/Forms/CheckForm'
 import { useDispatch, useSelector } from 'react-redux'
 import { getFournisseurs } from '../actions/fournisseurs'
+import FournisseurModal from '../components/Modals/FournisseurModal'
 
 const Print = () => {
 
   const fournisseurs = useSelector((state) => state.fournisseurs);
+
+  const [modal, setModal] = useState(false);
+
+  const handleModal = () => {
+    setModal(!modal);
+  }
 
   const dispatch = useDispatch();
 
@@ -101,7 +108,7 @@ const Print = () => {
         <div className='link-wrapper'>
           <RegularLink
             content="Ajouter un nouveau fournisseur"
-            link="/fournisseurs"
+            onClick={handleModal}
           />
         </div>
         <RegularDivider size="0.5px" />
@@ -113,6 +120,7 @@ const Print = () => {
           </div>
         ))}
       </div>
+      {modal && <FournisseurModal handleModal={handleModal} />}
     </ContentWrapper>
   )
 }

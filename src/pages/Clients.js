@@ -14,11 +14,18 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import RegularButton from '../components/Buttons/RegularButton'
 import { AiOutlinePlus } from 'react-icons/ai'
+import ClientModal from '../components/Modals/ClientModal'
 
 const Clients = () => {
 
   const clients = useSelector((state) => state.clients);
   const [loader, setLoader] = useState(false);
+
+  const [modal, setModal] = useState(false);
+
+  const handleModal = () => {
+    setModal(!modal);
+  }
 
   const dispatch = useDispatch();
 
@@ -33,7 +40,7 @@ const Clients = () => {
       <div className='client-wrapper'>
         <div>
           <PageTitle>Liste des clients</PageTitle>
-          <RegularButton styleType="add-btn">
+          <RegularButton onClick={handleModal} styleType="add-btn">
             Ajouter Client
             <AiOutlinePlus className='btn-icon-right' />
           </RegularButton>
@@ -48,6 +55,7 @@ const Clients = () => {
           />
         )}
       </div>
+      {modal && <ClientModal handleModal={handleModal} />}
     </ContentWrapper>
   )
 }

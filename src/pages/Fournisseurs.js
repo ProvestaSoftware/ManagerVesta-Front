@@ -13,11 +13,18 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import RegularButton from '../components/Buttons/RegularButton'
 import { AiOutlinePlus } from 'react-icons/ai'
+import FournisseurModal from '../components/Modals/FournisseurModal'
 
 const Fournisseurs = () => {
 
   const fournisseurs = useSelector((state) => state.fournisseurs);
   const [loader, setLoader] = useState(false);
+
+  const [modal, setModal] = useState(false);
+
+  const handleModal = () => {
+    setModal(!modal);
+  }
 
   const dispatch = useDispatch();
 
@@ -32,7 +39,7 @@ const Fournisseurs = () => {
       <div className='fournisseur-wrapper'>
         <div>
           <PageTitle>Liste des fournisseurs</PageTitle>
-          <RegularButton styleType="add-btn">
+          <RegularButton onClick={handleModal} styleType="add-btn">
             Ajouter Fournisseur
             <AiOutlinePlus className='btn-icon-right' />
           </RegularButton>
@@ -47,6 +54,7 @@ const Fournisseurs = () => {
           />
         )}
       </div>
+      {modal && <FournisseurModal handleModal={handleModal} />}
     </ContentWrapper>
   )
 }

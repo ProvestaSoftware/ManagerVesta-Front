@@ -1,7 +1,16 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react'
+import { useDispatch } from 'react-redux';
+import { deleteFournisseur, getFournisseurs } from '../../actions/fournisseurs';
 
 const FournisseurTableRow = ({ item, index, color }) => {
+
+    const dispatch = useDispatch();
+
+    const handleDelete = () => {
+        dispatch(deleteFournisseur(item.id));
+        dispatch(getFournisseurs());
+    }
 
     const options = {
       year: "numeric",
@@ -65,7 +74,7 @@ const FournisseurTableRow = ({ item, index, color }) => {
                 </td>
                 <td class="flex items-center space-x-4 px-6 py-4">
                     <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Editer</a>
-                    <a href="" type="button" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Supprimer</a>
+                    <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={handleDelete}>Supprimer</button>
                 </td>
             </tr>
         </>

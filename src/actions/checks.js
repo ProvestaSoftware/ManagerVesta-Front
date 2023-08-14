@@ -2,7 +2,7 @@ import * as api from '../api/index.js';
 import {
     FETCH_ALL_CHECKS,
     // CREATE,
-    // DELETE,
+    DELETE,
     UPDATE
 } from '../constants/actionTypes.js';
 
@@ -33,18 +33,20 @@ export const updateCheck = (id, check) => async (dispatch) => {
 
         dispatch({ type: UPDATE, payload: data });
 
+        // window.location.reload();
+
     } catch (error) {
         console.log(error);
     }
 };
 
-// export const deleteCheck = (id) => async (dispatch) => {
-//     try {
-//         await await api.deleteCheck(id);
+export const deleteCheck = (id) => async (dispatch) => {
+    try {
+        await await api.deleteCheck(id);
 
-//         dispatch({ type: DELETE, payload: id });
+        dispatch({ type: DELETE, payload: id });
 
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
+    } catch (error) {
+        console.log(error);
+    }
+};

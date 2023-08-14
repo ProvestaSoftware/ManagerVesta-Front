@@ -1,8 +1,8 @@
 import * as api from '../api/index.js';
 import {
     FETCH_ALL_FOURNISSEURS,
-    // CREATE,
-    // DELETE,
+    CREATE,
+    DELETE,
     // UPDATE
 } from '../constants/actionTypes.js';
 
@@ -16,16 +16,16 @@ export const getFournisseurs = () => async (dispatch) => {
     }
 };
 
-// export const createFournisseur = (fournisseur) => async (dispatch) => {
-//     try {
-//         const { data } = await api.createFournisseur(fournisseur);
+export const createFournisseur = (fournisseur) => async (dispatch) => {
+    try {
+        const { data } = await api.createFournisseur(fournisseur);
 
-//         dispatch({ type: CREATE, payload: data });
+        dispatch({ type: CREATE, payload: data });
 
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 // export const updateFournisseur = (id, fournisseur) => async (dispatch) => {
 //     try {
@@ -38,13 +38,13 @@ export const getFournisseurs = () => async (dispatch) => {
 //     }
 // };
 
-// export const deleteFournisseur = (id) => async (dispatch) => {
-//     try {
-//         await await api.deleteFournisseur(id);
+export const deleteFournisseur = (id) => async (dispatch) => {
+    try {
+        await await api.deleteFournisseur(id);
 
-//         dispatch({ type: DELETE, payload: id });
+        dispatch({ type: DELETE, payload: id });
 
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
+    } catch (error) {
+        console.log(error);
+    }
+};

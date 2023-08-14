@@ -1,10 +1,19 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react'
 import CheckModal from '../Modals/CheckModal';
+import { useDispatch } from 'react-redux';
+import { deleteCheck, getChecks } from '../../actions/checks';
 
 const CheckTableRow = ({ item, fournisseurs }) => {
 
     const [modal, setModal] = useState(false);
+
+    const dispatch = useDispatch();
+
+    const handleDelete = () => {
+        dispatch(deleteCheck(item.id));
+        dispatch(getChecks());
+    }
 
     const options = {
         year: "numeric",
@@ -68,7 +77,7 @@ const CheckTableRow = ({ item, fournisseurs }) => {
                 </td>
                 <td class="flex items-center space-x-4 px-6 py-4">
                     <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={handleModal}>Editer</button>
-                    <a href="" type="button" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Supprimer</a>
+                    <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={handleDelete}>Supprimer</button>
                 </td>
             </tr>
             {modal && <CheckModal item={item} handleModal={handleModal} />}

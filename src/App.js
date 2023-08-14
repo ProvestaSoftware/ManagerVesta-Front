@@ -15,7 +15,7 @@ import { statsData } from './data/MockData';
 function App() {
   return (
     <div className="App">
-      <BrowserRouter froceRefresh={true}>
+      <BrowserRouter>
         <Routes>
           <Route element={<Layout />}>
             <Route index element={<Accueil />} />

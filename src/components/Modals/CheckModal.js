@@ -4,7 +4,7 @@ import Select from '../Inputs/Select'
 import { dropdownCheckStatusData } from '../../data/MenuData'
 import RegularButton from '../Buttons/RegularButton'
 import { useDispatch } from 'react-redux'
-import { updateCheck } from '../../api'
+import { getChecks, updateCheck } from '../../actions/checks'
 
 const CheckModal = ({ item, handleModal }) => {
 
@@ -23,6 +23,8 @@ const CheckModal = ({ item, handleModal }) => {
         e.preventDefault();
         // console.log(checkData);
         dispatch(updateCheck(item.id, checkData));
+        dispatch(getChecks());
+        handleModal();
     };
 
 
