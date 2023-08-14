@@ -11,7 +11,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr) auto;
   max-width: 100%;
-  margin: 0 auto;
+  margin: 0 auto 20px auto;
   grid-gap: 10px;
 }
 
