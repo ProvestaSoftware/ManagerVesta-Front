@@ -1,9 +1,16 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { deleteClient, getClients } from '../../actions/clients';
+import ClientModal from '../Modals/ClientModal';
 
 const ClientTableRow = ({ item, index, color }) => {
+
+    const [modal, setModal] = useState(false);
+
+    const handleModal = () => {
+        setModal(!modal);
+    }
 
     const dispatch = useDispatch();
 
@@ -73,10 +80,11 @@ const ClientTableRow = ({ item, index, color }) => {
                     {item.status}
                 </td>
                 <td class="flex items-center space-x-4 px-6 py-4">
-                    <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Editer</a>
+                    <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={handleModal}>Editer</button>
                     <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={handleDelete}>Supprimer</button>
                 </td>
             </tr>
+            {modal && <ClientModal item={item} handleModal={handleModal} />}
         </>
     )
 }

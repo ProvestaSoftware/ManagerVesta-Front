@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Input from '../Inputs/Input'
 import RegularButton from '../Buttons/RegularButton'
 import { useDispatch } from 'react-redux'
-import { createClient, getClients } from '../../actions/clients'
+import { createClient, getClients, updateClient } from '../../actions/clients'
 
 const ClientModal = ({ item, handleModal }) => {
 
@@ -23,7 +23,10 @@ const ClientModal = ({ item, handleModal }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         // console.log(clientData);
-        dispatch(createClient(clientData));
+        if (item)
+            dispatch(updateClient(item.id, clientData));
+        else
+            dispatch(createClient(clientData));
         dispatch(getClients());
         handleModal();
     };

@@ -3,7 +3,7 @@ import {
     FETCH_ALL_CLIENTS,
     CREATE,
     DELETE,
-    // UPDATE
+    UPDATE
 } from '../constants/actionTypes.js';
 
 export const getClients = () => async (dispatch) => {
@@ -27,16 +27,16 @@ export const createClient = (client) => async (dispatch) => {
     }
 };
 
-// export const updateClient = (id, client) => async (dispatch) => {
-//     try {
-//         const { data } = await api.updateClient(id, client);
+export const updateClient = (id, client) => async (dispatch) => {
+    try {
+        const { data } = await api.updateClient(id, client);
 
-//         dispatch({ type: UPDATE, payload: data });
+        dispatch({ type: UPDATE, payload: data });
 
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 export const deleteClient = (id) => async (dispatch) => {
     try {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Input from '../Inputs/Input'
 import RegularButton from '../Buttons/RegularButton'
 import { useDispatch } from 'react-redux'
-import { createFournisseur, getFournisseurs } from '../../actions/fournisseurs'
+import { createFournisseur, getFournisseurs, updateFournisseur } from '../../actions/fournisseurs'
 import { useNavigate } from 'react-router-dom'
 
 const FournisseurModal = ({ item, handleModal }) => {
@@ -27,7 +27,10 @@ const FournisseurModal = ({ item, handleModal }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         // console.log(fournisseurData);
-        dispatch(createFournisseur(fournisseurData));
+        if (item)
+            dispatch(updateFournisseur(item.id, fournisseurData));
+        else
+            dispatch(createFournisseur(fournisseurData));
         if (window.location.pathname === "/fournisseurs")
             dispatch(getFournisseurs());
         else

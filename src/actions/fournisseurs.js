@@ -3,7 +3,7 @@ import {
     FETCH_ALL_FOURNISSEURS,
     CREATE,
     DELETE,
-    // UPDATE
+    UPDATE
 } from '../constants/actionTypes.js';
 
 export const getFournisseurs = () => async (dispatch) => {
@@ -27,16 +27,16 @@ export const createFournisseur = (fournisseur) => async (dispatch) => {
     }
 };
 
-// export const updateFournisseur = (id, fournisseur) => async (dispatch) => {
-//     try {
-//         const { data } = await api.updateFournisseur(id, fournisseur);
+export const updateFournisseur = (id, fournisseur) => async (dispatch) => {
+    try {
+        const { data } = await api.updateFournisseur(id, fournisseur);
 
-//         dispatch({ type: UPDATE, payload: data });
+        dispatch({ type: UPDATE, payload: data });
 
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 export const deleteFournisseur = (id) => async (dispatch) => {
     try {
