@@ -20,6 +20,9 @@ const RegularButton = ({ styleType, onClick, children, type }) => {
         case 'filter-btn':
             buttonClass = 'filter-btn';
             break;
+        case 'add-btn':
+            buttonClass = 'add-btn';
+            break;
         default:
             buttonClass = 'primary';
     }

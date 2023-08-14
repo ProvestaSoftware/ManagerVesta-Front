@@ -12,6 +12,8 @@ import { useDispatch } from 'react-redux'
 import { getClients } from '../actions/clients'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import RegularButton from '../components/Buttons/RegularButton'
+import { AiOutlinePlus } from 'react-icons/ai'
 
 const Clients = () => {
 
@@ -31,6 +33,10 @@ const Clients = () => {
       <div className='client-wrapper'>
         <div>
           <PageTitle>Liste des clients</PageTitle>
+          <RegularButton styleType="add-btn">
+            Ajouter Client
+            <AiOutlinePlus className='btn-icon-right' />
+          </RegularButton>
         </div>
         <RegularDivider />
         {loader ? (

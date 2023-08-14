@@ -68,7 +68,7 @@ const CheckFournisseur = () => {
             <RegularButton
               styleType="filter-btn"
             >
-              <AiFillFilter className='btn-icon' />
+              <AiFillFilter className='btn-icon-left' />
               Filtrer
             </RegularButton>
           </div>

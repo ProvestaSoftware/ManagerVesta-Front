@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getFournisseurs } from '../actions/fournisseurs'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import RegularButton from '../components/Buttons/RegularButton'
+import { AiOutlinePlus } from 'react-icons/ai'
 
 const Fournisseurs = () => {
 
@@ -30,6 +32,10 @@ const Fournisseurs = () => {
       <div className='fournisseur-wrapper'>
         <div>
           <PageTitle>Liste des fournisseurs</PageTitle>
+          <RegularButton styleType="add-btn">
+            Ajouter Fournisseur
+            <AiOutlinePlus className='btn-icon-right' />
+          </RegularButton>
         </div>
         <RegularDivider />
         {loader ? (
