@@ -8,6 +8,10 @@ const CheckTableRow = ({ item, fournisseurs }) => {
 
     const [modal, setModal] = useState(false);
 
+    const handleModal = () => {
+        setModal(!modal);
+    }
+
     const dispatch = useDispatch();
 
     const handleDelete = () => {
@@ -30,10 +34,6 @@ const CheckTableRow = ({ item, fournisseurs }) => {
         (fournisseur) =>
             fournisseur.id === item.fournisseur_id
     );
-
-    const handleModal = () => {
-        setModal(!modal);
-    }
 
     return (
         <>
