@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import ContentWrapper from '../components/ContentWrapper'
 import Select from '../components/Inputs/Select'
 import Input from '../components/Inputs/Input'
@@ -10,23 +10,28 @@ import { AiFillFilter } from 'react-icons/ai'
 import '../assets/css/CheckClient.css'
 import RegularDivider from '../components/RegularDivider'
 import ChecksTable from '../components/Tables/ChecksTable'
-import { checksColumnsData } from '../data/TableColumnsData' 
+import { checksColumnsData } from '../data/TableColumnsData'
 import { getChecks } from '../actions/checks'
 import { getClients } from '../actions/clients'
 import { useDispatch, useSelector } from 'react-redux'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const CheckClient = () => {
 
   const checks = useSelector((state) => state.checks);
   const clients = useSelector((state) => state.clients);
+  const [loader, setLoader] = useState(false);
 
-  console.log(checks);
+  // console.log(checks);
 
   const dispatch = useDispatch();
 
   useEffect(async () => {
+    await setLoader(true);
     await dispatch(getChecks());
     await dispatch(getClients());
+    await setLoader(false);
   }, []);
 
   return (
@@ -66,13 +71,15 @@ const CheckClient = () => {
             </RegularButton>
           </div>
         </form>
-        <div className='check-table-wrapper'>
+        {loader ? (
+          <Skeleton count={5} />
+        ) : (
           <ChecksTable
             columns={checksColumnsData}
             rows={checks}
             fournisseurs={clients}
           />
-        </div>
+        )}
       </div>
     </ContentWrapper>
   )

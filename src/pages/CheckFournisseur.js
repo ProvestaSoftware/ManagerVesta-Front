@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import ContentWrapper from '../components/ContentWrapper'
 import Select from '../components/Inputs/Select'
 import Input from '../components/Inputs/Input'
@@ -18,17 +18,22 @@ import { checksColumnsData } from '../data/TableColumnsData'
 import { useDispatch, useSelector } from 'react-redux'
 import { getChecks } from '../actions/checks'
 import { getFournisseurs } from '../actions/fournisseurs'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const CheckFournisseur = () => {
 
   const checks = useSelector((state) => state.checks);
   const fournisseurs = useSelector((state) => state.fournisseurs);
+  const [loader, setLoader] = useState(false);
 
   const dispatch = useDispatch();
 
   useEffect(async () => {
+    await setLoader(true);
     await dispatch(getChecks());
     await dispatch(getFournisseurs());
+    await setLoader(false);
   }, []);
 
   return (
@@ -68,13 +73,15 @@ const CheckFournisseur = () => {
             </RegularButton>
           </div>
         </form>
-        <div className='check-table-wrapper'>
+        {loader ? (
+          <Skeleton count={5} />
+        ) : (
           <ChecksTable
             columns={checksColumnsData}
             rows={checks}
             fournisseurs={fournisseurs}
           />
-        </div>
+        )}
       </div>
     </ContentWrapper>
   )

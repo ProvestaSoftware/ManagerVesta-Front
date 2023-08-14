@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import ContentWrapper from '../components/ContentWrapper'
 // import { fournisseursData } from '../data/MockData'
 import PageTitle from '../components/PageTitle'
@@ -9,15 +9,20 @@ import { fournisseursColumnsData } from '../data/TableColumnsData'
 import FournisseursTable from '../components/Tables/FournisseursTable'
 import { useDispatch, useSelector } from "react-redux";
 import { getFournisseurs } from '../actions/fournisseurs'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const Fournisseurs = () => {
 
   const fournisseurs = useSelector((state) => state.fournisseurs);
+  const [loader, setLoader] = useState(false);
 
   const dispatch = useDispatch();
 
   useEffect(async () => {
+    await setLoader(true);
     await dispatch(getFournisseurs());
+    await setLoader(false);
   }, []);
 
   return (
@@ -27,12 +32,14 @@ const Fournisseurs = () => {
           <PageTitle>Liste des fournisseurs</PageTitle>
         </div>
         <RegularDivider />
-        <div className='fournisseur-table-wrapper'>
+        {loader ? (
+          <Skeleton count={5} />
+        ) : (
           <FournisseursTable
             columns={fournisseursColumnsData}
             rows={fournisseurs}
           />
-        </div>
+        )}
       </div>
     </ContentWrapper>
   )
