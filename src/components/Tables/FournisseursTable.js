@@ -79,16 +79,16 @@ const FournisseursTable = ({ columns, rows }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {rows.map((item, index) => (
-                        <>
-                            <FournisseurTableRow
-                                key={index}
-                                index={index}
-                                item={item}
-                                color={colors[index]}
-                            />
-                        </>
-                    ))}
+                    {rows.length !== 0 ? rows.map((item, index) => (
+                        <FournisseurTableRow
+                            key={index}
+                            index={index}
+                            item={item}
+                            color={colors[index]}
+                        />
+                    )) : (
+                        <p className='no-data-msg'>There are no fournisseurs...</p>
+                    )}
                 </tbody>
             </table>
         </div>

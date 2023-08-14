@@ -64,15 +64,15 @@ const ChecksTable = ({ columns, rows, fournisseurs }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {rows.map((item, index) => (
-                        <>
-                            <CheckTableRow
-                                key={index}
-                                item={item}
-                                fournisseurs={fournisseurs}
-                            />
-                        </>
-                    ))}
+                    {rows.length !== 0 ? rows.map((item, index) => (
+                        <CheckTableRow
+                            key={index}
+                            item={item}
+                            fournisseurs={fournisseurs}
+                        />
+                    )) : (
+                        <p className='no-data-msg'>There are no checks...</p>
+                    )}
                 </tbody>
             </table>
         </div>

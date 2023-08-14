@@ -79,16 +79,16 @@ const ClientsTable = ({ columns, rows }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {rows.map((item, index) => (
-                        <>
-                            <ClientTableRow
-                                key={index}
-                                index={index}
-                                item={item}
-                                color={colors[index]}
-                            />
-                        </>
-                    ))}
+                    {rows.length !== 0 ? rows.map((item, index) => (
+                        <ClientTableRow
+                            key={index}
+                            index={index}
+                            item={item}
+                            color={colors[index]}
+                        />
+                    )) : (
+                        <p className='no-data-msg'>There are no clients...</p>
+                    )}
                 </tbody>
             </table>
         </div>
