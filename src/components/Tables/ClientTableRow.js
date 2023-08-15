@@ -3,20 +3,28 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { deleteClient, getClients } from '../../actions/clients';
 import ClientModal from '../Modals/ClientModal';
+import ConfirmModal from '../Modals/ConfirmModal';
 
 const ClientTableRow = ({ item, index, color }) => {
 
     const [modal, setModal] = useState(false);
+    const [confirm, setConfirm] = useState(false);
 
     const handleModal = () => {
         setModal(!modal);
     }
 
+    const handleConfirm = () => {
+        setConfirm(!confirm);
+    }
+
     const dispatch = useDispatch();
 
-    const handleDelete = () => {
+    const handleDelete = (e) => {
+        e.preventDefault();
         dispatch(deleteClient(item.id));
         dispatch(getClients());
+        handleConfirm();
     }
 
     const options = {
@@ -81,10 +89,11 @@ const ClientTableRow = ({ item, index, color }) => {
                 </td>
                 <td class="flex items-center space-x-4 px-6 py-4">
                     <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={handleModal}>Editer</button>
-                    <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={handleDelete}>Supprimer</button>
+                    <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={handleConfirm}>Supprimer</button>
                 </td>
             </tr>
             {modal && <ClientModal item={item} handleModal={handleModal} />}
+            {confirm && <ConfirmModal name={`Client ${item.nom} | ${item.email}`} handleModal={handleConfirm} handleDelete={handleDelete} />}
         </>
     )
 }

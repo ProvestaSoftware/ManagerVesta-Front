@@ -3,20 +3,28 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { deleteFournisseur, getFournisseurs } from '../../actions/fournisseurs';
 import FournisseurModal from '../Modals/FournisseurModal';
+import ConfirmModal from '../Modals/ConfirmModal';
 
 const FournisseurTableRow = ({ item, index, color }) => {
 
     const [modal, setModal] = useState(false);
+    const [confirm, setConfirm] = useState(false);
 
     const handleModal = () => {
         setModal(!modal);
     }
 
+    const handleConfirm = () => {
+        setConfirm(!confirm);
+    }
+
     const dispatch = useDispatch();
 
-    const handleDelete = () => {
+    const handleDelete = (e) => {
+        e.preventDefault();
         dispatch(deleteFournisseur(item.id));
         dispatch(getFournisseurs());
+        handleConfirm();
     }
 
     const options = {
@@ -81,10 +89,11 @@ const FournisseurTableRow = ({ item, index, color }) => {
                 </td>
                 <td class="flex items-center space-x-4 px-6 py-4">
                     <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={handleModal}>Editer</button>
-                    <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={handleDelete}>Supprimer</button>
+                    <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={handleConfirm}>Supprimer</button>
                 </td>
             </tr>
             {modal && <FournisseurModal item={item} handleModal={handleModal} />}
+            {confirm && <ConfirmModal name={`Fournisseur ${item.nom} | ${item.email}`} handleModal={handleConfirm} handleDelete={handleDelete} />}
         </>
     )
 }
