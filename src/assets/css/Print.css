@@ -27,6 +27,23 @@
   grid-gap: 10px;
 }
 
+.check-print-form-container {
+  display: grid;
+  grid-template-columns: auto repeat(3, 1fr) auto;
+  max-width: 100%;
+  margin: 0 auto;
+  grid-gap: 10px;
+}
+
+.save-print-container {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  max-width: 100%;
+  margin-right: 0;
+  margin-left: auto;
+  grid-gap: 10px;
+}
+
 .link-wrapper {
     display: flex;
     margin-top: 20px;
@@ -46,6 +63,11 @@
   .print-form-container {
     grid-template-columns: 1fr;
   }
+
+  .save-print-container {
+    grid-template-columns: 1fr;
+  }
+
   .print-btn {
     margin-top: 10px !important;
   }
