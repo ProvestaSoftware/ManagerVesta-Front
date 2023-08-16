@@ -130,3 +130,23 @@
 .danger:hover {
   background-color: #c82333;
 }
+
+@media screen and (max-width: 1200px) {
+  .add-btn {
+    margin-top: 20px;
+  }
+
+  .filter-btn {
+    margin-top: 10px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .add-btn {
+    margin-top: 20px;
+  }
+
+  .filter-btn {
+    margin-top: 10px;
+  }
+}
