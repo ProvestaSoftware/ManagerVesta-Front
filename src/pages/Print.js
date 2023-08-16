@@ -8,6 +8,7 @@ import Input from '../components/Inputs/Input'
 import Select from '../components/Inputs/Select'
 // import { fournisseursData } from '../data/MockData'
 import { BsCheckLg, BsWindowDock } from 'react-icons/bs'
+// import { AiOutlinePlus } from 'react-icons/ai'
 import { FaSave } from 'react-icons/fa'
 import RegularLink from '../components/RegularLink'
 import RegularDivider from '../components/RegularDivider'
@@ -20,6 +21,7 @@ const Print = () => {
   const fournisseurs = useSelector((state) => state.fournisseurs);
 
   const [modal, setModal] = useState(false);
+  // const [dueNumber, setDueNumber] = useState(0);
 
   const handleModal = () => {
     setModal(!modal);
@@ -36,25 +38,38 @@ const Print = () => {
     montant: '',
     dueNumber: '',
   });
-  
+
   const [checkGroupData, setCheckGroupData] = useState([]);
 
   const handleChange = (e) => {
     setCheckData({ ...checkData, [e.target.name]: e.target.value });
-    console.log(checkData);
+    // console.log(checkData);
   }
 
   const handleChecks = (e) => {
     e.preventDefault();
+    // setDueNumber(parseInt(checkData.dueNumber, 10));
     const dueNumber = parseInt(checkData.dueNumber, 10);
     setCheckGroupData(Array.from({ length: dueNumber }, (_, index) => ({
       id: index + 1,
       num: '',
-      montant: checkData.montant / dueNumber,
+      montant: '',
       dueDate: ''
     })));
     // console.log(checkGroupData);
   }
+
+  // const addCheck = (e) => {
+  //   e.preventDefault();
+  //   setDueNumber(dueNumber + 1);
+  //   setCheckData({ ...checkData, dueNumber: dueNumber });
+  //   setCheckGroupData(Array.from({ length: dueNumber }, (_, index) => ({
+  //     id: index + 1,
+  //     num: '',
+  //     montant: '',
+  //     dueDate: ''
+  //   })));
+  // }
 
   const handleInputChange = (id, field, value) => {
     setCheckGroupData(prevData =>
@@ -103,13 +118,26 @@ const Print = () => {
               name="montant"
               onChange={handleChange}
             />
+            {/* {dueNumber !== 0 ? (
+              <Input
+                label="Nombre d'écheances:"
+                placeholder="0"
+                value={dueNumber}
+                defaultValue={dueNumber !== 0 && dueNumber}
+                type="number"
+                name="dueNumber"
+                onChange={handleChange}
+              />
+            ) : ( */}
             <Input
               label="Nombre d'écheances:"
               placeholder="0"
+              // defaultValue={dueNumber !== 0 && dueNumber}
               type="number"
               name="dueNumber"
               onChange={handleChange}
             />
+            {/* )} */}
             <RegularButton
               styleType="print-btn"
               onClick={handleChecks}
@@ -158,21 +186,32 @@ const Print = () => {
           ))}
         </div>
         {checkGroupData.length !== 0 && (
-          <div className='save-print-container'>
-            <RegularButton
-              styleType="save-btn"
-              onClick={handleSubmit}
-            >
-              <FaSave className='btn-icon-left' />
-              Sauvegarder
-            </RegularButton>
-            <RegularButton
-              styleType="print-save-btn"
-            >
-              <BsWindowDock className='btn-icon-left' />
-              Sauvegarder et Imprimer
-            </RegularButton>
-          </div>
+          <>
+            {/* <div className='save-print-container'>
+              <RegularButton
+                styleType="print-add-btn"
+                onClick={addCheck}
+              >
+                <AiOutlinePlus className='btn-icon-left' />
+                Ajouter une autre écheance
+              </RegularButton>
+            </div> */}
+            <div className='save-print-container'>
+              <RegularButton
+                styleType="save-btn"
+                onClick={handleSubmit}
+              >
+                <FaSave className='btn-icon-left' />
+                Sauvegarder
+              </RegularButton>
+              <RegularButton
+                styleType="print-save-btn"
+              >
+                <BsWindowDock className='btn-icon-left' />
+                Sauvegarder et Imprimer
+              </RegularButton>
+            </div>
+          </>
         )}
       </div>
       {modal && <FournisseurModal handleModal={handleModal} />}
