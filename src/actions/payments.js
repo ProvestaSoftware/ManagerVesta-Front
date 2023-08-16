@@ -1,24 +1,24 @@
 import * as api from '../api/index.js';
 import {
-    FETCH_ALL_CHECKS,
+    FETCH_ALL_PAYMENTS,
     CREATE,
     DELETE,
     UPDATE
 } from '../constants/actionTypes.js';
 
-export const getChecks = () => async (dispatch) => {
+export const getPayments = () => async (dispatch) => {
     try {
-        const { data } = await api.fetchChecks();
+        const { data } = await api.fetchPayments();
 
-        dispatch({ type: FETCH_ALL_CHECKS, payload: data });
+        dispatch({ type: FETCH_ALL_PAYMENTS, payload: data });
     } catch (error) {
         console.log(error);
     }
 };
 
-export const createCheck = (check) => async (dispatch) => {
+export const createPayment = (payment) => async (dispatch) => {
     try {
-        const { data } = await api.createCheck(check);
+        const { data } = await api.createPayment(payment);
 
         dispatch({ type: CREATE, payload: data });
 
@@ -27,9 +27,9 @@ export const createCheck = (check) => async (dispatch) => {
     }
 };
 
-export const updateCheck = (id, check) => async (dispatch) => {
+export const updatePayment = (id, payment) => async (dispatch) => {
     try {
-        const { data } = await api.updateCheck(id, check);
+        const { data } = await api.updatePayment(id, payment);
 
         dispatch({ type: UPDATE, payload: data });
 
@@ -40,9 +40,9 @@ export const updateCheck = (id, check) => async (dispatch) => {
     }
 };
 
-export const deleteCheck = (id) => async (dispatch) => {
+export const deletePayment = (id) => async (dispatch) => {
     try {
-        await await api.deleteCheck(id);
+        await await api.deletePayment(id);
 
         dispatch({ type: DELETE, payload: id });
 

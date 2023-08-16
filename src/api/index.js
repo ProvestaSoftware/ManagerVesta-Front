@@ -21,8 +21,14 @@ export const updateClient = (id, updatedClient) => API.put(`/api/client/${id}/up
 export const deleteClient = (id) => API.delete(`/api/client/${id}/destroy`);
 
 
-
 export const fetchChecks = () => API.get('/api/check');
+export const createCheck = (newCheck) => API.post('/api/check', newCheck);
 export const updateCheck = (id, updatedCheck) => API.put(`/api/check/${id}/update`, updatedCheck);
 export const deleteCheck = (id) => API.delete(`/api/check/${id}/destroy`);
+
+
+export const fetchPayments = () => API.get('/api/payment');
+export const createPayment = (newPayment) => API.post('/api/payment', newPayment);
+export const updatePayment = (id, updatedPayment) => API.put(`/api/payment/${id}/update`, updatedPayment);
+export const deletePayment = (id) => API.delete(`/api/payment/${id}/destroy`);
 
