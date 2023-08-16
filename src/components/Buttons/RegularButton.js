@@ -26,6 +26,9 @@ const RegularButton = ({ styleType, onClick, children, type }) => {
         case 'print-save-btn':
             buttonClass = 'print-save-btn';
             break;
+        case 'print-add-btn':
+            buttonClass = 'print-add-btn';
+            break;
         case 'add-btn':
             buttonClass = 'add-btn';
             break;
