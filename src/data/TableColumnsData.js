@@ -57,3 +57,15 @@ export const clientsColumnsData = [
         value: 'Date de création',
     },
 ]
+
+export const paymentChecksData = [
+    {
+        value: 'Numéro de chéque',
+    },
+    {
+        value: 'Montant',
+    },
+    {
+        value: 'Date',
+    },
+]

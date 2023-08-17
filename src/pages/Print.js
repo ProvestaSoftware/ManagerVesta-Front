@@ -16,11 +16,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getFournisseurs } from '../actions/fournisseurs'
 import FournisseurModal from '../components/Modals/FournisseurModal'
 import { createPayment, getPayments } from '../actions/payments'
-import { createCheck } from '../actions/checks'
+import { createCheck, getChecks } from '../actions/checks'
+import PaymentChecksTable from '../components/Tables/PaymentChecksTable'
+import { paymentChecksData } from '../data/TableColumnsData'
 
 const Print = () => {
 
   const fournisseurs = useSelector((state) => state.fournisseurs);
+  const checks = useSelector((state) => state.checks);
 
   const [modal, setModal] = useState(false);
   // const [dueDatesNumber, setDueDatesNumber] = useState(0);
@@ -29,14 +32,42 @@ const Print = () => {
     setModal(!modal);
   }
 
+  const [filteredData, setFilteredData] = useState([]);
+
+  const filterDataByFournisseurId = (entryData, fournisseurId) => {
+    console.log("entryData", entryData);
+    const filteredArray = entryData.filter(entry => entry.fournisseur_id === parseInt(fournisseurId));
+    console.log("Filtered Array:", filteredArray); 
+    setFilteredData(filteredArray);
+  };
+
   const dispatch = useDispatch();
 
   useEffect(async () => {
     await dispatch(getFournisseurs());
+    await dispatch(getChecks());
     // await dispatch(getPayments());
   }, []);
 
   const [checkGroupData, setCheckGroupData] = useState([]);
+  // const testData = [
+  //   {
+  //     dueDate: "2023-08-27",
+  //     fournisseur_id: 4,
+  //     montant: 500,
+  //     num: "888888",
+  //     payment_id: 128,
+  //     id: 1
+  //   },
+  //   {
+  //     dueDate: "2023-08-27",
+  //     fournisseur_id: 10,
+  //     montant: 500,
+  //     num: "111111",
+  //     payment_id: 128,
+  //     id: 2
+  //   },
+  // ];
 
   const [paymentData, setPaymentData] = useState({
     montantTotal: '',
@@ -47,22 +78,25 @@ const Print = () => {
 
   const handleChange = (e) => {
     setPaymentData({ ...paymentData, [e.target.name]: e.target.value });
-    console.log("payment", paymentData);
+    console.log("paymentData", paymentData);
   }
 
-  const handleChecks = (e) => {
+  const handleChecks = async (e) => {
     e.preventDefault();
     // setDueDatesNumber(parseInt(checkData.dueDatesNumber, 10));
     const dueDatesNumber = parseInt(paymentData.dueDatesNumber, 10);
-    setCheckGroupData(Array.from({ length: dueDatesNumber }, (_, index) => ({
+    await setCheckGroupData(Array.from({ length: dueDatesNumber }, (_, index) => ({
       _id: index + 1,
       num: '',
       montant: '',
       dueDate: '',
       fournisseur_id: paymentData.fournisseur_id,
     })));
-    setPaymentData({ ...paymentData, checks: checkGroupData });
-    console.log(paymentData);
+    console.log("checks", checks);
+    await setPaymentData({ ...paymentData, checks: checkGroupData });
+    await filterDataByFournisseurId(checks, paymentData.fournisseur_id);
+    console.log("paymentData", paymentData);
+    console.log("filteredData", filteredData);
   }
 
   // const addCheck = (e) => {
@@ -99,12 +133,12 @@ const Print = () => {
     event.preventDefault();
     // You can process the formData array here, e.g., send it to the server.
     await setPaymentData({ ...paymentData, checks: checkGroupData })
-    console.log(paymentData);
+    console.log("paymentData", paymentData);
     let response;
     try {
       response = await dispatch(createPayment(paymentData));
       // await setPaymentId(response.id);
-      await console.log('Server response:', response);
+      // await console.log('Server response:', response);
       // Now you can use the response data in your component's state or perform any other actions
     } catch (error) {
       console.log('Error:', error);
@@ -191,48 +225,55 @@ const Print = () => {
         </div>
         <RegularDivider size="0.5px" />
         <div className='check-form'>
-          {checkGroupData.map((item, index) => (
-            <form key={item._id}>
-              <div className='check-print-form-container'>
-                <p>{index + 1}.</p>
-                <Input
-                  label="Numéro de chéque:"
-                  placeholder="Num"
-                  type="text"
-                  defaultValue={item.num}
-                  name="num"
-                  onChange={(e) => handleInputChange(item._id, 'num', e.target.value)}
-                />
-                <Input
-                  label="Montant:"
-                  placeholder="Montant en dinars"
-                  type="text"
-                  defaultValue={item.montant}
-                  name="montant"
-                  onChange={(e) => handleInputChange(item._id, 'montant', e.target.value)}
-                />
-                <Input
-                  label="Date:"
-                  type="date"
-                  defaultValue={item.dueDate}
-                  name="dueDate"
-                  onChange={(e) => handleInputChange(item._id, 'dueDate', e.target.value)}
-                />
-              </div>
-            </form>
-          ))}
+          {filteredData.length > 0 ? (
+            <PaymentChecksTable
+              columns={paymentChecksData}
+              rows={filteredData}
+            />
+          ) :
+            checkGroupData.map((item, index) => (
+              <form key={item._id}>
+                <div className='check-print-form-container'>
+                  <p>{index + 1}.</p>
+                  <Input
+                    label="Numéro de chéque:"
+                    placeholder="Num"
+                    type="text"
+                    defaultValue={item.num}
+                    name="num"
+                    onChange={(e) => handleInputChange(item._id, 'num', e.target.value)}
+                  />
+                  <Input
+                    label="Montant:"
+                    placeholder="Montant en dinars"
+                    type="text"
+                    defaultValue={item.montant}
+                    name="montant"
+                    onChange={(e) => handleInputChange(item._id, 'montant', e.target.value)}
+                  />
+                  <Input
+                    label="Date:"
+                    type="date"
+                    defaultValue={item.dueDate}
+                    name="dueDate"
+                    onChange={(e) => handleInputChange(item._id, 'dueDate', e.target.value)}
+                  />
+                </div>
+              </form>
+            ))}
         </div>
+
         {checkGroupData.length !== 0 && (
           <>
             {/* <div className='save-print-container'>
-              <RegularButton
-                styleType="print-add-btn"
-                onClick={addCheck}
-              >
-                <AiOutlinePlus className='btn-icon-left' />
-                Ajouter une autre écheance
-              </RegularButton>
-            </div> */}
+                <RegularButton
+                  styleType="print-add-btn"
+                  onClick={addCheck}
+                >
+                  <AiOutlinePlus className='btn-icon-left' />
+                  Ajouter une autre écheance
+                </RegularButton>
+              </div> */}
             <div className='save-print-container'>
               <RegularButton
                 styleType="save-btn"
@@ -249,7 +290,8 @@ const Print = () => {
               </RegularButton>
             </div>
           </>
-        )}
+        )
+        }
       </div>
       {modal && <FournisseurModal handleModal={handleModal} />}
     </ContentWrapper>
