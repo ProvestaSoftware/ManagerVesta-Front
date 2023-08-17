@@ -91,6 +91,7 @@ const Print = () => {
       num: '',
       montant: '',
       dueDate: '',
+      type: checkType === "Chéque" ? "Chéque" : "Traite",
       fournisseur_id: paymentData.fournisseur_id,
     })));
     // console.log("checks", checks);
@@ -156,6 +157,16 @@ const Print = () => {
     await filterDataByFournisseurId(checks, paymentData.fournisseur_id);
   };
 
+  const [checkType, setCheckType] = useState("Chéque");
+
+  const handleCheckType = () => {
+    setCheckType("Chéque")
+  }
+
+  const handleTraiteType = () => {
+    setCheckType("Traite")
+  }
+
   return (
     <ContentWrapper>
       <div className='print-wrapper'>
@@ -165,12 +176,14 @@ const Print = () => {
         <RegularDivider />
         <div className='print-btn-wrapper'>
           <RegularButton
-            styleType="primary"
+            styleType={checkType === "Traite" ? "secondary" : "primary"}
+            onClick={handleCheckType}
           >
             Chéque
           </RegularButton>
           <RegularButton
-            styleType="secondary"
+            styleType={checkType === "Chéque" ? "secondary" : "primary"}
+            onClick={handleTraiteType}
           >
             Traite
           </RegularButton>
