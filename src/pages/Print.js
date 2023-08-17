@@ -15,7 +15,7 @@ import RegularDivider from '../components/RegularDivider'
 import { useDispatch, useSelector } from 'react-redux'
 import { getFournisseurs } from '../actions/fournisseurs'
 import FournisseurModal from '../components/Modals/FournisseurModal'
-import { createPayment } from '../actions/payments'
+import { createPayment, getPayments } from '../actions/payments'
 import { createCheck } from '../actions/checks'
 
 const Print = () => {
@@ -33,6 +33,7 @@ const Print = () => {
 
   useEffect(async () => {
     await dispatch(getFournisseurs());
+    // await dispatch(getPayments());
   }, []);
 
   const [checkGroupData, setCheckGroupData] = useState([]);
@@ -58,7 +59,7 @@ const Print = () => {
       num: '',
       montant: '',
       dueDate: '',
-      fournisseur_id: paymentData.fournisseur_id
+      fournisseur_id: paymentData.fournisseur_id,
     })));
     setPaymentData({ ...paymentData, checks: checkGroupData });
     console.log(paymentData);
@@ -82,16 +83,40 @@ const Print = () => {
     );
   };
 
-  const handleSubmit = event => {
+  // const handleCreatePayment = async () => {
+  //   try {
+  //     const response = await dispatch(createPayment(paymentData));
+  //     // await setPaymentId(response.id);
+  //     await console.log('Server response:', response);
+  //     // Now you can use the response data in your component's state or perform any other actions
+  //   } catch (error) {
+  //     console.log('Error:', error);
+  //     // Handle the error, show a message, etc.
+  //   }
+  // };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     // You can process the formData array here, e.g., send it to the server.
-    setPaymentData({ ...paymentData, checks: checkGroupData })
+    await setPaymentData({ ...paymentData, checks: checkGroupData })
     console.log(paymentData);
-    dispatch(createPayment(paymentData));
-    for (let index = 0; index < checkGroupData.length; index++) {
-      const element = checkGroupData[index];
-      dispatch(createCheck(element));
+    let response;
+    try {
+      response = await dispatch(createPayment(paymentData));
+      // await setPaymentId(response.id);
+      await console.log('Server response:', response);
+      // Now you can use the response data in your component's state or perform any other actions
+    } catch (error) {
+      console.log('Error:', error);
+      // Handle the error, show a message, etc.
     }
+    for (let index = 0; index < checkGroupData.length; index++) {
+      let element = checkGroupData[index];
+      element.payment_id = response.payment.id;
+      await dispatch(createCheck(element));
+    }
+
+    dispatch(getPayments());
   };
 
   return (

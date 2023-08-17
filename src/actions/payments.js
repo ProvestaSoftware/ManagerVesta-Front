@@ -3,7 +3,7 @@ import {
     FETCH_ALL_PAYMENTS,
     CREATE,
     DELETE,
-    UPDATE
+    UPDATE,
 } from '../constants/actionTypes.js';
 
 export const getPayments = () => async (dispatch) => {
@@ -21,6 +21,8 @@ export const createPayment = (payment) => async (dispatch) => {
         const { data } = await api.createPayment(payment);
 
         dispatch({ type: CREATE, payload: data });
+
+        return data; // Return the response data
 
     } catch (error) {
         console.log(error);
