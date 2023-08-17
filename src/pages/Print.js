@@ -35,9 +35,9 @@ const Print = () => {
   const [filteredData, setFilteredData] = useState([]);
 
   const filterDataByFournisseurId = (entryData, fournisseurId) => {
-    console.log("entryData", entryData);
+    // console.log("entryData", entryData);
     const filteredArray = entryData.filter(entry => entry.fournisseur_id === parseInt(fournisseurId));
-    console.log("Filtered Array:", filteredArray); 
+    // console.log("Filtered Array:", filteredArray);
     setFilteredData(filteredArray);
   };
 
@@ -46,6 +46,7 @@ const Print = () => {
   useEffect(async () => {
     await dispatch(getFournisseurs());
     await dispatch(getChecks());
+    // await filterDataByFournisseurId(checks, paymentData.fournisseur_id);
     // await dispatch(getPayments());
   }, []);
 
@@ -78,7 +79,7 @@ const Print = () => {
 
   const handleChange = (e) => {
     setPaymentData({ ...paymentData, [e.target.name]: e.target.value });
-    console.log("paymentData", paymentData);
+    // console.log("paymentData", paymentData);
   }
 
   const handleChecks = async (e) => {
@@ -92,11 +93,11 @@ const Print = () => {
       dueDate: '',
       fournisseur_id: paymentData.fournisseur_id,
     })));
-    console.log("checks", checks);
+    // console.log("checks", checks);
     await setPaymentData({ ...paymentData, checks: checkGroupData });
     await filterDataByFournisseurId(checks, paymentData.fournisseur_id);
-    console.log("paymentData", paymentData);
-    console.log("filteredData", filteredData);
+    // console.log("paymentData", paymentData);
+    // console.log("filteredData", filteredData);
   }
 
   // const addCheck = (e) => {
@@ -133,7 +134,7 @@ const Print = () => {
     event.preventDefault();
     // You can process the formData array here, e.g., send it to the server.
     await setPaymentData({ ...paymentData, checks: checkGroupData })
-    console.log("paymentData", paymentData);
+    // console.log("paymentData", paymentData);
     let response;
     try {
       response = await dispatch(createPayment(paymentData));
@@ -150,7 +151,9 @@ const Print = () => {
       await dispatch(createCheck(element));
     }
 
-    dispatch(getPayments());
+    await dispatch(getPayments());
+    await dispatch(getChecks());
+    await filterDataByFournisseurId(checks, paymentData.fournisseur_id);
   };
 
   return (
@@ -263,7 +266,7 @@ const Print = () => {
             ))}
         </div>
 
-        {checkGroupData.length !== 0 && (
+        {(filteredData.length === 0 && checkGroupData.length > 0) && (
           <>
             {/* <div className='save-print-container'>
                 <RegularButton
