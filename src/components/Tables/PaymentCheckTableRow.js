@@ -45,7 +45,7 @@ const PaymentCheckTableRow = ({ item, index, fournisseurs }) => {
                     <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={handleModal}>Imprimer</button>
                 </td>
             </tr>
-            {modal && <PrintModal item={item} handleModal={handleModal} />}
+            {modal && <PrintModal item={item} handleModal={handleModal} fournisseurs={fournisseurs} />}
         </>
     )
 }

@@ -61,7 +61,16 @@
   .__check_data {
     display: none;
   }
-  .check img {
+  .check-inputs-print {
     display: none;
   }
+  .check-num-print {
+    display: none;
+  }
+  .check-border {
+    display: none;
+  }
+  /* .check img {
+    display: none;
+  } */
 }

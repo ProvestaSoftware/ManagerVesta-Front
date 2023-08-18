@@ -1,8 +1,16 @@
 import React, { useState } from 'react'
 import atbImage from '../../assets/images/ATBcheck.jpg'
 import '../../assets/css/PrintModal.css'
+import RegularButton from '../Buttons/RegularButton';
 
-const PrintModal = ({ item, handleModal }) => {
+const PrintModal = ({ item, handleModal, fournisseurs }) => {
+
+    const associatedFournisseur = fournisseurs.filter(
+        (fournisseur) =>
+            fournisseur.id === item.fournisseur_id
+    );
+
+    console.log("associatedFournisseur", associatedFournisseur[0]?.nom);
 
     function numberToWordsFR(num) {
         if (isNaN(num) || num < 1 || num > 999999999) {
@@ -162,12 +170,13 @@ const PrintModal = ({ item, handleModal }) => {
         return result;
     }
 
-    const [amount, setAmount] = useState('');
-    const [fournisseur, setFournisseur] = useState('');
+    const [amount, setAmount] = useState(item.montant);
+    // const [fournisseur, setFournisseur] = useState(associatedFournisseur[0]?.nom);
+    const fournisseur = associatedFournisseur[0]?.nom;
     const [formattedDate, setFormattedDate] = useState('');
 
-    const handleAmountChange = (event) => {
-        const amountValue = parseInt(event.target.value);
+    const handleAmountChange = () => {
+        const amountValue = parseInt(amount);
         if (isNaN(amountValue)) {
             setAmount('--------------');
         } else {
@@ -178,9 +187,9 @@ const PrintModal = ({ item, handleModal }) => {
         }
     };
 
-    const handleFournisseurChange = (event) => {
-        setFournisseur(event.target.value);
-    };
+    // const handleFournisseurChange = (event) => {
+    //     setFournisseur(event.target.value);
+    // };
 
     const printSection = () => {
         window.print();
@@ -202,6 +211,7 @@ const PrintModal = ({ item, handleModal }) => {
         const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
         setFormattedDate(formattedDate);
         document.getElementById('montant_le').innerText = formattedDate;
+        handleAmountChange();
     }, []);
 
 
@@ -217,9 +227,9 @@ const PrintModal = ({ item, handleModal }) => {
                 width: 'auto',
                 height: 'auto',
             }}>
-                <div class="relative w-full max-w-2xl max-h-full">
-                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                        <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+                <div class="relative w-full max-h-full">
+                    <div class="relative bg-white rounded-lg dark:bg-gray-700">
+                        <div class="check-num-print flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
                             <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
                                 Cheque #{item.num}
                             </h3>
@@ -238,7 +248,7 @@ const PrintModal = ({ item, handleModal }) => {
                                         {amount || '------------'}
                                     </span>
                                     <span className="check_data montant_ecrit montant_ecrit_line1" id="montant_ecrit_line1">
-                                        {formattedDate || '--------------------'}
+                                        {'--------------------'}
                                     </span>
                                     <span className="check_data montant_ecrit montant_ecrit_line2" id="montant_ecrit_line2">
                                         {'------------------------------------------------'}
@@ -249,13 +259,13 @@ const PrintModal = ({ item, handleModal }) => {
                                     <span className="check_data date montant_a_fr">Kélibia</span>
                                     <span className="check_data date montant_a_ar">قليبية</span>
                                     <span className="check_data date montant_le" id="montant_le">
-                                        --/--/----
+                                        {formattedDate || '--/--/----'}
                                     </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-                            <input
+                        <div class="check-inputs-print flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                            {/* <input
                                 type="number"
                                 placeholder="Montant ( dt )"
                                 min="1"
@@ -272,8 +282,15 @@ const PrintModal = ({ item, handleModal }) => {
                                 onChange={handleFournisseurChange}
                                 style={{ height: '30px', marginBottom: '20px' }}
                             />
-                            <br />
-                            <input
+                            <br /> */}
+                            <RegularButton
+                                styleType="primary"
+                                type="submit"
+                                onClick={printSection}
+                            >
+                                Imprimer chéque
+                            </RegularButton>
+                            {/* <input
                                 type="submit"
                                 value="Imprimer chéque"
                                 style={{
@@ -286,7 +303,7 @@ const PrintModal = ({ item, handleModal }) => {
                                     padding: '14px'
                                 }}
                                 onClick={printSection}
-                            />
+                            /> */}
                         </div>
                     </div>
                 </div>

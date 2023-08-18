@@ -245,6 +245,7 @@ const Print = () => {
             <PaymentChecksTable
               columns={paymentChecksData}
               rows={filteredData}
+              fournisseurs={fournisseurs}
             />
           ) :
             checkGroupData.map((item, index) => (

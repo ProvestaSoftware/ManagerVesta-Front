@@ -1,7 +1,7 @@
 import React from 'react'
 import PaymentCheckTableRow from './PaymentCheckTableRow'
 
-const PaymentChecksTable = ({ columns, rows }) => {
+const PaymentChecksTable = ({ columns, rows, fournisseurs }) => {
     return (
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -25,7 +25,7 @@ const PaymentChecksTable = ({ columns, rows }) => {
                         key={index}
                         item={item}
                         index={index}
-                        // fournisseurs={fournisseurs}
+                        fournisseurs={fournisseurs}
                     />
                 )) : (
                     <p className='no-data-msg'>There are no checks...</p>
