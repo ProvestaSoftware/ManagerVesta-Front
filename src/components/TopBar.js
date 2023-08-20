@@ -6,6 +6,7 @@ import Logo from './Logo'
 import adminImage from '../assets/images/icons/admin-md.png'
 
 const TopBar = () => {
+
   return (
     <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
       <div class="px-3 py-3 lg:px-5 lg:pl-3">
@@ -37,13 +38,13 @@ const TopBar = () => {
                   </p>
                 </div>
                 <ul class="py-1" role="none">
-                    {dropdownMenuData.map((item, index) => (
-                        <li>
-                            <DropdownButton
-                                item={item}
-                            />
-                        </li>
-                    ))}
+                  {dropdownMenuData.map((item, index) => (
+                    <li>
+                      <DropdownButton
+                        item={item}
+                      />
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>

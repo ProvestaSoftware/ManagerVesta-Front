@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../assets/css/RegularButton.css';
 
-const RegularButton = ({ styleType, onClick, children, type }) => {
+const RegularButton = ({ styleType, onClick, children, type, position }) => {
     let buttonClass = '';
 
     switch (styleType) {
@@ -37,7 +37,10 @@ const RegularButton = ({ styleType, onClick, children, type }) => {
     }
 
     return (
-        <button type={type} className={`multi-design-button ${buttonClass}`} onClick={onClick}>
+        <button style={{
+            marginRight: position === 'right' ? '0!important' : 'auto!important',
+            marginLeft: position === 'right' ? 'auto!important' : '0!important',
+        }} type={type} className={`multi-design-button ${buttonClass}`} onClick={onClick}>
             {children}
         </button>
     );

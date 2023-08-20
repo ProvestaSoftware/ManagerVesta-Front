@@ -57,7 +57,6 @@ export const sidebarBottomMenuData = [
     },
     {
         title: 'Se déconnecter',
-        link: '',
         icon: <BiLogOut />
     },
 ]
@@ -75,7 +74,6 @@ export const dropdownMenuData = [
     },
     {
         title: 'Se déconnecter',
-        // link: 'se-deconnecter',
         icon: <BiLogOut />
     },
 ]
