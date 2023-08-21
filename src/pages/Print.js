@@ -26,6 +26,7 @@ const Print = () => {
   const checks = useSelector((state) => state.checks);
 
   const [modal, setModal] = useState(false);
+  // const [otherFieldsDisabled, setOtherFieldsDisabled] = useState(false);
   // const [dueDatesNumber, setDueDatesNumber] = useState(0);
 
   const handleModal = () => {
@@ -43,9 +44,11 @@ const Print = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(async () => {
-    await dispatch(getFournisseurs());
-    await dispatch(getChecks());
+  useEffect(() => {
+    dispatch(getFournisseurs());
+    dispatch(getChecks());
+    // filterDataByFournisseurId(checks, paymentData.fournisseur_id);
+    // setOtherFieldsDisabled(filteredData.length > 0);
     // await filterDataByFournisseurId(checks, paymentData.fournisseur_id);
     // await dispatch(getPayments());
   }, []);
@@ -204,6 +207,7 @@ const Print = () => {
               type="text"
               name="montantTotal"
               onChange={handleChange}
+              // disabled={otherFieldsDisabled}
             />
             {/* {dueDatesNumber !== 0 ? (
               <Input
@@ -223,11 +227,13 @@ const Print = () => {
               type="number"
               name="dueDatesNumber"
               onChange={handleChange}
+              // disabled={otherFieldsDisabled}
             />
             {/* )} */}
             <RegularButton
               styleType="print-btn"
               onClick={handleChecks}
+              // disabled={otherFieldsDisabled}
             >
               <BsCheckLg />
             </RegularButton>
