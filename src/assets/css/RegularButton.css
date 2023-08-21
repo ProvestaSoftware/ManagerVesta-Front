@@ -76,9 +76,9 @@
   color: #fff;
   height: 60px;
   width: 320px;
-  margin-top: auto;
-  margin-left: 10px;
-  margin-right: 0;
+  margin-top: 20px;
+  margin-left: 0;
+  margin-right: auto;
 }
 
 .add-btn {
