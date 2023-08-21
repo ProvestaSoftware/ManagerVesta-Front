@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Layout from './components/Layout';
@@ -10,11 +11,203 @@ import CheckClient from './pages/CheckClient';
 import Clients from './pages/Clients';
 import Stats from './pages/Stats';
 import Settings from './pages/Settings';
-import { statsData } from './data/MockData';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Login from './pages/Login';
+import { BsCoin, BsFillLightningChargeFill } from 'react-icons/bs';
+import RegularDivider from './components/RegularDivider';
+import { FaArrowsAltV } from 'react-icons/fa';
+import { ImDroplet } from 'react-icons/im';
+import { useDispatch, useSelector } from 'react-redux';
+import { getChecks } from './actions/checks';
 
 function App() {
+
+  const allChecks = useSelector((state) => state.checks);
+
+  const checks = allChecks.filter(item => item.type === "Chèque");
+  const traites = allChecks.filter(item => item.type === "Traite");
+
+  const allChecksSumAmount = allChecks.reduce((sum, item) => sum + item.montant, 0);
+
+  const checksSumAmount = checks.reduce((sum, item) => sum + item.montant, 0);
+  const traitesSumAmount = traites.reduce((sum, item) => sum + item.montant, 0);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getChecks());
+  }, []);
+
+  const statsData = [
+      {
+          id: 1,
+          title: 'Impressions Total',
+          amount: checks.length + traites.length,
+          unity: '',
+          icon: <BsFillLightningChargeFill style={{
+              margin: 'auto',
+              display: 'block',
+              backgroundColor: '#599FCA',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              padding: '6px'
+          }} />,
+          color: '#ffffff',
+          backgroundColor: '#6EA8CC',
+          divider: <RegularDivider color="#ffffff" size="0.5px" width="50%" />,
+      },
+      {
+          id: 2,
+          title: 'Chèques',
+          amount: checks.length,
+          unity: '',
+          icon: <FaArrowsAltV style={{
+              margin: 'auto',
+              display: 'block',
+              backgroundColor: 'rgba(255, 126, 134, 0.10)',
+              color: '#FF7E86',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              padding: '6px'
+          }} />,
+          color: '#000000',
+          backgroundColor: '#ffffff',
+          divider: <RegularDivider color="#000000" size="0.5px" width="50%" />,
+      },
+      {
+          id: 3,
+          title: 'Traites',
+          amount: traites.length,
+          unity: '',
+          icon: <ImDroplet style={{
+              margin: 'auto',
+              display: 'block',
+              backgroundColor: 'rgba(161, 98, 247, 0.10)',
+              color: '#A162F7',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              padding: '6px'
+          }} />,
+          color: '#000000',
+          backgroundColor: '#ffffff',
+          divider: <RegularDivider color="#000000" size="0.5px" width="50%" />,
+      },
+      {
+          id: 4,
+          title: 'Montant Sortant',
+          amount: `$${allChecksSumAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+          unity: 'DT',
+          icon: <BsFillLightningChargeFill style={{
+              margin: 'auto',
+              display: 'block',
+              backgroundColor: '#1A569B',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              padding: '6px'
+          }} />,
+          color: '#ffffff',
+          backgroundColor: '#2663A9',
+          divider: <RegularDivider color="#ffffff" size="0.5px" width="50%" />,
+      },
+      {
+          id: 5,
+          title: 'Montant des Chèques',
+          amount: `$${checksSumAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+          unity: 'DT',
+          icon: <BsCoin style={{
+              margin: 'auto',
+              display: 'block',
+              backgroundColor: 'rgba(246, 204, 13, 0.10)',
+              color: '#F6CC0D',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              padding: '6px'
+          }} />,
+          color: '#000000',
+          backgroundColor: '#ffffff',
+          divider: <RegularDivider color="#000000" size="0.5px" width="50%" />,
+      },
+      {
+          id: 6,
+          title: 'Montant des Traites',
+          amount: `$${traitesSumAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+          unity: 'DT',
+          icon: <BsCoin style={{
+              margin: 'auto',
+              display: 'block',
+              backgroundColor: 'rgba(246, 204, 13, 0.10)',
+              color: '#F6CC0D',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              padding: '6px'
+          }} />,
+          color: '#000000',
+          backgroundColor: '#ffffff',
+          divider: <RegularDivider color="#000000" size="0.5px" width="50%" />,
+      },
+      {
+          id: 7,
+          title: 'Montant Entrant',
+          amount: `$${allChecksSumAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+          unity: 'DT',
+          icon: <BsFillLightningChargeFill style={{
+              margin: 'auto',
+              display: 'block',
+              backgroundColor: '#599FCA',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              padding: '6px'
+          }} />,
+          color: '#ffffff',
+          backgroundColor: '#6EA8CC',
+          divider: <RegularDivider color="#ffffff" size="0.5px" width="50%" />,
+      },
+      {
+          id: 8,
+          title: 'Montant des Chèques',
+          amount: `$${checksSumAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+          unity: 'DT',
+          icon: <BsCoin style={{
+              margin: 'auto',
+              display: 'block',
+              backgroundColor: 'rgba(246, 204, 13, 0.10)',
+              color: '#F6CC0D',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              padding: '6px'
+          }} />,
+          color: '#000000',
+          backgroundColor: '#ffffff',
+          divider: <RegularDivider color="#000000" size="0.5px" width="50%" />,
+      },
+      {
+          id: 9,
+          title: 'Montant des Traits ',
+          amount: `$${traitesSumAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+          unity: 'DT',
+          icon: <BsCoin style={{
+              margin: 'auto',
+              display: 'block',
+              backgroundColor: 'rgba(246, 204, 13, 0.10)',
+              color: '#F6CC0D',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              padding: '6px'
+          }} />,
+          color: '#000000',
+          backgroundColor: '#ffffff',
+          divider: <RegularDivider color="#000000" size="0.5px" width="50%" />,
+      },
+  ]
 
   const userProfile = useState(JSON.parse(localStorage.getItem("profile")));
   const user = userProfile[0]?.data?.user;
