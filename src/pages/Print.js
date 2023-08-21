@@ -8,7 +8,7 @@ import Input from '../components/Inputs/Input'
 import Select from '../components/Inputs/Select'
 // import { fournisseursData } from '../data/MockData'
 import { BsCheckLg, BsWindowDock } from 'react-icons/bs'
-// import { AiOutlinePlus } from 'react-icons/ai'
+import { AiOutlinePlus } from 'react-icons/ai'
 import { FaSave } from 'react-icons/fa'
 import RegularLink from '../components/RegularLink'
 import RegularDivider from '../components/RegularDivider'
@@ -47,6 +47,7 @@ const Print = () => {
   useEffect(() => {
     dispatch(getFournisseurs());
     dispatch(getChecks());
+    dispatch(getPayments());
     // filterDataByFournisseurId(checks, paymentData.fournisseur_id);
     // setOtherFieldsDisabled(filteredData.length > 0);
     // await filterDataByFournisseurId(checks, paymentData.fournisseur_id);
@@ -104,17 +105,18 @@ const Print = () => {
     // console.log("filteredData", filteredData);
   }
 
-  // const addCheck = (e) => {
-  //   e.preventDefault();
-  //   setDueDatesNumber(dueDatesNumber + 1);
-  //   setCheckData({ ...checkData, dueDatesNumber: dueDatesNumber });
-  //   setCheckGroupData(Array.from({ length: dueDatesNumber }, (_, index) => ({
-  //     id: index + 1,
-  //     num: '',
-  //     montant: '',
-  //     dueDate: ''
-  //   })));
-  // }
+  const addCheck = (e) => {
+    e.preventDefault();
+    setFilteredData([]);
+    setCheckGroupData(Array.from({ length: 1 }, (_, index) => ({
+      id: index + 1,
+      num: '',
+      montant: '',
+      dueDate: '',
+      type: checkType === "Chéque" ? "Chéque" : "Traite",
+      fournisseur_id: paymentData.fournisseur_id,
+    })));
+  }
 
   const handleInputChange = (id, field, value) => {
     setCheckGroupData(prevData =>
@@ -155,8 +157,6 @@ const Print = () => {
       await dispatch(createCheck(element));
     }
 
-    await dispatch(getPayments());
-    await dispatch(getChecks());
     await filterDataByFournisseurId(checks, paymentData.fournisseur_id);
   };
 
@@ -207,7 +207,7 @@ const Print = () => {
               type="text"
               name="montantTotal"
               onChange={handleChange}
-              // disabled={otherFieldsDisabled}
+            // disabled={otherFieldsDisabled}
             />
             {/* {dueDatesNumber !== 0 ? (
               <Input
@@ -227,13 +227,13 @@ const Print = () => {
               type="number"
               name="dueDatesNumber"
               onChange={handleChange}
-              // disabled={otherFieldsDisabled}
+            // disabled={otherFieldsDisabled}
             />
             {/* )} */}
             <RegularButton
               styleType="print-btn"
               onClick={handleChecks}
-              // disabled={otherFieldsDisabled}
+            // disabled={otherFieldsDisabled}
             >
               <BsCheckLg />
             </RegularButton>
@@ -248,11 +248,22 @@ const Print = () => {
         <RegularDivider size="0.5px" />
         <div className='check-form'>
           {filteredData.length > 0 ? (
-            <PaymentChecksTable
-              columns={paymentChecksData}
-              rows={filteredData}
-              fournisseurs={fournisseurs}
-            />
+            <>
+              <PaymentChecksTable
+                columns={paymentChecksData}
+                rows={filteredData}
+                fournisseurs={fournisseurs}
+              />
+              <div className='save-print-container'>
+                <RegularButton
+                  styleType="print-add-btn"
+                  onClick={addCheck}
+                >
+                  <AiOutlinePlus className='btn-icon-left' />
+                  Ajouter une autre écheance
+                </RegularButton>
+              </div>
+            </>
           ) :
             checkGroupData.map((item, index) => (
               <form key={item._id}>
@@ -287,32 +298,21 @@ const Print = () => {
         </div>
 
         {(filteredData.length === 0 && checkGroupData.length > 0) && (
-          <>
-            {/* <div className='save-print-container'>
-                <RegularButton
-                  styleType="print-add-btn"
-                  onClick={addCheck}
-                >
-                  <AiOutlinePlus className='btn-icon-left' />
-                  Ajouter une autre écheance
-                </RegularButton>
-              </div> */}
-            <div className='save-print-container'>
-              <RegularButton
-                styleType="save-btn"
-                onClick={handleSubmit}
-              >
-                <FaSave className='btn-icon-left' />
-                Sauvegarder
-              </RegularButton>
-              <RegularButton
-                styleType="print-save-btn"
-              >
-                <BsWindowDock className='btn-icon-left' />
-                Sauvegarder et Imprimer
-              </RegularButton>
-            </div>
-          </>
+          <div className='save-print-container'>
+            <RegularButton
+              styleType="save-btn"
+              onClick={handleSubmit}
+            >
+              <FaSave className='btn-icon-left' />
+              Sauvegarder
+            </RegularButton>
+            <RegularButton
+              styleType="print-save-btn"
+            >
+              <BsWindowDock className='btn-icon-left' />
+              Sauvegarder et Imprimer
+            </RegularButton>
+          </div>
         )
         }
       </div>
