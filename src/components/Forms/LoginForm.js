@@ -37,7 +37,7 @@ const LoginForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         await setLoader(true);
-        await console.log(formData);
+        // await console.log(formData);
         await dispatch(login(formData));
         await setLoader(false);
     };
