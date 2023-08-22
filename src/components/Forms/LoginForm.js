@@ -76,7 +76,7 @@ const LoginForm = () => {
                             <Input
                                 label="Mot de passe"
                                 placeholder="Mot de passe"
-                                type="text"
+                                type="password"
                                 name="password"
                                 form={true}
                                 onChange={(e) =>
