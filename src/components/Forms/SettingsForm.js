@@ -80,7 +80,7 @@ const SettingsForm = ({ user }) => {
                 <Input
                     label="Mot de passe actuel:"
                     placeholder="Mot de passe actuel"
-                    type="text"
+                    type="password"
                     name="password"
                     onChange={(e) =>
                         setPassFormData({ ...passFormData, password: e.target.value })
@@ -89,7 +89,7 @@ const SettingsForm = ({ user }) => {
                 <Input
                     label="Nouveau mot de passe:"
                     placeholder="Nouveau mot de passe"
-                    type="text"
+                    type="password"
                     name="newPassword"
                     onChange={(e) =>
                         setPassFormData({ ...passFormData, newPassword: e.target.value })
@@ -98,7 +98,7 @@ const SettingsForm = ({ user }) => {
                 <Input
                     label="Confirmer mot de passe:"
                     placeholder="Confirmer mot de passe"
-                    type="text"
+                    type="password"
                     name="newPassword_confirmation"
                     onChange={(e) =>
                         setPassFormData({ ...passFormData, newPassword_confirmation: e.target.value })
