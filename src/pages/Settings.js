@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ContentWrapper from '../components/ContentWrapper'
 import RegularDivider from '../components/RegularDivider'
 import PageTitle from '../components/PageTitle'
 import '../assets/css/Settings.css'
 import SettingsForm from '../components/Forms/SettingsForm'
-import { connectedUserData } from '../data/MockData'
 
 const Settings = () => {
+
+    const userProfile = useState(JSON.parse(localStorage.getItem("profile")));
+    const user = userProfile[0]?.data?.user;
+
     return (
         <ContentWrapper>
             <div className='settings-wrapper'>
@@ -15,7 +18,7 @@ const Settings = () => {
                 </div>
                 <RegularDivider />
                 <div className='settings-table-wrapper'>
-                    <SettingsForm item={connectedUserData} />
+                    <SettingsForm user={user} />
                 </div>
             </div>
         </ContentWrapper>
