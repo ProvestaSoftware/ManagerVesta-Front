@@ -19,19 +19,6 @@ const LoginForm = () => {
         password: "",
     }
 
-    // const renderError = () => {
-    //     if (message) {
-    //         return (
-    //             <Alert severity="error" style={{
-    //                 marginTop: '10px',
-    //                 marginBottom: '20px',
-    //             }}>
-    //                 {message}
-    //             </Alert>
-    //         )
-    //     }
-    // }
-
     const [formData, setFormData] = useState(initState);
 
     const handleSubmit = async (e) => {

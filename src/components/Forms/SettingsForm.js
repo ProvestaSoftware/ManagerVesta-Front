@@ -3,7 +3,7 @@ import Input from '../Inputs/Input'
 import RegularDivider from '../RegularDivider'
 import RegularButton from '../Buttons/RegularButton'
 import { useDispatch } from 'react-redux'
-import { updateUserProfileData } from '../../actions/userProfile'
+import { updateUserPassword, updateUserProfileData } from '../../actions/userProfile'
 import CircularProgress from '../CircularProgress'
 
 const SettingsForm = ({ user }) => {
@@ -13,8 +13,16 @@ const SettingsForm = ({ user }) => {
         email: user?.email,
     }
 
+    const passInitState = {
+        password: '',
+        newPassword: '',
+        newPassword_confirmation: '',
+    }
+
     const [formData, setFormData] = useState(initState);
+    const [passFormData, setPassFormData] = useState(passInitState);
     const [loader, setLoader] = useState(false);
+    const [passLoader, setPassLoader] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -24,6 +32,14 @@ const SettingsForm = ({ user }) => {
         // await console.log(formData);
         await dispatch(updateUserProfileData(user?.id, formData));
         await setLoader(false);
+    };
+
+    const handleSubmitPassword = async (e) => {
+        e.preventDefault();
+        await setPassLoader(true);
+        // await console.log(passFormData);
+        await dispatch(updateUserPassword(user?.id, passFormData));
+        await setPassLoader(false);
     };
 
     return (
@@ -60,25 +76,45 @@ const SettingsForm = ({ user }) => {
                 )}
             </form>
             <RegularDivider size="0.5px" />
-            <form className='password-form-container'>
+            <form onSubmit={handleSubmitPassword} className='password-form-container'>
                 <Input
                     label="Mot de passe actuel:"
                     placeholder="Mot de passe actuel"
                     type="text"
-                    defaultValue={user?.password}
+                    name="password"
+                    onChange={(e) =>
+                        setPassFormData({ ...passFormData, password: e.target.value })
+                    }
                 />
                 <Input
                     label="Nouveau mot de passe:"
                     placeholder="Nouveau mot de passe"
                     type="text"
-                    defaultValue={user?.newPassword}
+                    name="newPassword"
+                    onChange={(e) =>
+                        setPassFormData({ ...passFormData, newPassword: e.target.value })
+                    }
                 />
                 <Input
                     label="Confirmer mot de passe:"
                     placeholder="Confirmer mot de passe"
                     type="text"
-                    defaultValue={user?.confirmPassword}
+                    name="newPassword_confirmation"
+                    onChange={(e) =>
+                        setPassFormData({ ...passFormData, newPassword_confirmation: e.target.value })
+                    }
                 />
+                {passLoader ? (
+                    <CircularProgress />
+                ) : (
+                    <RegularButton
+                        styleType="primary"
+                        type="submit"
+                        position="right"
+                    >
+                        Enregistrer
+                    </RegularButton>
+                )}
             </form>
         </div>
     )

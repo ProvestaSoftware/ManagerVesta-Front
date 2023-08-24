@@ -1,10 +1,11 @@
 import * as api from "../api/index.js";
 import { AUTHERROR, UPDATE } from "../constants/actionTypes.js";
+import { logout } from "./auth.js";
 
 export const updateUserProfileData = (id, user) => async (dispatch) => {
     try {
         const { data } = await api.updateUserProfileData(id, user);
-        console.log("data", data?.data);
+        // console.log("data", data?.data);
 
         dispatch({ type: UPDATE, payload: data });
 
@@ -15,19 +16,22 @@ export const updateUserProfileData = (id, user) => async (dispatch) => {
     }
 };
 
-// export const updateUserPassword = (user) => async (dispatch) => {
-//     try {
-//         const { data } = await api.updateUserPassword(user);
+export const updateUserPassword = (id, user) => async (dispatch) => {
+    try {
+        const { data } = await api.updateUserPassword(id, user);
+        // console.log("pass data", data);
 
-//         dispatch({ type: UPDATE, payload: data });
+        dispatch({ type: UPDATE, payload: data });
 
-//         dispatch(authError(""));
+        dispatch(authError(""));
 
-//     } catch (error) {
-//         dispatch(authError(error.response.data.message));
-//         console.log(error.message);
-//     }
-// };
+        dispatch(logout());
+
+    } catch (error) {
+        dispatch(authError(error.response.data.message));
+        // console.log(error.message);
+    }
+};
 
 export const authError = (error) => async (dispatch) => {
     dispatch({

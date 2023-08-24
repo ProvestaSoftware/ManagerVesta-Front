@@ -13,6 +13,7 @@ API.interceptors.request.use((req) => {
 /*--- Auth --*/
 export const login = (formData) => API.post("/api/auth/login", formData);
 export const updateUserProfileData = (id, updatedUserProfileData) => API.put(`/api/auth/${id}/update`, updatedUserProfileData);
+export const updateUserPassword = (id, updatedUserPassword) => API.post(`/api/auth/${id}/update-password`, updatedUserPassword);
 
 
 /*--- Fournisseurs --*/
