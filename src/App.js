@@ -20,6 +20,7 @@ import { ImDroplet } from 'react-icons/im';
 import { useDispatch, useSelector } from 'react-redux';
 import { getChecks } from './actions/checks';
 import Charts from './pages/Charts';
+import { getFournisseurs } from './actions/fournisseurs';
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
 
   useEffect(() => {
     dispatch(getChecks());
+    dispatch(getFournisseurs());
   }, []);
 
   const statsData = [
