@@ -1,6 +1,7 @@
 import React from "react";
 import { ResponsivePie } from "@nivo/pie";
 import { useSelector } from "react-redux";
+import Header from "../Header";
 
 const BreakdownChart = ({ isDashboard = false }) => {
 
@@ -45,6 +46,7 @@ const BreakdownChart = ({ isDashboard = false }) => {
         position: "relative"
       }}
     >
+      <Header title="Chèques VS Traites" subtitle="Nombre de chèques / traites" />
       <ResponsivePie
         data={formattedData}
         valueFormat={valueFormatter}
@@ -131,23 +133,6 @@ const BreakdownChart = ({ isDashboard = false }) => {
           }
         ]}
       />
-      {/* <Box
-        position="absolute"
-        top="50%"
-        left="50%"
-        color={theme.palette.secondary[400]}
-        textAlign="center"
-        pointerEvents="none"
-        sx={{
-          transform: isDashboard
-            ? "translate(-75%, -170%)"
-            : "translate(-50%, -100%)"
-        }}
-      >
-        <Typography variant="h6">
-          {!isDashboard && "Total:"} ${data.totalSales}
-        </Typography>
-      </Box> */}
     </div>
   );
 };
