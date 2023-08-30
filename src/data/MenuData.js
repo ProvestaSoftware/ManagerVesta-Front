@@ -5,6 +5,7 @@ import { HiNewspaper } from 'react-icons/hi'
 import { LuNewspaper } from 'react-icons/lu'
 import { FaUserTie, FaUser } from 'react-icons/fa'
 import { BiLogOut } from 'react-icons/bi'
+import { MdOutlineNetworkPing } from 'react-icons/md'
 
 export const sidebarMenuData = [
     {
@@ -46,6 +47,11 @@ export const sidebarMenuData = [
         title: 'Statistiques',
         link: 'stats',
         icon: <ImStatsDots />
+    },
+    {
+        title: 'KPIs',
+        link: 'kpis',
+        icon: <MdOutlineNetworkPing />
     },
 ]
 

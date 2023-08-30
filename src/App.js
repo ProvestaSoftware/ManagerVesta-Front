@@ -19,6 +19,7 @@ import { FaArrowsAltV } from 'react-icons/fa';
 import { ImDroplet } from 'react-icons/im';
 import { useDispatch, useSelector } from 'react-redux';
 import { getChecks } from './actions/checks';
+import Charts from './pages/Charts';
 
 function App() {
 
@@ -98,7 +99,7 @@ function App() {
       {
           id: 4,
           title: 'Montant Sortant',
-          amount: `$${allChecksSumAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+          amount: `${allChecksSumAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
           unity: 'DT',
           icon: <BsFillLightningChargeFill style={{
               margin: 'auto',
@@ -116,7 +117,7 @@ function App() {
       {
           id: 5,
           title: 'Montant des Chèques',
-          amount: `$${checksSumAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+          amount: `${checksSumAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
           unity: 'DT',
           icon: <BsCoin style={{
               margin: 'auto',
@@ -135,7 +136,7 @@ function App() {
       {
           id: 6,
           title: 'Montant des Traites',
-          amount: `$${traitesSumAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+          amount: `${traitesSumAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
           unity: 'DT',
           icon: <BsCoin style={{
               margin: 'auto',
@@ -154,7 +155,7 @@ function App() {
       {
           id: 7,
           title: 'Montant Entrant',
-          amount: `$${allChecksSumAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+          amount: `${allChecksSumAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
           unity: 'DT',
           icon: <BsFillLightningChargeFill style={{
               margin: 'auto',
@@ -172,7 +173,7 @@ function App() {
       {
           id: 8,
           title: 'Montant des Chèques',
-          amount: `$${checksSumAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+          amount: `${checksSumAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
           unity: 'DT',
           icon: <BsCoin style={{
               margin: 'auto',
@@ -191,7 +192,7 @@ function App() {
       {
           id: 9,
           title: 'Montant des Traits ',
-          amount: `$${traitesSumAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+          amount: `${traitesSumAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
           unity: 'DT',
           icon: <BsCoin style={{
               margin: 'auto',
@@ -230,6 +231,7 @@ function App() {
             <Route path="/cheques-clients" element={user ? <CheckClient /> : <Navigate to="/login" replace />} />
             <Route path="/clients" element={user ? <Clients /> : <Navigate to="/login" replace />} />
             <Route path="/stats" element={user ? <Stats data={statsData} /> : <Navigate to="/login" replace />} />
+            <Route path="/kpis" element={user ? <Charts /> : <Navigate to="/login" replace />} />
             <Route path="/parametres" element={user ? <Settings /> : <Navigate to="/login" replace />} />
           </Route>
           <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
