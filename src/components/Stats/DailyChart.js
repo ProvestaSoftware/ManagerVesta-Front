@@ -17,9 +17,20 @@ const DailyChart = () => {
 
     const processData = () => {
         const dailyDataMap = {};
+        let earliest = null;
+        let latest = null;
 
         for (const item of allChecks) {
             const date = item.dueDate.split('T')[0];
+
+            if (!earliest || date < earliest) {
+                earliest = date;
+            }
+
+            if (!latest || date > latest) {
+                latest = date;
+            }
+
             if (dailyDataMap[date]) {
                 dailyDataMap[date]++;
             } else {
@@ -27,17 +38,15 @@ const DailyChart = () => {
             }
         }
 
+        setStartDate(new Date(earliest));
+        setEndDate(new Date(latest));
+
         const processedData = Object.keys(dailyDataMap).map(date => ({
             date,
             totalChecks: dailyDataMap[date],
         }));
 
         setDailyData(processedData);
-        if (dailyData.length > 0) {
-          const sortedDates = dailyData.map(data => data.date).sort();
-          setStartDate(sortedDates[0]);
-          setEndDate(sortedDates[sortedDates.length - 1]);
-        }
     };
 
     useEffect(() => {
