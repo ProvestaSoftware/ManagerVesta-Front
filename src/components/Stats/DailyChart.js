@@ -10,16 +10,21 @@ const DailyChart = () => {
 
     const allChecks = useSelector((state) => state.checks);
 
-    const [dailyData, setDailyData] = useState([]);
+    const checks = allChecks.filter(item => item.type === "Chèque");
+    const traites = allChecks.filter(item => item.type === "Traite");
+
+    const [checkDailyData, setCheckDailyData] = useState([]);
+    const [traiteDailyData, setTraiteDailyData] = useState([]);
 
     const [startDate, setStartDate] = useState(new Date("2023-07-01"));
     const [endDate, setEndDate] = useState(new Date("2023-09-31"));
 
     const processData = () => {
-        const dailyDataMap = {};
+        const checkDailyDataMap = {};
+        const traiteDailyDataMap = {};
         let earliest = null;
         let latest = null;
-
+        
         for (const item of allChecks) {
             const date = item.dueDate.split('T')[0];
 
@@ -30,23 +35,43 @@ const DailyChart = () => {
             if (!latest || date > latest) {
                 latest = date;
             }
+        }
 
-            if (dailyDataMap[date]) {
-                dailyDataMap[date]++;
+        for (const item of checks) {
+            const date = item.dueDate.split('T')[0];
+
+            if (checkDailyDataMap[date]) {
+                checkDailyDataMap[date]++;
             } else {
-                dailyDataMap[date] = 1;
+                checkDailyDataMap[date] = 1;
+            }
+        }
+
+        for (const item of traites) {
+            const date = item.dueDate.split('T')[0];
+
+            if (traiteDailyDataMap[date]) {
+                traiteDailyDataMap[date]++;
+            } else {
+                traiteDailyDataMap[date] = 1;
             }
         }
 
         setStartDate(new Date(earliest));
         setEndDate(new Date(latest));
 
-        const processedData = Object.keys(dailyDataMap).map(date => ({
+        const checkProcessedData = Object.keys(checkDailyDataMap).map(date => ({
             date,
-            totalChecks: dailyDataMap[date],
+            totalChecks: checkDailyDataMap[date],
         }));
 
-        setDailyData(processedData);
+        const traiteProcessedData = Object.keys(traiteDailyDataMap).map(date => ({
+            date,
+            totalChecks: traiteDailyDataMap[date],
+        }));
+
+        setCheckDailyData(checkProcessedData);
+        setTraiteDailyData(traiteProcessedData);
     };
 
     useEffect(() => {
@@ -57,27 +82,45 @@ const DailyChart = () => {
         if (!allChecks) return [];
 
         // console.log("dailyData", dailyData);
-        const totalChecksLine = {
+        const checksLine = {
             id: "Checks",
             color: "#2663a9",
             data: [],
         };
+        const traitesLine = {
+            id: "Traites",
+            color: "#6ea8cc",
+            data: [],
+        };
 
-        Object.values(dailyData).forEach(({ date, totalChecks }) => {
+        Object.values(checkDailyData).forEach(({ date, totalChecks }) => {
             const dateFormatted = new Date(date);
             if (dateFormatted >= startDate && dateFormatted <= endDate) {
                 const splitDate = date.substring(date.indexOf("-") + 1);
 
-                totalChecksLine.data = [
-                    ...totalChecksLine.data,
+                checksLine.data = [
+                    ...checksLine.data,
+                    { x: splitDate, y: `${Number(totalChecks).toFixed(0)}` },
+                ];
+            }
+        });
+        Object.values(traiteDailyData).forEach(({ date, totalChecks }) => {
+            const dateFormatted = new Date(date);
+            if (dateFormatted >= startDate && dateFormatted <= endDate) {
+                const splitDate = date.substring(date.indexOf("-") + 1);
+
+                traitesLine.data = [
+                    ...traitesLine.data,
                     { x: splitDate, y: `${Number(totalChecks).toFixed(0)}` },
                 ];
             }
         });
 
-        const formattedData = [totalChecksLine];
+        const formattedData = [checksLine, traitesLine];
         return [formattedData];
-    }, [allChecks, dailyData, startDate, endDate]);
+    }, [allChecks, checkDailyData, traiteDailyData, startDate, endDate]);
+
+    const yTickValues = formattedData[0].data.map(entry => Math.round(entry.y)); // Assuming data[0].data is your y-axis data
 
     return (
         <div style={{
@@ -119,7 +162,7 @@ const DailyChart = () => {
                             axis: {
                                 domain: {
                                     line: {
-                                        stroke: "#6ea8cc",
+                                        stroke: "#ff7e86",
                                     },
                                 },
                                 legend: {
@@ -129,11 +172,11 @@ const DailyChart = () => {
                                 },
                                 ticks: {
                                     line: {
-                                        stroke: "#6ea8cc",
+                                        stroke: "#ff7e86",
                                         strokeWidth: 1,
                                     },
                                     text: {
-                                        fill: "#6ea8cc",
+                                        fill: "#ff7e86",
                                     },
                                 },
                             },
@@ -158,7 +201,7 @@ const DailyChart = () => {
                             stacked: false,
                             reverse: false,
                         }}
-                        yFormat=" >-.0f"
+                        yFormat={value => Math.round(value)} // This formats y-axis values as integers
                         curve="catmullRom"
                         axisTop={null}
                         axisRight={null}
@@ -179,22 +222,24 @@ const DailyChart = () => {
                             legend: "Nombre de chèques",
                             legendOffset: -50,
                             legendPosition: "middle",
+                            tickValues: yTickValues,
                         }}
                         enableGridX={false}
-                        enableGridY={false}
+                        enableGridY={true}
                         pointSize={10}
                         pointColor={{ theme: "background" }}
                         pointBorderWidth={2}
                         pointBorderColor={{ from: "serieColor" }}
                         pointLabelYOffset={-12}
                         useMesh={true}
+                        lineWidth={2}
                         legends={[
                             {
-                                anchor: "top-right",
+                                anchor: "top-left",
                                 direction: "column",
                                 justify: false,
                                 translateX: 50,
-                                translateY: 0,
+                                translateY: -50,
                                 itemsSpacing: 0,
                                 itemDirection: "left-to-right",
                                 itemWidth: 80,
