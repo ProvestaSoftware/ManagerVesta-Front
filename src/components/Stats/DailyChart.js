@@ -85,7 +85,7 @@ const DailyChart = () => {
         }}>
             <Header title="DAILY Checks" subtitle="Checks Count By Date" />
             <div style={{
-                height: '400px',
+                height: '360px',
             }}>
                 <div style={{
                     display: 'flex',

@@ -38,7 +38,7 @@ const BreakdownChart = ({ isDashboard = false }) => {
   return (
     <div
       style={{
-        height: isDashboard ? "325px" : "100%",
+        height: isDashboard ? "460px" : "100%",
         width: "100%",
         minHeight: isDashboard ? "325px" : undefined,
         minWidth: isDashboard ? "325px" : undefined,
