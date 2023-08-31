@@ -4,7 +4,7 @@ import ContentWrapper from '../components/ContentWrapper'
 import RegularDivider from '../components/RegularDivider'
 import PageTitle from '../components/PageTitle'
 import '../assets/css/Stats.css'
-import BreakdownChart from '../components/Stats/BreakdownChart'
+import BreakdownCheckTypeChart from '../components/Stats/BreakdownCheckTypeChart'
 import DailyChart from '../components/Stats/DailyChart'
 import { useSelector } from 'react-redux'
 import TopFournisseursTable from '../components/Stats/TopFournisseursTable'
@@ -100,7 +100,7 @@ const Charts = () => {
                 </div>
                 <RegularDivider />
                 <div className='kpis-container'>
-                    <BreakdownChart isDashboard={true} />
+                    <BreakdownCheckTypeChart isDashboard={true} />
                     <DailyChart />
                     <TopFournisseursTable fournisseurs={fournisseurs} checks={checks} />
                     <TimeRangeChart data={rangeData} />

@@ -3,7 +3,7 @@ import { ResponsivePie } from "@nivo/pie";
 import { useSelector } from "react-redux";
 import Header from "../Header";
 
-const BreakdownChart = ({ isDashboard = false }) => {
+const BreakdownCheckTypeChart = ({ isDashboard = false }) => {
 
   const allChecks = useSelector((state) => state.checks);
 
@@ -138,4 +138,4 @@ const BreakdownChart = ({ isDashboard = false }) => {
   );
 };
 
-export default BreakdownChart;
+export default BreakdownCheckTypeChart;
