@@ -63,7 +63,7 @@ const CheckTableRow = ({ item, fournisseurs }) => {
                 </td>
                 <td class="px-6 py-4">
                     <div style={{
-                        backgroundColor: item.type === 'Cheque' ? '#00A3FF' : '#94C509',
+                        backgroundColor: item.type === 'Chèque' ? '#00A3FF' : '#94C509',
                         color: '#ffffff',
                         borderRadius: '15px',
                         padding: '10px',
