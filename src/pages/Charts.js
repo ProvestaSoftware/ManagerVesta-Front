@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux'
 import TopFournisseursTable from '../components/Stats/TopFournisseursTable'
 import TimeRangeChart from '../components/Stats/TimeRangeChart'
 import TopIcomesFournisseurs from '../components/Stats/TopIcomesFournisseurs'
+import TopMonths from '../components/Stats/TopMonths'
 // import TimeRangeChart from '../components/Stats/TimeRangeChart'
 
 const Charts = () => {
@@ -47,7 +48,7 @@ const Charts = () => {
 
     useEffect(() => {
         processData();
-        console.log("rangeData", rangeData);
+        // console.log("rangeData", rangeData);
     }, [checks]);
 
     // Transform data
@@ -104,6 +105,7 @@ const Charts = () => {
                     <TopFournisseursTable fournisseurs={fournisseurs} checks={checks} />
                     <TimeRangeChart data={rangeData} />
                     <TopIcomesFournisseurs data={top5Data} />
+                    <TopMonths />
                 </div>
             </div>
         </ContentWrapper>
