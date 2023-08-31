@@ -46,7 +46,7 @@ const BreakdownCheckTypeChart = ({ isDashboard = false }) => {
         position: "relative"
       }}
     >
-      <Header title="Chèques VS Traites" subtitle="Nombre de chèques / traites" />
+      <Header title="Chèques VS Traites" subtitle="Nombre de Ch/Tr" />
       <ResponsivePie
         data={formattedData}
         valueFormat={valueFormatter}
