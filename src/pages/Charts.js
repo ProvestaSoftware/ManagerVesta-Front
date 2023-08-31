@@ -11,6 +11,7 @@ import TopFournisseursTable from '../components/Stats/TopFournisseursTable'
 import TimeRangeChart from '../components/Stats/TimeRangeChart'
 import TopIcomesFournisseurs from '../components/Stats/TopIcomesFournisseurs'
 import TopMonths from '../components/Stats/TopMonths'
+import BreakdownCheckStatusChart from '../components/Stats/BreakdownCheckStatusChart'
 // import TimeRangeChart from '../components/Stats/TimeRangeChart'
 
 const Charts = () => {
@@ -32,6 +33,7 @@ const Charts = () => {
                     <TimeRangeChart checks={checks} />
                     <TopIcomesFournisseurs checks={checks} fournisseurs={fournisseurs} />
                     <TopMonths />
+                    <BreakdownCheckStatusChart isDashboard={true} />
                 </div>
             </div>
         </ContentWrapper>
