@@ -50,7 +50,7 @@ const BreakdownCheckTypeChart = ({ isDashboard = false }) => {
       <ResponsivePie
         data={formattedData}
         valueFormat={valueFormatter}
-        cornerRadius={8}
+        cornerRadius={0}
         theme={{
           axis: {
             domain: {
@@ -91,7 +91,7 @@ const BreakdownCheckTypeChart = ({ isDashboard = false }) => {
             : { top: 40, right: 80, bottom: 80, left: 80 }
         }
         sortByValue={true}
-        innerRadius={0.45}
+        innerRadius={0}
         activeOuterRadiusOffset={8}
         borderWidth={1}
         borderColor={{
