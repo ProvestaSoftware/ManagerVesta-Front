@@ -40,10 +40,10 @@ const BreakdownCheckTypeChart = ({ isDashboard = false }) => {
     <div
       style={{
         height: isDashboard ? "460px" : "100%",
-        width: "100%",
+        width: "400px",
         minHeight: isDashboard ? "325px" : undefined,
         minWidth: isDashboard ? "325px" : undefined,
-        position: "relative"
+        position: "relative",
       }}
     >
       <Header title="Chèques VS Traites" subtitle="Nombre de Ch/Tr" />
@@ -87,7 +87,7 @@ const BreakdownCheckTypeChart = ({ isDashboard = false }) => {
         colors={{ datum: "data.color" }}
         margin={
           isDashboard
-            ? { top: 40, right: 80, bottom: 100, left: 50 }
+            ? { top: 40, right: 0, bottom: 100, left: 120 }
             : { top: 40, right: 80, bottom: 80, left: 80 }
         }
         sortByValue={true}
