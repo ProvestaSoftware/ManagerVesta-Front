@@ -110,7 +110,7 @@ function TopMonths() {
                     tickSize: 5,
                     tickPadding: 5,
                     tickRotation: 0,
-                    legend: 'Fournisseur',
+                    legend: 'Mois',
                     legendPosition: 'middle',
                     legendOffset: 40
                 }}
