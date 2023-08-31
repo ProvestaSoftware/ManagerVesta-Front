@@ -3,20 +3,53 @@ import React, { useEffect, useState } from 'react'
 import { ResponsiveCalendar } from '@nivo/calendar'
 import Header from '../Header';
 
-const TimeRangeChart = ({ data }) => {
+const TimeRangeChart = ({ checks }) => {
+
+    const [rangeData, setRangeData] = useState([]);
+
+    // if (!fournisseurs || !checks) {
+    //     // Data is not available yet, you can display a loading message or spinner
+    //     return <p>Loading...</p>;
+    // }
+
+    const processRangeData = () => {
+        const rangeDataMap = {};
+
+        for (const item of checks) {
+            const date = item.dueDate.split('T')[0];
+
+            if (rangeDataMap[date]) {
+                rangeDataMap[date]++;
+            } else {
+                rangeDataMap[date] = 1;
+            }
+        }
+
+        const processedData = Object.keys(rangeDataMap).map(date => ({
+            value: rangeDataMap[date],
+            day: date,
+        }));
+
+        setRangeData(processedData);
+    };
+
+    useEffect(() => {
+        processRangeData();
+        // console.log("rangeData", rangeData);
+    }, [checks]);
 
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
 
-    // console.log("data", data);
+    // console.log("rangeData", rangeData);
 
-    const maxValue = Math.max(...data.map(item => item.value));
+    const maxValue = Math.max(...rangeData.map(item => item.value));
 
     const processData = () => {
         let earliest = null;
         let latest = null;
 
-        for (const item of data) {
+        for (const item of rangeData) {
             const date = item.day.split('T')[0];
 
             if (!earliest || date < earliest) {
@@ -34,7 +67,7 @@ const TimeRangeChart = ({ data }) => {
 
     useEffect(() => {
         processData();
-    }, [data]);
+    }, [rangeData]);
 
     const legendRanges = [
         { from: 0, to: Math.floor(maxValue / 2), label: `0 - ${Math.floor(maxValue / 2)}`, color: '#6ea8cc' },
@@ -62,7 +95,7 @@ const TimeRangeChart = ({ data }) => {
             }}>
                 <Header title="Calendrier des Chèques et Traites" subtitle="Ch/Tr par Date et Intensité" />
                 <ResponsiveCalendar
-                    data={data}
+                    data={rangeData}
                     from={startDate}
                     to={endDate}
                     emptyColor="#eeeeee"

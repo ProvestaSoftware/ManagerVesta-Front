@@ -2,15 +2,54 @@ import React from 'react'
 import { ResponsiveBar } from '@nivo/bar'
 import Header from '../Header'
 
-const TopIcomesFournisseurs = ({ data }) => {
+const TopIcomesFournisseurs = ({ fournisseurs, checks }) => {
 
-    // console.log("data", data);
+    // Transform data
+    const transformedData = fournisseurs.map((fournisseur) => {
+        const dataForFournisseur = checks.filter(
+            (check) => check.fournisseur_id === fournisseur.id
+        );
+
+        const montantByType = dataForFournisseur.reduce(
+            (sums, check) => {
+                if (check.type === 'Chèque') {
+                    sums.cheque += check.montant;
+                } else if (check.type === 'Traite') {
+                    sums.traite += check.montant;
+                }
+                return sums;
+            },
+            { cheque: 0, traite: 0 }
+        );
+
+        return {
+            fournisseur: fournisseur.nom,
+            "Cheques": montantByType.cheque,
+            ChequesColor: '#2663a9',
+            "Traites": montantByType.traite,
+            TraitesColor: '#6ea8cc',
+        };
+    });
+
+    // console.log("transformedData", transformedData);
+
+    const sortedData = transformedData.sort((a, b) => {
+        const aTotal = a.Cheques + a.Traites;
+        const bTotal = b.Cheques + b.Traites;
+        return bTotal - aTotal;
+    });
+
+    const top5Data = sortedData.slice(0, 5);
+
+    // console.log("top5Data", top5Data);
+
+    // console.log("transformedData", transformedData);
 
     return (
         <div style={{ height: '460px', width: '100%', marginBottom: '50px' }}>
             <Header title={"TOP 5 Fournisseurs"} subtitle={"Par Montant Ch/Tr"} />
             <ResponsiveBar
-                data={data}
+                data={top5Data}
                 keys={['Cheques', 'Traites']}
                 indexBy="fournisseur"
                 margin={{ top: 50, right: 130, bottom: 50, left: 90 }}
