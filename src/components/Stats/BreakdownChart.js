@@ -50,6 +50,7 @@ const BreakdownChart = ({ isDashboard = false }) => {
       <ResponsivePie
         data={formattedData}
         valueFormat={valueFormatter}
+        cornerRadius={8}
         theme={{
           axis: {
             domain: {
