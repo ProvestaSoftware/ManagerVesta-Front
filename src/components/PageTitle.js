@@ -3,10 +3,11 @@ import '../assets/css/PageTitle.css'
 
 const PageTitle = ({ children, fontSize, fontWeight }) => {
     return (
-        <h1 style={{
+        <div style={{
             fontSize: fontSize,
-            fontWeight: fontWeight
-        }} className='page-title'>{children}</h1>
+            fontWeight: fontWeight,
+            height: '100%',
+        }} className='page-title'>{children}</div>
     )
 }
 

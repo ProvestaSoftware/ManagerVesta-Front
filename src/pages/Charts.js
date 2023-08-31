@@ -538,7 +538,10 @@ const Charts = () => {
                 <div className='kpis-container'>
                     <BreakdownChart isDashboard={true} />
                     <DailyChart />
-                    {/* <TopFournisseursChart fournisseurs={fournisseurs} checks={checks} /> */}
+                    {
+                        // fournisseurs && fournisseurs.length > 0 && checks && checks.length > 0 &&
+                            // <TopFournisseursChart fournisseurs={fournisseurs} checks={checks} />
+                    }
                     {/* <TimeRangeChart data={data} /> */}
                     <TopFournisseursTable fournisseurs={fournisseurs} checks={checks} />
                 </div>

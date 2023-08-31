@@ -4,7 +4,7 @@ import logo from '../assets/images/provestaLogo.svg'
 const Logo = ({ style }) => {
     return (
         <a href="/" class="flex">
-            <img src={logo} class="h-8 mr-3" alt="Provesta Logo" style={style} />
+            <img src={'/logo_cca.png'} class="h-10 mr-3" alt="CCA Logo - Provesta" style={style} />
         </a>
     )
 }

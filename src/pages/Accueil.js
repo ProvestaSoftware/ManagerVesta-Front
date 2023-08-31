@@ -1,20 +1,16 @@
 import React from 'react'
 import ContentWrapper from '../components/ContentWrapper'
 import Logo from '../components/Logo'
-import RegularDivider from '../components/RegularDivider'
-import PageTitle from '../components/PageTitle'
 
 const Accueil = () => {
-
     const currentYear = new Date().getFullYear();
 
     return (
         <ContentWrapper>
-            <Logo />
-            <RegularDivider />
-            <PageTitle fontSize="16px" fontWeight="400">
-                Copyright {currentYear} All rights are reserved.
-            </PageTitle>
+            <img src={'/logo_cca.png'} className='rounded' />
+            <span className='text-sm absolute bottom-10 right-10'>
+                Copyright {currentYear} All rights are reserved - Powered by <a href='https://provestasoft.com'>ProvestaSoft</a>.
+            </span>
         </ContentWrapper>
     )
 }
