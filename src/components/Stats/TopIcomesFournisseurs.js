@@ -13,7 +13,7 @@ const TopIcomesFournisseurs = ({ data }) => {
                 data={data}
                 keys={['Cheques', 'Traites']}
                 indexBy="fournisseur"
-                margin={{ top: 0, right: 130, bottom: 50, left: 90 }}
+                margin={{ top: 50, right: 130, bottom: 50, left: 90 }}
                 padding={0.3}
                 valueScale={{ type: 'linear' }}
                 indexScale={{ type: 'band', round: true }}
