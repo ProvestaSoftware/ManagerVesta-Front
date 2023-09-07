@@ -11,7 +11,7 @@ const FournisseurModal = ({ item, handleModal }) => {
         nom: item ? item.nom : '',
         email: item ? item.email : '',
         numTel: item ? item.numTel : '',
-        banque: item ? item.banque : '',
+        banque: item ? item.banque : 'ATB',
         rib: item ? item.rib : '',
     });
 

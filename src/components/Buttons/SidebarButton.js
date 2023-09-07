@@ -32,7 +32,7 @@ const SidebarButton = ({ item }) => {
                     style={{
                         backgroundColor:
                             active === item.link
-                                ? '#6ea8cc'
+                                ? '#ee8432'
                                 : "transparent",
                         color:
                             active === item.link
@@ -50,7 +50,7 @@ const SidebarButton = ({ item }) => {
                         cursor: 'pointer',
                         backgroundColor:
                             active === item.link
-                                ? '#6ea8cc'
+                                ? '#ee8432'
                                 : "transparent",
                         color:
                             active === item.link

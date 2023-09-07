@@ -297,7 +297,7 @@ const PrintModal = ({ item, handleModal, fournisseurs }) => {
                                 style={{
                                     height: 'auto',
                                     marginBottom: '20px',
-                                    background: '#6ea8cc',
+                                    background: '#ee8432',
                                     color: '#fff',
                                     borderRadius: '10px',
                                     cursor: 'pointer',

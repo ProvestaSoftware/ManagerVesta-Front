@@ -13,7 +13,7 @@ const Login = () => {
                 <Logo style={{
                     margin: 'auto',
                     width: '100%',
-                    height: '36px'
+                    height: '80px'
                 }} />
             </div>
             <RegularDivider />

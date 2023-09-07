@@ -1,15 +1,16 @@
 import React from "react";
 import { ResponsivePie } from "@nivo/pie";
 import { useSelector } from "react-redux";
+import Header from "../Header";
 
-const BreakdownChart = ({ isDashboard = false }) => {
+const BreakdownCheckTypeChart = ({ isDashboard = false }) => {
 
   const allChecks = useSelector((state) => state.checks);
 
   const checks = allChecks.filter(item => item.type === "Chèque");
   const traites = allChecks.filter(item => item.type === "Traite");
 
-  const colors = ["#2663a9", "#6ea8cc"];
+  const colors = ["#2663a9", "#ee8432"];
   const initData = {
     "Chèque": checks.length,
     "Traite": traites.length
@@ -39,40 +40,42 @@ const BreakdownChart = ({ isDashboard = false }) => {
     <div
       style={{
         height: isDashboard ? "460px" : "100%",
-        width: "100%",
+        width: "400px",
         minHeight: isDashboard ? "325px" : undefined,
         minWidth: isDashboard ? "325px" : undefined,
-        position: "relative"
+        position: "relative",
       }}
     >
+      <Header title="Chèques VS Traites" subtitle="Nombre de Ch/Tr" />
       <ResponsivePie
         data={formattedData}
         valueFormat={valueFormatter}
+        cornerRadius={0}
         theme={{
           axis: {
             domain: {
               line: {
-                stroke: "#ff7e86"
+                stroke: "#6ea8cc"
               }
             },
             legend: {
               text: {
-                fill: "#ff7e86"
+                fill: "#6ea8cc"
               }
             },
             ticks: {
               line: {
-                stroke: "#ff7e86",
+                stroke: "#6ea8cc",
                 strokeWidth: 1
               },
               text: {
-                fill: "#ff7e86"
+                fill: "#6ea8cc"
               }
             }
           },
           legends: {
             text: {
-              fill: "#ff7e86"
+              fill: "#6ea8cc"
             }
           },
           tooltip: {
@@ -84,11 +87,11 @@ const BreakdownChart = ({ isDashboard = false }) => {
         colors={{ datum: "data.color" }}
         margin={
           isDashboard
-            ? { top: 40, right: 80, bottom: 100, left: 50 }
+            ? { top: 40, right: 0, bottom: 100, left: 120 }
             : { top: 40, right: 80, bottom: 80, left: 80 }
         }
         sortByValue={true}
-        innerRadius={0.45}
+        innerRadius={0}
         activeOuterRadiusOffset={8}
         borderWidth={1}
         borderColor={{
@@ -97,7 +100,7 @@ const BreakdownChart = ({ isDashboard = false }) => {
         }}
         enableArcLinkLabels={!isDashboard}
         enableRadialLabels={true}
-        arcLinkLabelsTextColor={"#ff7e86"}
+        arcLinkLabelsTextColor={"#6ea8cc"}
         arcLinkLabelsThickness={2}
         arcLinkLabelsColor={{ from: "color" }}
         arcLabelsSkipAngle={10}
@@ -131,25 +134,8 @@ const BreakdownChart = ({ isDashboard = false }) => {
           }
         ]}
       />
-      {/* <Box
-        position="absolute"
-        top="50%"
-        left="50%"
-        color={theme.palette.secondary[400]}
-        textAlign="center"
-        pointerEvents="none"
-        sx={{
-          transform: isDashboard
-            ? "translate(-75%, -170%)"
-            : "translate(-50%, -100%)"
-        }}
-      >
-        <Typography variant="h6">
-          {!isDashboard && "Total:"} ${data.totalSales}
-        </Typography>
-      </Box> */}
     </div>
   );
 };
 
-export default BreakdownChart;
+export default BreakdownCheckTypeChart;

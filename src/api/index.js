@@ -21,6 +21,7 @@ export const fetchFournisseurs = () => API.get('/api/fournisseur');
 export const createFournisseur = (newFournisseur) => API.post('/api/fournisseur', newFournisseur);
 export const updateFournisseur = (id, updatedFournisseur) => API.put(`/api/fournisseur/${id}/update`, updatedFournisseur);
 export const deleteFournisseur = (id) => API.delete(`/api/fournisseur/${id}/destroy`);
+export const fetchFilterFournisseursChecks = (request) => API.post('/api/fournisseur_checks/filter', request);
 
 
 /*--- Clients --*/

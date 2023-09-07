@@ -17,7 +17,7 @@ import ChecksTable from '../components/Tables/ChecksTable'
 import { checksColumnsData } from '../data/TableColumnsData'
 import { useDispatch, useSelector } from 'react-redux'
 import { getChecks } from '../actions/checks'
-import { getFournisseurs } from '../actions/fournisseurs'
+import { getFournisseurs, filterFournisseurChecks } from '../actions/fournisseurs'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
@@ -36,6 +36,16 @@ const CheckFournisseur = () => {
     await setLoader(false);
   }, []);
 
+  const [Filters, setFilters] = useState({});
+  const hangdleFilters = (prop, value) => {
+    setFilters({ ...Filters, [prop]: value });
+  };
+
+  const RunFilters = (e) => {
+    e.preventDefault()
+    dispatch(filterFournisseurChecks(Filters));
+  }
+
   return (
     <ContentWrapper>
       <div className='check-wrapper'>
@@ -49,24 +59,33 @@ const CheckFournisseur = () => {
               label="Filtrer de:"
               placeholder="..."
               type="date"
+              required={false}
+              onChange={(e) => hangdleFilters('from', e.target.value)}
             />
             <Input
               label="Jusqu'à:"
               placeholder="..."
               type="date"
+              required={false}
+              onChange={(e) => hangdleFilters('to', e.target.value)}
             />
             <Select
               label="Fournisseur:"
               title="Recherche fournisseurs"
               options={fournisseurs}
+              required={false}
+              onChange={(e) => hangdleFilters('fournisseur', e.target.value)}
             />
             <Select
               label="Type d'impression:"
               title="Tous (Chéques et Traites)"
               options={checkTypeData}
+              required={false}
+              onChange={(e) => hangdleFilters('type', e.target.value)}
             />
             <RegularButton
               styleType="filter-btn"
+              onClick={(e) => RunFilters(e)}
             >
               <AiFillFilter className='btn-icon-left' />
               Filtrer
@@ -80,6 +99,7 @@ const CheckFournisseur = () => {
             columns={checksColumnsData}
             rows={checks}
             fournisseurs={fournisseurs}
+            onSearch={(e) => hangdleFilters('search_keyword', e.target.value)}
           />
         )}
       </div>

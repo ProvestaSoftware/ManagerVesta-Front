@@ -10,7 +10,7 @@ const ClientModal = ({ item, handleModal }) => {
         nom: item ? item.nom : '',
         email: item ? item.email : '',
         numTel: item ? item.numTel : '',
-        banque: item ? item.banque : '',
+        banque: item ? item.banque : 'ATB',
         rib: item ? item.rib : '',
     });
 
@@ -115,7 +115,7 @@ const ClientModal = ({ item, handleModal }) => {
                                         }
                                     />
                                 </div>
-                                <div class="col-span-6 sm:col-span-3">
+                                <div class="col-span-6 sm:col-span-6">
                                     <Input
                                         label="RIB"
                                         placeholder="RIB"

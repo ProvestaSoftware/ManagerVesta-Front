@@ -16,15 +16,15 @@ const DailyChart = () => {
     const [checkDailyData, setCheckDailyData] = useState([]);
     const [traiteDailyData, setTraiteDailyData] = useState([]);
 
-    const [startDate, setStartDate] = useState(new Date("2023-07-01"));
-    const [endDate, setEndDate] = useState(new Date("2023-09-31"));
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
 
     const processData = () => {
         const checkDailyDataMap = {};
         const traiteDailyDataMap = {};
         let earliest = null;
         let latest = null;
-        
+
         for (const item of allChecks) {
             const date = item.dueDate.split('T')[0];
 
@@ -89,7 +89,7 @@ const DailyChart = () => {
         };
         const traitesLine = {
             id: "Traites",
-            color: "#6ea8cc",
+            color: "#ee8432",
             data: [],
         };
 
@@ -124,146 +124,142 @@ const DailyChart = () => {
 
     return (
         <div style={{
-            margin: '1.5rem 2.5rem',
+            height: '360px',
         }}>
-            <Header title="DAILY Checks" subtitle="Checks Count By Date" />
+            <Header title="DAILY Chèques" subtitle="Nombre de Chèques par Date" />
             <div style={{
-                height: '360px',
+                display: 'flex',
+                justifyContent: 'flex-end',
             }}>
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                }}>
-                    <div>
-                        <DatePicker
-                            selected={startDate}
-                            onChange={(date) => setStartDate(date)}
-                            selectsStart
-                            startDate={startDate}
-                            endDate={endDate}
-                        />
-                    </div>
-                    <div>
-                        <DatePicker
-                            selected={endDate}
-                            onChange={(date) => setEndDate(date)}
-                            selectsEnd
-                            startDate={startDate}
-                            endDate={endDate}
-                            minDate={startDate}
-                        />
-                    </div>
-                </div>
-
-                {allChecks ? (
-                    <ResponsiveLine
-                        data={formattedData}
-                        theme={{
-                            axis: {
-                                domain: {
-                                    line: {
-                                        stroke: "#ff7e86",
-                                    },
-                                },
-                                legend: {
-                                    text: {
-                                        fill: "#000000",
-                                    },
-                                },
-                                ticks: {
-                                    line: {
-                                        stroke: "#ff7e86",
-                                        strokeWidth: 1,
-                                    },
-                                    text: {
-                                        fill: "#ff7e86",
-                                    },
-                                },
-                            },
-                            legends: {
-                                text: {
-                                    fill: "#2663a9",
-                                },
-                            },
-                            tooltip: {
-                                container: {
-                                    color: "#000000",
-                                },
-                            },
-                        }}
-                        colors={{ datum: "color" }}
-                        margin={{ top: 50, right: 50, bottom: 70, left: 60 }}
-                        xScale={{ type: "point" }}
-                        yScale={{
-                            type: "linear",
-                            min: "auto",
-                            max: "auto",
-                            stacked: false,
-                            reverse: false,
-                        }}
-                        yFormat={value => Math.round(value)} // This formats y-axis values as integers
-                        curve="catmullRom"
-                        axisTop={null}
-                        axisRight={null}
-                        axisBottom={{
-                            orient: "bottom",
-                            tickSize: 5,
-                            tickPadding: 5,
-                            tickRotation: 90,
-                            legend: "Mois",
-                            legendOffset: 60,
-                            legendPosition: "middle",
-                        }}
-                        axisLeft={{
-                            orient: "left",
-                            tickSize: 5,
-                            tickPadding: 5,
-                            tickRotation: 0,
-                            legend: "Nombre de chèques",
-                            legendOffset: -50,
-                            legendPosition: "middle",
-                            tickValues: yTickValues,
-                        }}
-                        enableGridX={false}
-                        enableGridY={true}
-                        pointSize={10}
-                        pointColor={{ theme: "background" }}
-                        pointBorderWidth={2}
-                        pointBorderColor={{ from: "serieColor" }}
-                        pointLabelYOffset={-12}
-                        useMesh={true}
-                        lineWidth={2}
-                        legends={[
-                            {
-                                anchor: "top-left",
-                                direction: "column",
-                                justify: false,
-                                translateX: 50,
-                                translateY: -50,
-                                itemsSpacing: 0,
-                                itemDirection: "left-to-right",
-                                itemWidth: 80,
-                                itemHeight: 20,
-                                itemOpacity: 0.75,
-                                symbolSize: 12,
-                                symbolShape: "circle",
-                                symbolBorderColor: "rgba(0, 0, 0, .5)",
-                                effects: [
-                                    {
-                                        on: "hover",
-                                        style: {
-                                            itemBackground: "rgba(0, 0, 0, .03)",
-                                            itemOpacity: 1,
-                                        },
-                                    },
-                                ],
-                            },
-                        ]}
+                <div>
+                    <DatePicker
+                        selected={startDate}
+                        onChange={(date) => setStartDate(date)}
+                        selectsStart
+                        startDate={startDate}
+                        endDate={endDate}
                     />
-                ) : (
-                    <>Loading...</>
-                )}
+                </div>
+                <div>
+                    <DatePicker
+                        selected={endDate}
+                        onChange={(date) => setEndDate(date)}
+                        selectsEnd
+                        startDate={startDate}
+                        endDate={endDate}
+                        minDate={startDate}
+                    />
+                </div>
             </div>
+
+            {allChecks ? (
+                <ResponsiveLine
+                    data={formattedData}
+                    theme={{
+                        axis: {
+                            domain: {
+                                line: {
+                                    stroke: "#6ea8cc",
+                                },
+                            },
+                            legend: {
+                                text: {
+                                    fill: "#000000",
+                                },
+                            },
+                            ticks: {
+                                line: {
+                                    stroke: "#6ea8cc",
+                                    strokeWidth: 1,
+                                },
+                                text: {
+                                    fill: "#6ea8cc",
+                                },
+                            },
+                        },
+                        legends: {
+                            text: {
+                                fill: "#2663a9",
+                            },
+                        },
+                        tooltip: {
+                            container: {
+                                color: "#000000",
+                            },
+                        },
+                    }}
+                    colors={{ datum: "color" }}
+                    margin={{ top: 50, right: 50, bottom: 70, left: 60 }}
+                    xScale={{ type: "point" }}
+                    yScale={{
+                        type: "linear",
+                        min: "auto",
+                        max: "auto",
+                        stacked: false,
+                        reverse: false,
+                    }}
+                    yFormat={value => Math.round(value)} // This formats y-axis values as integers
+                    curve="catmullRom"
+                    axisTop={null}
+                    axisRight={null}
+                    axisBottom={{
+                        orient: "bottom",
+                        tickSize: 5,
+                        tickPadding: 5,
+                        tickRotation: 90,
+                        legend: "Mois",
+                        legendOffset: 60,
+                        legendPosition: "middle",
+                    }}
+                    axisLeft={{
+                        orient: "left",
+                        tickSize: 5,
+                        tickPadding: 5,
+                        tickRotation: 0,
+                        legend: "Nombre de chèques",
+                        legendOffset: -50,
+                        legendPosition: "middle",
+                        tickValues: yTickValues,
+                    }}
+                    enableGridX={false}
+                    enableGridY={true}
+                    pointSize={10}
+                    pointColor={{ theme: "background" }}
+                    pointBorderWidth={2}
+                    pointBorderColor={{ from: "serieColor" }}
+                    pointLabelYOffset={-12}
+                    useMesh={true}
+                    lineWidth={2}
+                    legends={[
+                        {
+                            anchor: "top-left",
+                            direction: "column",
+                            justify: false,
+                            translateX: 50,
+                            translateY: -50,
+                            itemsSpacing: 0,
+                            itemDirection: "left-to-right",
+                            itemWidth: 80,
+                            itemHeight: 20,
+                            itemOpacity: 0.75,
+                            symbolSize: 12,
+                            symbolShape: "circle",
+                            symbolBorderColor: "rgba(0, 0, 0, .5)",
+                            effects: [
+                                {
+                                    on: "hover",
+                                    style: {
+                                        itemBackground: "rgba(0, 0, 0, .03)",
+                                        itemOpacity: 1,
+                                    },
+                                },
+                            ],
+                        },
+                    ]}
+                />
+            ) : (
+                <>Loading...</>
+            )}
         </div>
     );
 };

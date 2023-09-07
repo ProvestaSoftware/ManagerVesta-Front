@@ -3,13 +3,13 @@ import {
     FETCH_ALL_FOURNISSEURS,
     CREATE,
     DELETE,
-    UPDATE
+    UPDATE,
+    FILTER_FOURNISSEUR_CHECKS
 } from '../constants/actionTypes.js';
 
 export const getFournisseurs = () => async (dispatch) => {
     try {
         const { data } = await api.fetchFournisseurs();
-
         dispatch({ type: FETCH_ALL_FOURNISSEURS, payload: data });
     } catch (error) {
         console.log(error);
@@ -44,6 +44,15 @@ export const deleteFournisseur = (id) => async (dispatch) => {
 
         dispatch({ type: DELETE, payload: id });
 
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const filterFournisseurChecks = (request) => async (dispatch) => {
+    try {
+        const { data } = await api.fetchFilterFournisseursChecks(request);
+        dispatch({ type: FILTER_FOURNISSEUR_CHECKS, payload: data });
     } catch (error) {
         console.log(error);
     }

@@ -172,7 +172,7 @@ export const statsData = [
             padding: '6px'
         }} />,
         color: '#ffffff',
-        backgroundColor: '#6EA8CC',
+        backgroundColor: '#ee8432',
         divider: <RegularDivider color="#ffffff" size="0.5px" width="50%" />,
     },
     {
@@ -184,7 +184,7 @@ export const statsData = [
             margin: 'auto',
             display: 'block',
             backgroundColor: 'rgba(255, 126, 134, 0.10)',
-            color: '#FF7E86',
+            color: '#6ea8cc',
             borderRadius: '50%',
             width: '40px',
             height: '40px',
@@ -228,7 +228,7 @@ export const statsData = [
             padding: '6px'
         }} />,
         color: '#ffffff',
-        backgroundColor: '#2663A9',
+        backgroundColor: '#2663a9',
         divider: <RegularDivider color="#ffffff" size="0.5px" width="50%" />,
     },
     {
@@ -284,7 +284,7 @@ export const statsData = [
             padding: '6px'
         }} />,
         color: '#ffffff',
-        backgroundColor: '#6EA8CC',
+        backgroundColor: '#ee8432',
         divider: <RegularDivider color="#ffffff" size="0.5px" width="50%" />,
     },
     {
