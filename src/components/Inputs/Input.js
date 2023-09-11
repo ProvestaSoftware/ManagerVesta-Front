@@ -1,7 +1,7 @@
 import React from 'react'
 import '../../assets/css/Input.css'
 
-const Input = ({ label, placeholder, type, form, defaultValue, value, defaultChecked, name, onChange, disabled, required = true }) => {
+const Input = ({ label, placeholder, type, form, defaultValue, value, defaultChecked, name, onChange, disabled, required = false }) => {
     return (
         <div className="form-group">
             <label for="large-input" class="block mb-2 text-base font-medium text-gray-900 dark:text-white" style={{

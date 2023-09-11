@@ -21,7 +21,29 @@ export const checksColumnsData = [
         value: 'Etat du chéque',
     },
 ]
-
+export const checksClientColumnsData = [
+    {
+        value: 'Numéro de telephone',
+    },
+    {
+        value: 'Montant',
+    },
+    {
+        value: 'client',
+    },
+    {
+        value: 'Type',
+    },
+    {
+        value: 'Date de création',
+    },
+    {
+        value: "Date d'écheance",
+    },
+    {
+        value: 'Etat du chéque',
+    },
+]
 export const fournisseursColumnsData = [
     {
         value: 'Nom',

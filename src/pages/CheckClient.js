@@ -9,59 +9,135 @@ import PageTitle from '../components/PageTitle'
 import { AiFillFilter } from 'react-icons/ai'
 import '../assets/css/CheckClient.css'
 import RegularDivider from '../components/RegularDivider'
-import ChecksTable from '../components/Tables/ChecksTable'
-import { checksColumnsData } from '../data/TableColumnsData'
-import { getChecks } from '../actions/checks'
+import ChecksClientsTable from '../components/Tables/ChecksClientsTable'
+import { checksClientColumnsData } from '../data/TableColumnsData'
+import { filterCheckClients, getChecksClients } from '../actions/checkClient'
 import { getClients } from '../actions/clients'
 import { useDispatch, useSelector } from 'react-redux'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { checkTypeData } from '../data/MockData'
+import { AiOutlinePlus } from 'react-icons/ai'
+import CheckFournisseurModal from '../components/Modals/CheckFournisseurModal'
+import { ChecksClients } from '../_services/checksclients.service';
 
 const CheckClient = () => {
-
-  const checks = useSelector((state) => state.checks);
+  // const checkclient = useSelector((state) => state.checkClients);
+  // console.log('____checkclient',checkclient)
   const clients = useSelector((state) => state.clients);
-  const [loader, setLoader] = useState(false);
-
-  // console.log(checks);
-
   const dispatch = useDispatch();
+  const [loader, setLoader] = useState(false);
+  const [Filters, setFilters] = useState({
+    from: '',
+    to: '',
+    client: '',
+    type: '',
+    keyword:'',
+  });
 
-  useEffect(async () => {
-    await setLoader(true);
-    await dispatch(getChecks());
-    await dispatch(getClients());
-    await setLoader(false);
-  }, []);
 
+  const [checkclient, setCheckClient] = useState([]);
+  
+  const getData = () => {
+    setLoader(true)
+    ChecksClients.getAll()
+      .then(res => {
+        setCheckClient(res.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+      .finally(() => {
+        setLoader(false)
+      })
+  }
+
+  useEffect(() => {
+    getData()
+  }, [])
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoader(true);
+        // await dispatch(getChecksClients());
+        await dispatch(getClients());
+        getData();
+        setLoader(false);
+      } catch (error) {
+        console.error(error);
+        setLoader(false);
+      }
+    };
+
+    fetchData();
+  }, [dispatch]);
+
+  const [modal, setModal] = useState(false);
+
+  const handleModal = () => {
+    setModal(!modal);
+    getData();
+  };
+  const handleFiltersChange = (prop, value) => {
+    setFilters({ ...Filters, [prop]: value });
+  };
+
+  const handleFilterSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const filters = {
+        from: Filters.from,
+        to: Filters.to,
+        client: Filters.client,
+        type: Filters.type,
+        keyword: Filters.keyword,
+      };
+      const filteredData = await ChecksClients.filterCheckClients(filters);
+      setCheckClient(filteredData.checkClients);
+    } catch (error) {
+      console.error('Error while filtering data:', error);
+    } finally {
+      // Add any cleanup or finalization code here
+      // This block will always run, whether there was an error or not
+    }
+  };
+console.log('checkclient',checkclient)
   return (
     <ContentWrapper>
       <div className='check-wrapper'>
         <div>
           <PageTitle>Chéques et traites clients</PageTitle>
+          <RegularButton onClick={handleModal} styleType="add-btn">
+                Ajouter Check Client
+            <AiOutlinePlus className='btn-icon-right' />
+          </RegularButton>
         </div>
         <RegularDivider />
-        <form>
+        <form onSubmit={handleFilterSubmit}>
           <div className='check-form-container'>
             <Input
               label="Filtrer de:"
               placeholder="..."
               type="date"
+              onChange={(e) => handleFiltersChange('from', e.target.value)}
             />
             <Input
               label="Jusqu'à:"
               placeholder="..."
               type="date"
+              onChange={(e) => handleFiltersChange('to', e.target.value)}
             />
             <Select
               label="Client:"
               title="Recherche clients"
               options={clients}
+              onChange={(e) => handleFiltersChange('client', e.target.value)}
             />
             <Select
               label="Type d'impression:"
               title="Tous (Chéques et Traites)"
-              options={clients}
+              options={checkTypeData}
+              onChange={(e) => handleFiltersChange('type', e.target.value)}
             />
             <RegularButton
               styleType="filter-btn"
@@ -74,13 +150,18 @@ const CheckClient = () => {
         {loader ? (
           <Skeleton count={5} />
         ) : (
-          <ChecksTable
-            columns={checksColumnsData}
-            rows={checks}
+          <ChecksClientsTable
+            columns={checksClientColumnsData}
+            rows={checkclient.length ? checkclient : checkclient}
             fournisseurs={clients}
+            getData={getData}
+            onSerach={(e) => handleFiltersChange('keyword', e.target.value)}
+            Filters={Filters}
           />
         )}
       </div>
+      {modal && <CheckFournisseurModal handleModal={handleModal} clients={clients} getData={getData} />}
+
     </ContentWrapper>
   )
 }

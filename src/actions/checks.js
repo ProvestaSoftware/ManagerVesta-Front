@@ -3,7 +3,8 @@ import {
     FETCH_ALL_CHECKS,
     CREATE,
     DELETE,
-    UPDATE
+    UPDATE,
+    FILTER_FOURNISSEUR_CHECKS,
 } from '../constants/actionTypes.js';
 
 export const getChecks = () => async (dispatch) => {
@@ -50,3 +51,13 @@ export const deleteCheck = (id) => async (dispatch) => {
         console.log(error);
     }
 };
+
+export const filterFournisseurChecks = (request) => async (dispatch) => {
+    try {
+        const { data } = await api.fetchFilterFournisseursChecks(request);
+        dispatch({ type: FILTER_FOURNISSEUR_CHECKS, payload: data.checks });
+    } catch (error) {
+        console.error('Error filtering fournisseur checks:', error);
+    }
+};
+

@@ -1,7 +1,7 @@
 import React from 'react'
 import '../../assets/css/Select.css'
 
-const Select = ({ title, options, label, form, defaultValue, defaultChecked, name, onChange, object, required = true }) => {
+const Select = ({ title, options, label, form, defaultValue, defaultChecked, name, onChange, object, required = false }) => {
     return (
         <div className='form-group'>
             <label for="large" class="block mb-2 text-base font-medium text-gray-900 dark:text-white" style={{

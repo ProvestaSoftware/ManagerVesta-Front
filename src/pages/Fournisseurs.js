@@ -8,7 +8,7 @@ import RegularDivider from '../components/RegularDivider'
 import { fournisseursColumnsData } from '../data/TableColumnsData'
 import FournisseursTable from '../components/Tables/FournisseursTable'
 import { useDispatch, useSelector } from "react-redux";
-import { getFournisseurs } from '../actions/fournisseurs'
+import { getFournisseurs, searchFournisseurs } from '../actions/fournisseurs'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import RegularButton from '../components/Buttons/RegularButton'
@@ -19,6 +19,18 @@ const Fournisseurs = () => {
 
   const fournisseurs = useSelector((state) => state.fournisseurs);
   const [loader, setLoader] = useState(false);
+  const searchKeyword = useSelector((state) => state.searchKeyword); 
+
+  const handleSearchChange = (prop, value) => {
+    if (prop === searchKeyword) {
+      dispatch(searchFournisseurs(value)); 
+    }
+  };
+  useEffect(() => {
+    if (searchKeyword) {
+      handleSearchChange();
+    }
+  }, [searchKeyword]);
 
   const [modal, setModal] = useState(false);
 
@@ -50,7 +62,9 @@ const Fournisseurs = () => {
         ) : (
           <FournisseursTable
             columns={fournisseursColumnsData}
-            rows={fournisseurs}
+            rows={fournisseurs || [] }
+            onSearch={(keyword) => handleSearchChange(searchKeyword, keyword)}
+            searchKeyword={searchKeyword}
           />
         )}
       </div>

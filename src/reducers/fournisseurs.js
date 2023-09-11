@@ -1,4 +1,4 @@
-import { FETCH_ALL_FOURNISSEURS, DELETE, CREATE, UPDATE, FILTER_FOURNISSEUR_CHECKS } from "../constants/actionTypes";
+import { FETCH_ALL_FOURNISSEURS, DELETE, CREATE, UPDATE,SEARCH_FOURNISSEURS } from "../constants/actionTypes";
 
 export const FournisseurReducer = (fournisseurs = [], action) => {
     switch (action.type) {
@@ -10,8 +10,8 @@ export const FournisseurReducer = (fournisseurs = [], action) => {
             return fournisseurs?.map((fournisseur) => (fournisseur.id === action.payload.id ? action.payload : fournisseur));
         case DELETE:
             return fournisseurs.filter((fournisseur) => fournisseur.id !== action.payload);
-        case FILTER_FOURNISSEUR_CHECKS:
-            return action.payload;
+        case SEARCH_FOURNISSEURS:
+            return action.payload
         default:
             return fournisseurs;
     }

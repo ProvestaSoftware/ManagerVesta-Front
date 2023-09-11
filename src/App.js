@@ -18,16 +18,14 @@ import RegularDivider from './components/RegularDivider';
 import { FaArrowsAltV } from 'react-icons/fa';
 import { ImDroplet } from 'react-icons/im';
 import { useDispatch, useSelector } from 'react-redux';
-import { getChecks } from './actions/checks';
 import Charts from './pages/Charts';
-import { getFournisseurs } from './actions/fournisseurs';
 
 function App() {
 
     const allChecks = useSelector((state) => state.checks);
 
-    const checks = allChecks.filter(item => item.type === "Chèque");
-    const traites = allChecks.filter(item => item.type === "Traite");
+    const checks = allChecks?.filter(item => item.type === "Chèque");
+    const traites = allChecks?.filter(item => item.type === "Traite");
 
     const allChecksSumAmount = allChecks.reduce((sum, item) => sum + item.montant, 0);
 

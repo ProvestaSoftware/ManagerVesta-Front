@@ -2,11 +2,11 @@
 import React, { useState } from 'react'
 import CheckModal from '../Modals/CheckModal';
 import { useDispatch } from 'react-redux';
-import { deleteCheck, getChecks } from '../../actions/checks';
+import { deleteCheckClient, getChecksClients } from '../../actions/checkClient';
 import ConfirmModal from '../Modals/ConfirmModal';
 import moment from 'moment'
 
-const CheckTableRow = ({ item, fournisseurs }) => {
+const CheckClientTableRow = ({ item, fournisseurs,getData}) => {
 
     const [modal, setModal] = useState(false);
     const [confirm, setConfirm] = useState(false);
@@ -23,9 +23,10 @@ const CheckTableRow = ({ item, fournisseurs }) => {
 
     const handleDelete = (e) => {
         e.preventDefault();
-        dispatch(deleteCheck(item.id));
-        dispatch(getChecks());
+        dispatch(deleteCheckClient(item.id));
+        getData();
         handleConfirm();
+        getData();
     }
 
     const created_at = new Date(item?.created_at);
@@ -47,7 +48,7 @@ const CheckTableRow = ({ item, fournisseurs }) => {
                     {item?.montant} dt
                 </td>
                 <td class="px-6 py-4">
-                    {item?.fournisseur?.nom}
+                    {item?.client?.nom}
                 </td>
                 <td class="px-6 py-4">
                     <div style={{
@@ -104,4 +105,4 @@ const CheckTableRow = ({ item, fournisseurs }) => {
     )
 }
 
-export default CheckTableRow
+export default CheckClientTableRow
