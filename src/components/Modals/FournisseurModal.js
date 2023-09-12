@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import { createFournisseur, getFournisseurs, updateFournisseur } from '../../actions/fournisseurs'
 import { useNavigate } from 'react-router-dom'
 
-const FournisseurModal = ({ item, handleModal }) => {
+const FournisseurModal = ({ item, handleModal,refreshFournisseursList }) => {
 
     const [fournisseurData, setFournisseurData] = useState({
         nom: item ? item.nom : '',
@@ -33,8 +33,8 @@ const FournisseurModal = ({ item, handleModal }) => {
             dispatch(createFournisseur(fournisseurData));
         if (window.location.pathname === "/fournisseurs")
             dispatch(getFournisseurs());
-        else
-            navigate("/fournisseurs");
+            await refreshFournisseursList(); // Refresh the list of suppliers
+
         handleModal();
     };
 

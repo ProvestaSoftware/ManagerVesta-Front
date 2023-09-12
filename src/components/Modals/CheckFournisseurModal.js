@@ -68,16 +68,14 @@ const CheckFournisseurModal = ({ item, handleModal,clients,getData }) => {
                             <div className="grid grid-cols-6 gap-6">
                                 <div className="col-span-6 sm:col-span-3">
                                     <Input
-                                        label="N° de Téléphone"
-                                        placeholder="N° de Téléphone"
+                                        label="Num"
+                                        placeholder="Num"
                                         defaultValue={fournisseurData.num}
                                         name="num"
                                         id="num"
                                         type="number"
                                         form={true}
                                         onChange={handleInputChange}
-                                        pattern="\d{8}" 
-                                        title="N° de Téléphone must have exactly 8 digits" 
                                         required 
                                     />
                                 </div>

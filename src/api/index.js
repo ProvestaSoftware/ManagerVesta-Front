@@ -28,8 +28,9 @@ export const searchFournisseurs = (keyword) => API.get(`/api/fournisseur/search/
 /*--- Clients --*/
 export const fetchClients = () => API.get('/api/client');
 export const createClient = (newClient) => API.post('/api/client', newClient);
-export const updateClient = (id, updatedClient) => API.put(`/api/client/${id}/update`, updatedClient);
+export const updateClient = (id, updatedClient) => API.post(`/api/client/${id}/update`, updatedClient);
 export const deleteClient = (id) => API.delete(`/api/client/${id}/destroy`);
+export const searchClient= (keyword) => API.get(`/api/client/search/keywords/${keyword}`);
 
 
 /*--- Checks --*/

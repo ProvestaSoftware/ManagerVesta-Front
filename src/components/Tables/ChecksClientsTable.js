@@ -1,9 +1,9 @@
 import React from 'react'
 import CheckClientTableRow from './CheckClientTableRow'
 
-const ChecksClientsTable = ({ columns, rows, fournisseurs, onSerach ,Filters,getData}) => {
+const ChecksClientsTable = ({ columns, rows, fournisseurs, onSerach ,Filters,getData,setLoader}) => {
 
-    console.log('rows',rows)
+
     return (
         <div style={{
             width: '100%',
@@ -48,6 +48,7 @@ const ChecksClientsTable = ({ columns, rows, fournisseurs, onSerach ,Filters,get
                             item={item}
                             fournisseurs={fournisseurs}
                             getData={getData}
+                            setLoader={setLoader}
                         />
                     )) : (
                         <p className='no-data-msg'>Il n'y a pas de chèques..</p>

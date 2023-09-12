@@ -24,10 +24,21 @@ const Print = () => {
 
   const fournisseurs = useSelector((state) => state.fournisseurs);
   const checks = useSelector((state) => state.checks);
+  const [numberOfChecks, setNumberOfChecks] = useState(); 
+  
+  const refreshFournisseursList = async () => {
+    try {
+      await dispatch(getFournisseurs());
+    } catch (error) {
+      console.log('Error refreshing fournisseurs list:', error);
+    }
+  };
 
+  const handleChangeNumberOfChecks = (e) => {
+    const newNumberOfChecks = parseInt(e.target.value, 10);
+    setNumberOfChecks(newNumberOfChecks);
+  };
   const [modal, setModal] = useState(false);
-  // const [otherFieldsDisabled, setOtherFieldsDisabled] = useState(false);
-  // const [dueDatesNumber, setDueDatesNumber] = useState(0);
 
   const handleModal = () => {
     setModal(!modal);
@@ -36,9 +47,7 @@ const Print = () => {
   const [filteredData, setFilteredData] = useState([]);
 
   const filterDataByFournisseurId = (entryData, fournisseurId) => {
-    // console.log("entryData", entryData);
     const filteredArray = entryData.filter(entry => entry.fournisseur_id === parseInt(fournisseurId));
-    // console.log("Filtered Array:", filteredArray);
     setFilteredData(filteredArray);
   };
 
@@ -48,31 +57,9 @@ const Print = () => {
     dispatch(getFournisseurs());
     dispatch(getChecks());
     dispatch(getPayments());
-    // filterDataByFournisseurId(checks, paymentData.fournisseur_id);
-    // setOtherFieldsDisabled(filteredData.length > 0);
-    // await filterDataByFournisseurId(checks, paymentData.fournisseur_id);
-    // await dispatch(getPayments());
   }, []);
 
   const [checkGroupData, setCheckGroupData] = useState([]);
-  // const testData = [
-  //   {
-  //     dueDate: "2023-08-27",
-  //     fournisseur_id: 4,
-  //     montant: 500,
-  //     num: "888888",
-  //     payment_id: 128,
-  //     id: 1
-  //   },
-  //   {
-  //     dueDate: "2023-08-27",
-  //     fournisseur_id: 10,
-  //     montant: 500,
-  //     num: "111111",
-  //     payment_id: 128,
-  //     id: 2
-  //   },
-  // ];
 
   const [paymentData, setPaymentData] = useState({
     montantTotal: '',
@@ -80,85 +67,81 @@ const Print = () => {
     fournisseur_id: '',
     checks: checkGroupData,
   });
+  const [isAddCheckDisabled, setIsAddCheckDisabled] = useState(true);
 
   const handleChange = (e) => {
-    setPaymentData({ ...paymentData, [e.target.name]: e.target.value });
-    // console.log("paymentData", paymentData);
-  }
+    const { name, value } = e.target;
+    setPaymentData({ ...paymentData, [name]: value });
+  
+    const requiredFieldsFilled =
+      paymentData.montantTotal && paymentData.fournisseur_id;
+  
+    setIsAddCheckDisabled(!requiredFieldsFilled);
+  };
 
-  const handleChecks = async (e) => {
-    e.preventDefault();
-    // setDueDatesNumber(parseInt(checkData.dueDatesNumber, 10));
-    const dueDatesNumber = parseInt(paymentData.dueDatesNumber, 10);
-    await setCheckGroupData(Array.from({ length: dueDatesNumber }, (_, index) => ({
-      _id: index + 1,
-      num: '',
-      montant: '',
-      dueDate: '',
-      type: checkType === "Chéque" ? "Chéque" : "Traite",
-      fournisseur_id: paymentData.fournisseur_id,
-    })));
-    // console.log("checks", checks);
-    await setPaymentData({ ...paymentData, checks: checkGroupData });
-    await filterDataByFournisseurId(checks, paymentData.fournisseur_id);
-    // console.log("paymentData", paymentData);
-    // console.log("filteredData", filteredData);
-  }
 
+  const handleInputChange = (id, field, value) => {
+    setCheckGroupData(prevData =>
+      prevData.map(item => (item.id === id ? { ...item, [field]: field === 'montant' ? parseInt(value, 10) : value } : item))
+    );
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+  
+    const totalMontant = checkGroupData.reduce((sum, item) => sum + (item.montant || 0), 0);
+  
+    if (totalMontant !== parseInt(paymentData.montantTotal, 10)) {
+      alert("Total montant does not match montantTotal. Please check the values.");
+      return; 
+    }
+  
+    const updatedPaymentData = {
+      ...paymentData,
+      checks: checkGroupData,
+      dueDatesNumber: numberOfChecks,
+    };
+  
+    await setPaymentData(updatedPaymentData);
+  
+    let response;
+    try {
+      response = await dispatch(createPayment(updatedPaymentData));
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  
+    const paymentId = response.payment.id;
+  
+    const checksWithPaymentId = checkGroupData.map((check) => ({
+      ...check,
+      payment_id: paymentId,
+    }));
+  
+    try {
+      await dispatch(createCheck(checksWithPaymentId));
+    } catch (error) {
+      console.log('Error creating checks:', error);
+      return;
+    }
+  
+    await filterDataByFournisseurId(checks, updatedPaymentData.fournisseur_id);
+  };
+  
+  
   const addCheck = (e) => {
     e.preventDefault();
     setFilteredData([]);
-    setCheckGroupData(Array.from({ length: 1 }, (_, index) => ({
+    setCheckGroupData(Array.from({ length: numberOfChecks }, (_, index) => ({
       id: index + 1,
       num: '',
       montant: '',
       dueDate: '',
       type: checkType === "Chéque" ? "Chéque" : "Traite",
       fournisseur_id: paymentData.fournisseur_id,
+      payment_id:''
     })));
   }
-
-  const handleInputChange = (id, field, value) => {
-    setCheckGroupData(prevData =>
-      prevData.map(item => (item._id === id ? { ...item, [field]: field === 'montant' ? parseInt(value, 10) : value } : item))
-    );
-  };
-
-  // const handleCreatePayment = async () => {
-  //   try {
-  //     const response = await dispatch(createPayment(paymentData));
-  //     // await setPaymentId(response.id);
-  //     await console.log('Server response:', response);
-  //     // Now you can use the response data in your component's state or perform any other actions
-  //   } catch (error) {
-  //     console.log('Error:', error);
-  //     // Handle the error, show a message, etc.
-  //   }
-  // };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    // You can process the formData array here, e.g., send it to the server.
-    await setPaymentData({ ...paymentData, checks: checkGroupData })
-    // console.log("paymentData", paymentData);
-    let response;
-    try {
-      response = await dispatch(createPayment(paymentData));
-      // await setPaymentId(response.id);
-      // await console.log('Server response:', response);
-      // Now you can use the response data in your component's state or perform any other actions
-    } catch (error) {
-      console.log('Error:', error);
-      // Handle the error, show a message, etc.
-    }
-    for (let index = 0; index < checkGroupData.length; index++) {
-      let element = checkGroupData[index];
-      element.payment_id = response.payment.id;
-      await dispatch(createCheck(element));
-    }
-
-    await filterDataByFournisseurId(checks, paymentData.fournisseur_id);
-  };
 
   const [checkType, setCheckType] = useState("Chéque");
 
@@ -169,6 +152,7 @@ const Print = () => {
   const handleTraiteType = () => {
     setCheckType("Traite")
   }
+ 
 
   return (
     <ContentWrapper>
@@ -207,33 +191,20 @@ const Print = () => {
               type="text"
               name="montantTotal"
               onChange={handleChange}
-            // disabled={otherFieldsDisabled}
             />
-            {/* {dueDatesNumber !== 0 ? (
-              <Input
+             <Input
                 label="Nombre d'écheances:"
                 placeholder="0"
-                value={dueDatesNumber}
-                defaultValue={dueDatesNumber !== 0 && dueDatesNumber}
                 type="number"
                 name="dueDatesNumber"
-                onChange={handleChange}
+                onChange={handleChangeNumberOfChecks}
+                value={numberOfChecks}
               />
-            ) : ( */}
-            <Input
-              label="Nombre d'écheances:"
-              placeholder="0"
-              // defaultValue={dueDatesNumber !== 0 && dueDatesNumber}
-              type="number"
-              name="dueDatesNumber"
-              onChange={handleChange}
-            // disabled={otherFieldsDisabled}
-            />
             {/* )} */}
             <RegularButton
               styleType="print-btn"
-              onClick={handleChecks}
-            // disabled={otherFieldsDisabled}
+              onClick={addCheck}
+              disabled={isAddCheckDisabled}
             >
               <BsCheckLg />
             </RegularButton>
@@ -247,57 +218,41 @@ const Print = () => {
         </div>
         <RegularDivider size="0.5px" />
         <div className='check-form'>
-          {filteredData.length > 0 ? (
-            <>
-              <PaymentChecksTable
-                columns={paymentChecksData}
-                rows={filteredData}
-                fournisseurs={fournisseurs}
-              />
-              <div className='save-print-container'>
-                <RegularButton
-                  styleType="print-add-btn"
-                  onClick={addCheck}
-                >
-                  <AiOutlinePlus className='btn-icon-left' />
-                  Ajouter une autre écheance
-                </RegularButton>
-              </div>
-            </>
-          ) :
-            checkGroupData.map((item, index) => (
-              <form key={item._id}>
-                <div className='check-print-form-container'>
-                  <p>{index + 1}.</p>
-                  <Input
-                    label="Numéro de chéque:"
-                    placeholder="Num"
-                    type="text"
-                    defaultValue={item.num}
-                    name="num"
-                    onChange={(e) => handleInputChange(item._id, 'num', e.target.value)}
-                  />
-                  <Input
-                    label="Montant:"
-                    placeholder="Montant en dinars"
-                    type="text"
-                    defaultValue={item.montant}
-                    name="montant"
-                    onChange={(e) => handleInputChange(item._id, 'montant', e.target.value)}
-                  />
-                  <Input
-                    label="Date:"
-                    type="date"
-                    defaultValue={item.dueDate}
-                    name="dueDate"
-                    onChange={(e) => handleInputChange(item._id, 'dueDate', e.target.value)}
-                  />
-                </div>
-              </form>
-            ))}
+          {checkGroupData.map((item, index) => (
+            <div key={item.id}>
+                <form key={index}>
+                  <div className='check-print-form-container'>
+                    <p>{index + 1}.</p>
+                    <Input
+                      label="Numéro de chéque:"
+                      placeholder="Num"
+                      type="text"
+                      defaultValue={item.num}
+                      name="num"
+                      onChange={(e) => handleInputChange(item.id, 'num', e.target.value)}
+                    />
+                    <Input
+                      label="Montant:"
+                      placeholder="Montant en dinars"
+                      type="text"
+                      defaultValue={item.montant}
+                      name="montant"
+                      onChange={(e) => handleInputChange(item.id, 'montant', e.target.value)}
+                    />
+                    <Input
+                      label="Date:"
+                      type="date"
+                      defaultValue={item.dueDate}
+                      name="dueDate"
+                      onChange={(e) => handleInputChange(item.id, 'dueDate', e.target.value)}
+                    />
+                  </div>
+                </form>
+            </div>
+          ))}
         </div>
 
-        {(filteredData.length === 0 && checkGroupData.length > 0) && (
+        {(checkGroupData.length > 0) && (
           <div className='save-print-container'>
             <RegularButton
               styleType="save-btn"
@@ -316,7 +271,7 @@ const Print = () => {
         )
         }
       </div>
-      {modal && <FournisseurModal handleModal={handleModal} />}
+      {modal && <FournisseurModal handleModal={handleModal} refreshFournisseursList={refreshFournisseursList} />}
     </ContentWrapper>
   )
 }

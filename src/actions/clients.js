@@ -1,9 +1,10 @@
 import * as api from '../api/index.js';
 import {
     FETCH_ALL_CLIENTS,
-    CREATE,
+    CREATE_CLIENTS,
     DELETE,
-    UPDATE
+    UPDATE,
+    SEARCH_CLIENT
 } from '../constants/actionTypes.js';
 
 export const getClients = () => async (dispatch) => {
@@ -20,7 +21,7 @@ export const createClient = (client) => async (dispatch) => {
     try {
         const { data } = await api.createClient(client);
 
-        dispatch({ type: CREATE, payload: data });
+        dispatch({ type: CREATE_CLIENTS, payload: data });
 
     } catch (error) {
         console.log(error);
@@ -48,3 +49,11 @@ export const deleteClient = (id) => async (dispatch) => {
         console.log(error);
     }
 };
+export const searchClients = (keyword) => async (dispatch) => {
+    try {
+      const { data } = await api.searchClient(keyword);
+      dispatch({ type: SEARCH_CLIENT, payload: data.clients});
+    } catch (error) {
+      console.error('Error searching fournisseurs:', error);
+    }
+  };

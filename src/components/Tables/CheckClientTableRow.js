@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react'
-import CheckModal from '../Modals/CheckModal';
+import CheckClientModal from '../Modals/CheckClientModal';
 import { useDispatch } from 'react-redux';
 import { deleteCheckClient, getChecksClients } from '../../actions/checkClient';
 import ConfirmModal from '../Modals/ConfirmModal';
 import moment from 'moment'
 
-const CheckClientTableRow = ({ item, fournisseurs,getData}) => {
+const CheckClientTableRow = ({ item,getData,setLoader}) => {
 
     const [modal, setModal] = useState(false);
     const [confirm, setConfirm] = useState(false);
@@ -17,17 +17,25 @@ const CheckClientTableRow = ({ item, fournisseurs,getData}) => {
 
     const handleConfirm = () => {
         setConfirm(!confirm);
+        
     }
 
     const dispatch = useDispatch();
 
-    const handleDelete = (e) => {
+    const handleDelete = async (e) => {
+        setLoader(true);
         e.preventDefault();
-        dispatch(deleteCheckClient(item.id));
-        getData();
-        handleConfirm();
-        getData();
-    }
+        try {
+          await dispatch(deleteCheckClient(item.id));
+          getData();
+          handleConfirm();
+        } catch (error) {
+          
+          console.error("Error deleting check:", error);
+        } finally {
+          setLoader(false); 
+        }
+      };
 
     const created_at = new Date(item?.created_at);
 
@@ -99,7 +107,7 @@ const CheckClientTableRow = ({ item, fournisseurs,getData}) => {
                     <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={handleConfirm}>Supprimer</button>
                 </td>
             </tr>
-            {modal && <CheckModal item={item} handleModal={handleModal} />}
+            {modal && <CheckClientModal item={item} handleModal={handleModal} getData={getData} setLoader={setLoader} />}
             {confirm && <ConfirmModal name={`Chèque #${item.num}`} handleModal={handleConfirm} handleDelete={handleDelete} />}
         </>
     )

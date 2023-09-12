@@ -101,7 +101,6 @@ const CheckClient = () => {
       // This block will always run, whether there was an error or not
     }
   };
-console.log('checkclient',checkclient)
   return (
     <ContentWrapper>
       <div className='check-wrapper'>
@@ -153,10 +152,10 @@ console.log('checkclient',checkclient)
           <ChecksClientsTable
             columns={checksClientColumnsData}
             rows={checkclient.length ? checkclient : checkclient}
-            fournisseurs={clients}
             getData={getData}
             onSerach={(e) => handleFiltersChange('keyword', e.target.value)}
             Filters={Filters}
+            setLoader={setLoader}
           />
         )}
       </div>

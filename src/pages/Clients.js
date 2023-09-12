@@ -9,7 +9,7 @@ import { clientsColumnsData } from '../data/TableColumnsData'
 import ClientsTable from '../components/Tables/ClientsTable'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
-import { getClients } from '../actions/clients'
+import { getClients, searchClients } from '../actions/clients'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import RegularButton from '../components/Buttons/RegularButton'
@@ -19,6 +19,20 @@ import ClientModal from '../components/Modals/ClientModal'
 const Clients = () => {
 
   const clients = useSelector((state) => state.clients);
+  const searchKeyword = useSelector((state) => state.searchKeyword); 
+
+
+  const handleSearchChange = (prop, value) => {
+    if (prop === searchKeyword) {
+      dispatch(searchClients(value)); 
+    }
+  };
+  useEffect(() => {
+    if (searchKeyword) {
+      handleSearchChange();
+    }
+  }, [searchKeyword]);
+
   const [loader, setLoader] = useState(false);
 
   const [modal, setModal] = useState(false);
@@ -33,7 +47,7 @@ const Clients = () => {
     await setLoader(true);
     await dispatch(getClients());
     await setLoader(false);
-  }, []);
+  }, [dispatch]);
 
   return (
     <ContentWrapper>
@@ -52,6 +66,8 @@ const Clients = () => {
           <ClientsTable
             columns={clientsColumnsData}
             rows={clients}
+            onSearch={(keyword) => handleSearchChange(searchKeyword, keyword)}
+            searchKeyword={searchKeyword}
           />
         )}
       </div>
