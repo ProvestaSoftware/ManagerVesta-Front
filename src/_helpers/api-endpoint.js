@@ -3,14 +3,16 @@ function server() {
 }
 
 export const ApiConfigs = {
-  base_url: server() + '/check-client',
+  base_url: server() + '/',
   root_url: server(),
   /* -------------------------------- */
 
   checkclient: {
-    getAll: '/',   
-    filter: '/client_checks/filter',                 
-    // search: '/recompense/search/keyword',
+    getAll: 'check-client/',   
+    filter: 'check-client/client_checks/filter',                 
+  },
+  check: {
+    checkDueDateExists: 'check/check-due-date-exists',
   },
  
 }

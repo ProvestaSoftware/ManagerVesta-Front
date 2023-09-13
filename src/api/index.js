@@ -40,6 +40,7 @@ export const updateCheck = (id, updatedCheck) => API.put(`/api/check/${id}/updat
 export const deleteCheck = (id) => API.delete(`/api/check/${id}/destroy`);
 export const filterChecks = (filters) => API.get('/api/checks/filter', { params: filters });
 export const fetchFilterFournisseursChecks = (request) => API.post('/api/check/fournisseur_checks/filter', request);
+
 /*--- Check Clients --*/
 export const fetchCheckClients = () => API.get('/api/check-client');
 export const createCheckClient = (newCheckClient) => API.post('/api/check-client', newCheckClient);

@@ -19,6 +19,7 @@ import { createPayment, getPayments } from '../actions/payments'
 import { createCheck, getChecks } from '../actions/checks'
 import PaymentChecksTable from '../components/Tables/PaymentChecksTable'
 import { paymentChecksData } from '../data/TableColumnsData'
+import { Checks } from '../_services/checks.service';
 
 const Print = () => {
 
@@ -80,11 +81,7 @@ const Print = () => {
   };
 
 
-  const handleInputChange = (id, field, value) => {
-    setCheckGroupData(prevData =>
-      prevData.map(item => (item.id === id ? { ...item, [field]: field === 'montant' ? parseInt(value, 10) : value } : item))
-    );
-  };
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -129,19 +126,40 @@ const Print = () => {
   };
   
   
+  const calculateCheckAmounts = () => {
+    if (paymentData.montantTotal && numberOfChecks) {
+      const totalAmount = parseFloat(paymentData.montantTotal);
+      const numChecks = parseInt(numberOfChecks, 10);
+  
+      const baseAmount = Math.floor(totalAmount / numChecks);
+  
+      const remainingAmount = totalAmount - baseAmount * numChecks;
+  
+      const checkAmounts = Array(numChecks).fill(baseAmount);
+  
+      for (let i = 0; i < remainingAmount; i++) {
+        checkAmounts[i] += 1;
+      }
+  
+      const updatedCheckGroupData = checkAmounts.map((amount, index) => ({
+        id: index + 1,
+        num: '',
+        montant: amount,
+        dueDate: '',
+        type: checkType === 'Chéque' ? 'Chéque' : 'Traite',
+        fournisseur_id: paymentData.fournisseur_id,
+        payment_id: '',
+      }));
+  
+      setCheckGroupData(updatedCheckGroupData);
+    }
+  };
+
   const addCheck = (e) => {
     e.preventDefault();
     setFilteredData([]);
-    setCheckGroupData(Array.from({ length: numberOfChecks }, (_, index) => ({
-      id: index + 1,
-      num: '',
-      montant: '',
-      dueDate: '',
-      type: checkType === "Chéque" ? "Chéque" : "Traite",
-      fournisseur_id: paymentData.fournisseur_id,
-      payment_id:''
-    })));
-  }
+    calculateCheckAmounts(); 
+  };
 
   const [checkType, setCheckType] = useState("Chéque");
 
@@ -152,8 +170,86 @@ const Print = () => {
   const handleTraiteType = () => {
     setCheckType("Traite")
   }
- 
+  const [ dateError, setDateError] = useState('');
 
+  const checkIfDateExists = async (dueDate) => {
+    try {
+      const response = await Checks.checkDueDateExists(dueDate);
+      const { exists, message, checksWithinRange } = response;
+  
+      if (exists) {
+        if (checksWithinRange > 0) {
+          return { exists: true, message: `You have ${checksWithinRange} checks.` };
+        } else {
+          return { exists: true, message };
+        }
+      } else {
+        return { exists: false, message };
+      }
+    } catch (error) {
+      console.error('Error checking due date:', error);
+      return { exists: false, message: 'An error occurred while checking the due date.' };
+    }
+  };
+  
+  const handleDateBlur = async (dueDate) => {
+    try {
+      const dateExists = await checkIfDateExists(dueDate);
+      if (dateExists.exists) {
+        setDateError(dateExists.message)
+        console.log(dateExists.message); // You can log or handle the message as needed
+      } else {
+        // Handle the case when the date is valid
+      }
+    } catch (error) {
+      console.error('Error checking due date:', error);
+    }
+  };
+  
+  
+  const [ montanterror, setMontantError] = useState('');
+
+  const handleMontanteBlur = async (value) => {
+    try {
+      const totalMontant = checkGroupData.reduce(
+        (sum, item) => sum + (item.montant || 0),
+        0
+      );
+
+      if (totalMontant !== parseInt(paymentData.montantTotal, 10)) {
+        setMontantError(
+          "Le total ne correspond pas à montantTotal. Vérifiez les valeurs"
+        );
+      } else {
+        setMontantError('');
+      }
+    } catch (error) {
+      console.error('Error checking montant:', error);
+    }
+  };
+
+  const handleInputChange = (id, field, value) => {
+    if (field === 'dueDate') {
+     
+      const formattedDate = value;
+  
+      setCheckGroupData(prevData =>
+        prevData.map(item => (item.id === id ? { ...item, [field]: formattedDate } : item))
+      );
+      handleDateBlur(formattedDate);
+      handleMontanteBlur(formattedDate);
+    } 
+    if (field === 'montant') {
+     
+      const formattedDate = value;
+      handleMontanteBlur(formattedDate);
+    } else {
+      setCheckGroupData(prevData =>
+        prevData.map(item => (item.id === id ? { ...item, [field]: field === 'montant' ? parseInt(value, 10) : value } : item))
+      );
+    }
+  };
+  
   return (
     <ContentWrapper>
       <div className='print-wrapper'>
@@ -238,13 +334,17 @@ const Print = () => {
                       defaultValue={item.montant}
                       name="montant"
                       onChange={(e) => handleInputChange(item.id, 'montant', e.target.value)}
+                      onBlur={(e) => handleMontanteBlur(e.target.value)}
+                      helpertext={montanterror} 
                     />
-                    <Input
+                  <Input
                       label="Date:"
                       type="date"
                       defaultValue={item.dueDate}
                       name="dueDate"
                       onChange={(e) => handleInputChange(item.id, 'dueDate', e.target.value)}
+                      onBlur={(e) => handleDateBlur(e.target.value)}
+                      helpertext={dateError}
                     />
                   </div>
                 </form>

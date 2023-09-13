@@ -43,3 +43,7 @@
     transform: rotate(360deg);
   }
 }
+.warning-text {
+  color: orange; /* You can choose the color you prefer */
+  font-weight: bold;
+}
