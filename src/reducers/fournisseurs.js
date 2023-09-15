@@ -9,7 +9,7 @@ export const FournisseurReducer = (fournisseurs = [], action) => {
         case UPDATE:
             return fournisseurs?.map((fournisseur) => (fournisseur.id === action.payload.id ? action.payload : fournisseur));
         case DELETE:
-            return fournisseurs.filter((fournisseur) => fournisseur.id !== action.payload);
+            return fournisseurs.filter((fournisseur) => fournisseur?.id !== action.payload);
         case SEARCH_FOURNISSEURS:
             return action.payload
         default:

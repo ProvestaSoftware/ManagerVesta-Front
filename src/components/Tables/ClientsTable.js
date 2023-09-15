@@ -1,5 +1,6 @@
 import React from 'react'
 import ClientTableRow from './ClientTableRow'
+import Skeleton from 'react-loading-skeleton';
 
 function getBankColor(bank_name) {
     switch( bank_name ){
@@ -10,7 +11,7 @@ function getBankColor(bank_name) {
     }
 }
 
-const ClientsTable = ({ columns, rows,onSearch,searchKeyword }) => {
+const ClientsTable = ({ columns, rows,onSearch,searchKeyword,loadingSearch }) => {
 
     return (
         <div style={{
@@ -61,6 +62,9 @@ const ClientsTable = ({ columns, rows,onSearch,searchKeyword }) => {
                     />
                 </div>
             </div>
+            {loadingSearch ? (
+                <Skeleton count={5} />
+            ) : (
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
@@ -90,6 +94,7 @@ const ClientsTable = ({ columns, rows,onSearch,searchKeyword }) => {
                     )}
                 </tbody>
             </table>
+            )}
         </div>
 
     )

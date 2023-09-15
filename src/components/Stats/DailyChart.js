@@ -10,8 +10,8 @@ const DailyChart = () => {
 
     const allChecks = useSelector((state) => state.checks);
 
-    const checks = allChecks?.filter(item => item.type === "Chèque");
-    const traites = allChecks?.filter(item => item.type === "Traite");
+    const checks = allChecks?.filter(item => item?.type === "Chèque");
+    const traites = allChecks?.filter(item => item?.type === "Traite");
 
     const [checkDailyData, setCheckDailyData] = useState([]);
     const [traiteDailyData, setTraiteDailyData] = useState([]);

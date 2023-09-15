@@ -3,7 +3,7 @@ import CheckClientTableRow from './CheckClientTableRow'
 
 const ChecksClientsTable = ({ columns, rows, fournisseurs, onSerach ,Filters,getData,setLoader}) => {
 
-
+console.log('Filters',rows)
     return (
         <div style={{
             width: '100%',

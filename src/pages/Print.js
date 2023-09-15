@@ -20,12 +20,15 @@ import { createCheck, getChecks } from '../actions/checks'
 import PaymentChecksTable from '../components/Tables/PaymentChecksTable'
 import { paymentChecksData } from '../data/TableColumnsData'
 import { Checks } from '../_services/checks.service';
+import { CircularProgressbar } from 'react-circular-progressbar';
+import { useNavigate } from 'react-router-dom'
 
 const Print = () => {
 
   const fournisseurs = useSelector((state) => state.fournisseurs);
   const checks = useSelector((state) => state.checks);
   const [numberOfChecks, setNumberOfChecks] = useState(); 
+  const navigate = useNavigate();
   
   const refreshFournisseursList = async () => {
     try {
@@ -81,49 +84,51 @@ const Print = () => {
   };
 
 
+  const [isLoading, setIsLoading] = useState(false);
 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
   
-    const totalMontant = checkGroupData.reduce((sum, item) => sum + (item.montant || 0), 0);
+    setIsLoading(true);
   
-    if (totalMontant !== parseInt(paymentData.montantTotal, 10)) {
-      alert("Total montant does not match montantTotal. Please check the values.");
-      return; 
-    }
-  
-    const updatedPaymentData = {
-      ...paymentData,
-      checks: checkGroupData,
-      dueDatesNumber: numberOfChecks,
-    };
-  
-    await setPaymentData(updatedPaymentData);
-  
-    let response;
     try {
-      response = await dispatch(createPayment(updatedPaymentData));
+      const totalMontant = checkGroupData.reduce((sum, item) => sum + (item.montant || 0), 0);
+  
+      if (totalMontant !== parseInt(paymentData.montantTotal, 10)) {
+        alert("Total montant does not match montantTotal. Please check the values.");
+        return; 
+      }
+  
+      const updatedPaymentData = {
+        ...paymentData,
+        checks: checkGroupData,
+        dueDatesNumber: numberOfChecks,
+      };
+  
+      await setPaymentData(updatedPaymentData);
+  
+      const response = await dispatch(createPayment(updatedPaymentData));
+      const paymentId = response.payment.id;
+  
+      const checksWithPaymentId = checkGroupData.map((check) => ({
+        ...check,
+        payment_id: paymentId,
+      }));
+  
+      await dispatch(createCheck(checksWithPaymentId));
+  
+      await filterDataByFournisseurId(checks, updatedPaymentData.fournisseur_id);
+      // navigate('/cheques-fournisseurs');
+  
     } catch (error) {
       console.log('Error:', error);
+    } finally {
+      setIsLoading(false);
     }
-  
-    const paymentId = response.payment.id;
-  
-    const checksWithPaymentId = checkGroupData.map((check) => ({
-      ...check,
-      payment_id: paymentId,
-    }));
-  
-    try {
-      await dispatch(createCheck(checksWithPaymentId));
-    } catch (error) {
-      console.log('Error creating checks:', error);
-      return;
-    }
-  
-    await filterDataByFournisseurId(checks, updatedPaymentData.fournisseur_id);
   };
+  
+  
   
   
   const calculateCheckAmounts = () => {
@@ -196,35 +201,31 @@ const Print = () => {
     try {
       const dateExists = await checkIfDateExists(dueDate);
       if (dateExists.exists) {
-        setDateError(dateExists.message)
-        console.log(dateExists.message); // You can log or handle the message as needed
+        setDateError(dateExists.message);
+        console.log(dateExists.message);
       } else {
-        // Handle the case when the date is valid
+        setDateError('');  
+        console.log('Date is valid');
       }
     } catch (error) {
       console.error('Error checking due date:', error);
     }
   };
   
-  
   const [ montanterror, setMontantError] = useState('');
 
-  const handleMontanteBlur = async (value) => {
-    try {
-      const totalMontant = checkGroupData.reduce(
-        (sum, item) => sum + (item.montant || 0),
-        0
+  const handleMontanteBlur = (value) => {
+    const totalMontant = checkGroupData.reduce(
+      (sum, item) => sum + (item.montant || 0),
+      0
+    );
+  
+    if (totalMontant !== parseInt(paymentData.montantTotal, 10)) {
+      setMontantError(
+        "Le total ne correspond pas à montantTotal. Vérifiez les valeurs"
       );
-
-      if (totalMontant !== parseInt(paymentData.montantTotal, 10)) {
-        setMontantError(
-          "Le total ne correspond pas à montantTotal. Vérifiez les valeurs"
-        );
-      } else {
-        setMontantError('');
-      }
-    } catch (error) {
-      console.error('Error checking montant:', error);
+    } else {
+      setMontantError('');
     }
   };
 
@@ -237,11 +238,13 @@ const Print = () => {
         prevData.map(item => (item.id === id ? { ...item, [field]: formattedDate } : item))
       );
       handleDateBlur(formattedDate);
-      handleMontanteBlur(formattedDate);
     } 
     if (field === 'montant') {
      
       const formattedDate = value;
+       setCheckGroupData(prevData =>
+        prevData.map(item => (item.id === id ? { ...item, [field]: formattedDate } : item))
+      );
       handleMontanteBlur(formattedDate);
     } else {
       setCheckGroupData(prevData =>
@@ -249,129 +252,137 @@ const Print = () => {
       );
     }
   };
-  
+  const [ newfornisseur, setNewFornisseur] = useState(' ');
+  console.log('newfornisseur',newfornisseur?.id)
   return (
     <ContentWrapper>
-      <div className='print-wrapper'>
-        <div>
-          <PageTitle>Imprimer - Chéque</PageTitle>
+      {isLoading ? (
+        <div className="fixed-loader-container">
+            <div className="fixed-loader"></div>
         </div>
-        <RegularDivider />
-        <div className='print-btn-wrapper'>
-          <RegularButton
-            styleType={checkType === "Traite" ? "secondary" : "primary"}
-            onClick={handleCheckType}
-          >
-            Chéque
-          </RegularButton>
-          <RegularButton
-            styleType={checkType === "Chéque" ? "secondary" : "primary"}
-            onClick={handleTraiteType}
-          >
-            Traite
-          </RegularButton>
-        </div>
-        <form>
-          <div className='print-form-container'>
-            <Select
-              label="Fournisseur:"
-              title="Recherche fournisseurs"
-              options={fournisseurs}
-              name="fournisseur_id"
-              onChange={handleChange}
-              object={true}
-            />
-            <Input
-              label="Montant total:"
-              placeholder="Montant en dinars"
-              type="text"
-              name="montantTotal"
-              onChange={handleChange}
-            />
-             <Input
-                label="Nombre d'écheances:"
-                placeholder="0"
-                type="number"
-                name="dueDatesNumber"
-                onChange={handleChangeNumberOfChecks}
-                value={numberOfChecks}
+      ) : (
+        <div className='print-wrapper'>
+          <div>
+            <PageTitle>Imprimer - Chéque</PageTitle>
+          </div>
+          <RegularDivider />
+          <div className='print-btn-wrapper'>
+            <RegularButton
+              styleType={checkType === "Traite" ? "secondary" : "primary"}
+              onClick={handleCheckType}
+            >
+              Chéque
+            </RegularButton>
+            <RegularButton
+              styleType={checkType === "Chéque" ? "secondary" : "primary"}
+              onClick={handleTraiteType}
+            >
+              Traite
+            </RegularButton>
+          </div>
+          <form>
+            <div className='print-form-container'>
+              <Select
+                label="Fournisseur:"
+                title="Recherche fournisseurs"
+                options={fournisseurs}
+                name="fournisseur_id"
+                onChange={handleChange}
+                object={false}
+                defaultValue={newfornisseur.id}
               />
-            {/* )} */}
-            <RegularButton
-              styleType="print-btn"
-              onClick={addCheck}
-              disabled={isAddCheckDisabled}
-            >
-              <BsCheckLg />
-            </RegularButton>
-          </div>
-        </form>
-        <div className='link-wrapper'>
-          <RegularLink
-            content="Ajouter un nouveau fournisseur"
-            onClick={handleModal}
-          />
-        </div>
-        <RegularDivider size="0.5px" />
-        <div className='check-form'>
-          {checkGroupData.map((item, index) => (
-            <div key={item.id}>
-                <form key={index}>
-                  <div className='check-print-form-container'>
-                    <p>{index + 1}.</p>
-                    <Input
-                      label="Numéro de chéque:"
-                      placeholder="Num"
-                      type="text"
-                      defaultValue={item.num}
-                      name="num"
-                      onChange={(e) => handleInputChange(item.id, 'num', e.target.value)}
-                    />
-                    <Input
-                      label="Montant:"
-                      placeholder="Montant en dinars"
-                      type="text"
-                      defaultValue={item.montant}
-                      name="montant"
-                      onChange={(e) => handleInputChange(item.id, 'montant', e.target.value)}
-                      onBlur={(e) => handleMontanteBlur(e.target.value)}
-                      helpertext={montanterror} 
-                    />
-                  <Input
-                      label="Date:"
-                      type="date"
-                      defaultValue={item.dueDate}
-                      name="dueDate"
-                      onChange={(e) => handleInputChange(item.id, 'dueDate', e.target.value)}
-                      onBlur={(e) => handleDateBlur(e.target.value)}
-                      helpertext={dateError}
-                    />
-                  </div>
-                </form>
+              <Input
+                label="Montant total:"
+                placeholder="Montant en dinars"
+                type="text"
+                name="montantTotal"
+                onChange={handleChange}
+              />
+              <Input
+                  label="Nombre d'écheances:"
+                  placeholder="0"
+                  type="number"
+                  name="dueDatesNumber"
+                  onChange={handleChangeNumberOfChecks}
+                  value={numberOfChecks}
+                />
+              {/* )} */}
+              <RegularButton
+                styleType="print-btn"
+                onClick={addCheck}
+                disabled={isAddCheckDisabled}
+              >
+                <BsCheckLg />
+              </RegularButton>
             </div>
-          ))}
-        </div>
-
-        {(checkGroupData.length > 0) && (
-          <div className='save-print-container'>
-            <RegularButton
-              styleType="save-btn"
-              onClick={handleSubmit}
-            >
-              <FaSave className='btn-icon-left' />
-              Sauvegarder
-            </RegularButton>
-            <RegularButton
-              styleType="print-save-btn"
-            >
-              <BsWindowDock className='btn-icon-left' />
-              Sauvegarder et Imprimer
-            </RegularButton>
+          </form>
+          <div className='link-wrapper'>
+            <RegularLink
+              content="Ajouter un nouveau fournisseur"
+              onClick={handleModal}
+            />
           </div>
-        )
-        }
-      </div>
-      {modal && <FournisseurModal handleModal={handleModal} refreshFournisseursList={refreshFournisseursList} />}
+          <RegularDivider size="0.5px" />
+          <div className='check-form'>
+            {checkGroupData.map((item, index) => (
+              <div key={item.id}>
+                  <form key={index}>
+                    <div className='check-print-form-container'>
+                      <p>{index + 1}.</p>
+                      <Input
+                        label="Numéro de chéque:"
+                        placeholder="Num"
+                        type="text"
+                        defaultValue={item.num}
+                        name="num"
+                        onChange={(e) => handleInputChange(item.id, 'num', e.target.value)}
+                      />
+                      <Input
+                        label="Montant:"
+                        placeholder="Montant en dinars"
+                        type="text"
+                        defaultValue={item.montant}
+                        name="montant"
+                        onChange={(e) => handleInputChange(item.id, 'montant', e.target.value)}
+                        onBlur={(e) => handleMontanteBlur(e.target.value)}
+                        helpertext={montanterror} 
+                      />
+                      <Input
+                          label="Date:"
+                          type="date"
+                          defaultValue={item.dueDate}
+                          name="dueDate"
+                          onChange={(e) => handleInputChange(item.id, 'dueDate', e.target.value)}
+                          onBlur={(e) => handleDateBlur(e.target.value)}
+                          helpertext={dateError}  
+                      />
+                    </div>
+                  </form>
+              </div>
+            ))}
+          </div>
+
+          {(checkGroupData.length > 0) && (
+            <div className='save-print-container'>
+              <RegularButton
+                styleType="save-btn"
+                onClick={handleSubmit}
+              >
+                <FaSave className='btn-icon-left' />
+                Sauvegarder
+              </RegularButton>
+              <RegularButton
+                styleType="print-save-btn"
+              >
+                <BsWindowDock className='btn-icon-left' />
+                Sauvegarder et Imprimer
+              </RegularButton>
+            </div>
+          )
+          }
+        </div>
+      )}
+      {modal && <FournisseurModal handleModal={handleModal} refreshFournisseursList={refreshFournisseursList} setNewFornisseur={setNewFornisseur} />}
     </ContentWrapper>
   )
 }

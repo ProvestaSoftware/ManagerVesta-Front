@@ -7,8 +7,8 @@ const BreakdownCheckTypeChart = ({ isDashboard = false }) => {
 
   const allChecks = useSelector((state) => state.checks);
 
-  const checks = allChecks?.filter(item => item.type === "Chèque");
-  const traites = allChecks?.filter(item => item.type === "Traite");
+  const checks = allChecks?.filter(item => item?.type === "Chèque");
+  const traites = allChecks?.filter(item => item?.type === "Traite");
 
   const colors = ["#2663a9", "#ee8432"];
   const initData = {

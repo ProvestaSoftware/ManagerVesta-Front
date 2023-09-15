@@ -13,9 +13,9 @@ const Select = ({ title, options, label, form, defaultValue, defaultChecked, nam
                 height: form ? '50px' : '60px',
                 color: '#696F79'
             }}  required={required} id="large" class="block w-full px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option defaultValue={defaultValue} defaultChecked={defaultChecked} selected>{title}</option>
+                <option defaultValue={null} defaultChecked={defaultChecked} >{title}</option>
                 {options.map((item, index) => (
-                    <option key={item.id} value={object ? item.id : item.nom}>{item.nom}</option>
+                    <option key={item.id} value={object ? item.id : item.id} selected={item.id==defaultValue ? true : false }>{item.nom}</option>
                 ))}
             </select>
         </div>

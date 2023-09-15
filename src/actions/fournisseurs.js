@@ -20,6 +20,7 @@ export const createFournisseur = (fournisseur) => async (dispatch) => {
     try {
         const { data } = await api.createFournisseur(fournisseur);
         dispatch({ type: CREATE, payload: data });
+        return data;
     } catch (error) {
         console.error('Error creating fournisseur:', error);
     }

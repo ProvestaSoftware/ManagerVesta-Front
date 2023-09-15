@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import FournisseurTableRow from './FournisseurTableRow'
+import Skeleton from 'react-loading-skeleton';
 
 function getBankColor(bank_name) {
     switch( bank_name ){
@@ -10,8 +11,11 @@ function getBankColor(bank_name) {
     }
 }
 
-const FournisseursTable = ({ columns, rows ,onSearch,searchKeyword }) => {
+const FournisseursTable = ({ columns, rows ,onSearch,searchKeyword,loadingSearch }) => {
 console.log('rowfor',rows)
+
+
+
     return (
         <div style={{
             width: '100%',
@@ -61,6 +65,9 @@ console.log('rowfor',rows)
                     />
                 </div>
             </div>
+            {loadingSearch ? (
+                <Skeleton count={5} />
+            ) : (
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
@@ -90,6 +97,7 @@ console.log('rowfor',rows)
                     )}
                 </tbody>
             </table>
+            )}
         </div>
 
     )

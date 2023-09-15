@@ -34,6 +34,13 @@ const CheckFournisseur = () => {
     setFilters({ ...Filters, [prop]: value });
   };
 
+  if (Filters.type == 1 ){
+    Filters.type='Chèque'
+    
+  }else if(Filters.type == 2){
+    Filters.type='Traite'
+  }
+
   const handleFilterSubmit = async (e) => {
     e.preventDefault();
     try {

@@ -55,7 +55,7 @@ export const deleteCheck = (id) => async (dispatch) => {
 export const filterFournisseurChecks = (request) => async (dispatch) => {
     try {
         const { data } = await api.fetchFilterFournisseursChecks(request);
-        dispatch({ type: FILTER_FOURNISSEUR_CHECKS, payload: data.checks });
+        dispatch({ type: FILTER_FOURNISSEUR_CHECKS, payload: data?.checks });
     } catch (error) {
         console.error('Error filtering fournisseur checks:', error);
     }

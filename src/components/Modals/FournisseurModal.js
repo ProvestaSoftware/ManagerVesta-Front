@@ -5,7 +5,14 @@ import { useDispatch } from 'react-redux'
 import { createFournisseur, getFournisseurs, updateFournisseur } from '../../actions/fournisseurs'
 import { useNavigate } from 'react-router-dom'
 
-const FournisseurModal = ({ item, handleModal,refreshFournisseursList }) => {
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+
+const FournisseurModal = ({ item, handleModal,refreshFournisseursList,setNewFornisseur }) => {
+
+
+  const [Loading, setLoading] = useState(false);
+
 
     const [fournisseurData, setFournisseurData] = useState({
         nom: item ? item.nom : '',
@@ -22,24 +29,46 @@ const FournisseurModal = ({ item, handleModal,refreshFournisseursList }) => {
         if (item) setFournisseurData(item);
     }, [item]);
 
-    console.log('location: ', window.location.pathname);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // console.log(fournisseurData);
-        if (item)
-            dispatch(updateFournisseur(item.id, fournisseurData));
-        else
-            dispatch(createFournisseur(fournisseurData));
-        if (window.location.pathname === "/fournisseurs")
-            dispatch(getFournisseurs());
-            await refreshFournisseursList(); // Refresh the list of suppliers
+        setLoading(true);
+    
+        try {
+            let createdFournisseurData;
+            if (item) {
+                await dispatch(updateFournisseur(item.id, fournisseurData));
+                refreshFournisseursList();
+            } else {
+                createdFournisseurData = await dispatch(createFournisseur(fournisseurData));
+                refreshFournisseursList();
+                setNewFornisseur(createdFournisseurData?.fournisseur);
+            }
+    
+            if (window.location.pathname === "/fournisseurs") {
+                await dispatch(getFournisseurs());
+            }
+            refreshFournisseursList();
+            handleModal();
+            
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+            setLoading(false);
+            handleModal(false)
 
-        handleModal();
+        }
     };
 
 
     return (
+        <>
+        {Loading ? (
+        <div className="fixed-loader-container">
+            <div className="fixed-loader"></div>
+        </div>
+          ) : (
+            <>
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 9999 }}>
             <div style={{
                 position: 'fixed',
@@ -150,6 +179,9 @@ const FournisseurModal = ({ item, handleModal,refreshFournisseursList }) => {
                 </div>
             </div>
         </div>
+        </>
+        )}
+        </>
     )
 }
 

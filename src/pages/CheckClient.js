@@ -81,24 +81,24 @@ const CheckClient = () => {
   const handleFiltersChange = (prop, value) => {
     setFilters({ ...Filters, [prop]: value });
   };
+    if (Filters.type == 1){
+      Filters.type = 'Chèque'
+    }else if(Filters.type == 2) {
+    Filters.type = 'Traite'
+    }
+    const [loadingFilter, setLoadingFilter] = useState(false); 
 
   const handleFilterSubmit = async (e) => {
     e.preventDefault();
     try {
-      const filters = {
-        from: Filters.from,
-        to: Filters.to,
-        client: Filters.client,
-        type: Filters.type,
-        keyword: Filters.keyword,
-      };
-      const filteredData = await ChecksClients.filterCheckClients(filters);
+      setLoadingFilter(true)
+      const filteredData = await ChecksClients.filterCheckClients(Filters);
       setCheckClient(filteredData.checkClients);
     } catch (error) {
       console.error('Error while filtering data:', error);
     } finally {
-      // Add any cleanup or finalization code here
-      // This block will always run, whether there was an error or not
+      setLoadingFilter(false)
+
     }
   };
   return (
@@ -146,7 +146,7 @@ const CheckClient = () => {
             </RegularButton>
           </div>
         </form>
-        {loader ? (
+        {loader || loadingFilter  ? (
           <Skeleton count={5} />
         ) : (
           <ChecksClientsTable

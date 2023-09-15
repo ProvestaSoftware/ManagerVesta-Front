@@ -20,10 +20,26 @@ const Fournisseurs = () => {
   const fournisseurs = useSelector((state) => state.fournisseurs);
   const [loader, setLoader] = useState(false);
   const searchKeyword = useSelector((state) => state.searchKeyword); 
+  const [loadingSearch, setLoadingSearch] = useState(false); 
 
-  const handleSearchChange = (prop, value) => {
-    if (prop === searchKeyword) {
-      dispatch(searchFournisseurs(value)); 
+  const refreshFournisseursList = async () => {
+    try {
+      await dispatch(getFournisseurs());
+    } catch (error) {
+      console.log('Error refreshing fournisseurs list:', error);
+    }
+  };
+
+  const handleSearchChange = async (prop, value) => {
+    try {
+      setLoadingSearch(true); 
+      if (prop === searchKeyword) {
+        await dispatch(searchFournisseurs(value));
+      }
+    } catch (error) {
+      console.error('Error during search:', error);
+    } finally {
+      setLoadingSearch(false);
     }
   };
   useEffect(() => {
@@ -65,10 +81,11 @@ const Fournisseurs = () => {
             rows={fournisseurs || [] }
             onSearch={(keyword) => handleSearchChange(searchKeyword, keyword)}
             searchKeyword={searchKeyword}
+            loadingSearch={loadingSearch}
           />
         )}
       </div>
-      {modal && <FournisseurModal handleModal={handleModal} />}
+      {modal && <FournisseurModal handleModal={handleModal} refreshFournisseursList={refreshFournisseursList} />}
     </ContentWrapper>
   )
 }

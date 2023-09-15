@@ -9,7 +9,7 @@ export const CheckReducer = (checks = [], action) => {
         case UPDATE:
             return checks?.map((check) => (check.id === action.payload.id ? action.payload : check));
         case DELETE:
-            return checks.filter((check) => check.id !== action.payload);
+            return checks?.filter((check) => check?.id !== action.payload);
         case FILTER_FOURNISSEUR_CHECKS:
             return action.payload;
         default:

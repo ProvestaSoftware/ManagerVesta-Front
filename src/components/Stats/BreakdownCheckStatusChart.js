@@ -7,9 +7,9 @@ const BreakdownCheckStatusChart = ({ isDashboard = false }) => {
 
   const allChecks = useSelector((state) => state.checks);
 
-  const pendingChecks = allChecks?.filter(item => item.status === "En attente");
-  const paidChecks = allChecks?.filter(item => item.status === "Payé");
-  const unpaidChecks = allChecks?.filter(item => item.status === "Impayé");
+  const pendingChecks = allChecks?.filter(item => item?.status === "En attente");
+  const paidChecks = allChecks?.filter(item => item?.status === "Payé");
+  const unpaidChecks = allChecks?.filter(item => item?.status === "Impayé");
 
   const colors = ["#ee8432", "#2663a9", "#6ea8cc"];
   const initData = {

@@ -20,11 +20,19 @@ const Clients = () => {
 
   const clients = useSelector((state) => state.clients);
   const searchKeyword = useSelector((state) => state.searchKeyword); 
+  const [loadingSearch, setLoadingSearch] = useState(false); 
 
 
-  const handleSearchChange = (prop, value) => {
-    if (prop === searchKeyword) {
-      dispatch(searchClients(value)); 
+  const handleSearchChange = async (prop, value) => {
+    try {
+      setLoadingSearch(true); 
+      if (prop === searchKeyword) {
+        await dispatch(searchClients(value));
+      }
+    } catch (error) {
+      console.error('Error during search:', error);
+    } finally {
+      setLoadingSearch(false);
     }
   };
   useEffect(() => {
@@ -49,6 +57,7 @@ const Clients = () => {
     await setLoader(false);
   }, [dispatch]);
 
+  
   return (
     <ContentWrapper>
       <div className='client-wrapper'>
@@ -68,10 +77,12 @@ const Clients = () => {
             rows={clients}
             onSearch={(keyword) => handleSearchChange(searchKeyword, keyword)}
             searchKeyword={searchKeyword}
+            loadingSearch={loadingSearch}
+
           />
         )}
       </div>
-      {modal && <ClientModal handleModal={handleModal} />}
+      {modal && <ClientModal handleModal={handleModal} loader={loader} setLoader={setLoader} />}
     </ContentWrapper>
   )
 }

@@ -4,7 +4,7 @@ import RegularButton from '../Buttons/RegularButton'
 import { useDispatch } from 'react-redux'
 import { createClient, getClients, updateClient } from '../../actions/clients'
 
-const ClientModal = ({ item, handleModal }) => {
+const ClientModal = ({ item, handleModal,loader,setLoader}) => {
 
     const [clientData, setClientData] = useState({
         nom: item ? item.nom : '',
@@ -20,20 +20,33 @@ const ClientModal = ({ item, handleModal }) => {
         if (item) setClientData(item);
     }, [item]);
 
+ 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // console.log(clientData);
-        if (item)
-            dispatch(updateClient(item.id, clientData));
-        else
-            dispatch(createClient(clientData));
-        dispatch(getClients());
-        handleModal();
-    };
+        setLoader(true); 
+    
+        try {
+          if (item) {
+            await dispatch(updateClient(item.id, clientData));
+          } else {
+            await dispatch(createClient(clientData));
+          }
+          await dispatch(getClients());
+          handleModal();
+        } finally {
+          setLoader(false); 
+        }
+      };
 
 
     return (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 9999 }}>
+        <>
+            {loader ? (
+            <div className="fixed-loader-container">
+                <div className="fixed-loader"></div>
+            </div>
+          ) : (
+            <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 9999 }}>
             <div style={{
                 position: 'fixed',
                 top: '50%',
@@ -131,6 +144,7 @@ const ClientModal = ({ item, handleModal }) => {
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
                             <RegularButton
                                 styleType="primary"
@@ -142,7 +156,11 @@ const ClientModal = ({ item, handleModal }) => {
                     </form>
                 </div>
             </div>
-        </div>
+            </div>
+          )}
+        
+        </>
+   
     )
 }
 
