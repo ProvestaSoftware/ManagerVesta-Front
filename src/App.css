@@ -44,7 +44,7 @@
   }
 }
 .warning-text {
-  color: orange; /* You can choose the color you prefer */
+  color: orange; 
   font-weight: bold;
 }
 
@@ -95,4 +95,35 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+.event-popup {
+  background-color: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  font-size: 16px; 
+  line-height: 1.6; 
+  text-align: center;
+}
+
+.event-popup button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: rgb(238, 132, 50);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.popup-container {
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+.event-popup-text{
+  text-align: left;
 }

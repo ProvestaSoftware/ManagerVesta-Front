@@ -22,6 +22,7 @@ import { paymentChecksData } from '../data/TableColumnsData'
 import { Checks } from '../_services/checks.service';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import { useNavigate } from 'react-router-dom'
+import PrintModal from '../components/Modals/PrintModal'
 
 const Print = () => {
 
@@ -43,10 +44,12 @@ const Print = () => {
     setNumberOfChecks(newNumberOfChecks);
   };
   const [modal, setModal] = useState(false);
+  const [showPrintModal, setShowPrintModal] = useState(false);
 
   const handleModal = () => {
     setModal(!modal);
   }
+
 
   const [filteredData, setFilteredData] = useState([]);
 
@@ -88,14 +91,16 @@ const Print = () => {
 
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    if( event ){
+      event.preventDefault();
+    }
   
     setIsLoading(true);
   
     try {
       const totalMontant = checkGroupData.reduce((sum, item) => sum + (item.montant || 0), 0);
   
-      if (totalMontant !== parseInt(paymentData.montantTotal, 10)) {
+      if (totalMontant != parseInt(paymentData.montantTotal, 10)) {
         alert("Total montant does not match montantTotal. Please check the values.");
         return; 
       }
@@ -119,7 +124,10 @@ const Print = () => {
       await dispatch(createCheck(checksWithPaymentId));
   
       await filterDataByFournisseurId(checks, updatedPaymentData.fournisseur_id);
-      // navigate('/cheques-fournisseurs');
+
+      if( event ){
+        navigate('/cheques-fournisseurs');
+      }
   
     } catch (error) {
       console.log('Error:', error);
@@ -128,7 +136,10 @@ const Print = () => {
     }
   };
   
-  
+  const handleModalPrint = () => {
+    // handleSubmit();
+    setShowPrintModal(!showPrintModal);
+  }
   
   
   const calculateCheckAmounts = () => {
@@ -253,7 +264,8 @@ const Print = () => {
     }
   };
   const [ newfornisseur, setNewFornisseur] = useState(' ');
-  console.log('newfornisseur',newfornisseur?.id)
+
+  console.log('dddd',checks)
   return (
     <ContentWrapper>
       {isLoading ? (
@@ -373,6 +385,7 @@ const Print = () => {
               </RegularButton>
               <RegularButton
                 styleType="print-save-btn"
+                onClick={handleModalPrint}
               >
                 <BsWindowDock className='btn-icon-left' />
                 Sauvegarder et Imprimer
@@ -381,6 +394,13 @@ const Print = () => {
           )
           }
         </div>
+      )}
+      {showPrintModal && (
+        <PrintModal
+          handleModal={() => setShowPrintModal(false)} 
+          fournisseurs={fournisseurs}
+          item={checkGroupData}
+        />
       )}
       {modal && <FournisseurModal handleModal={handleModal} refreshFournisseursList={refreshFournisseursList} setNewFornisseur={setNewFornisseur} />}
     </ContentWrapper>
