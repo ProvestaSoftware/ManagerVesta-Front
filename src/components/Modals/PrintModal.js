@@ -178,6 +178,42 @@ console.log('item',item)
     window.print();
   };
 
+  // const printSection = () => {
+  //   const printWindow = window.open('', '_blank');
+  //   printWindow.document.write('<html><head><title>Print</title></head><body>');
+
+  //   item.forEach((check, index) => {
+  //     const selectedFournisseur = fournisseurs.find((f) => f.id == check.fournisseur_id);
+  //     const fournisseurNom = selectedFournisseur ? selectedFournisseur.nom : '';
+
+  //     printWindow.document.write(`
+  //       <div style="width: 687.87401575px; height: 309.92125984px; display: block; page-break-before: ${index === 0 ? 'auto' : 'always'};">
+  //         <img src="${atbImage}" style="width: 100%; height: 100%;" alt="Check" />
+  //         <span class="check_data montant" id="montant-${index}">
+  //           ${check?.montant || '------------'}
+  //         </span>
+  //         <span class="check_data montant_ecrit montant_ecrit_line1" id="montant_ecrit_line1-${index}">
+  //           ${numberToWordsFR(check?.montant || 0).slice(0, 17)}
+  //         </span>
+  //         <span class="check_data montant_ecrit montant_ecrit_line2" id="montant_ecrit_line2-${index}">
+  //           ${numberToWordsFR(check?.montant || 0).slice(17)}
+  //         </span>
+  //         <span class="check_data montant_to" id="montant_to-${index}">
+  //           ${fournisseurNom || '----------------------------------------------------'}
+  //         </span>
+  //         <span class="check_data date montant_a_fr">Kélibia</span>
+  //         <span class="check_data date montant_a_ar">قليبية</span>
+  //         <span class="check_data date montant_le" id="montant_le-${index}">
+  //           ${formattedDate || '--/--/----'}
+  //         </span>
+  //       </div>
+  //     `);
+  //   });
+
+  //   printWindow.document.write('</body></html>');
+  //   printWindow.document.close();
+  //   printWindow.print();
+  // };
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 9999 }}>
       <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '20px', borderRadius: '8px', width: '90%', height: 'auto' }}>
@@ -201,25 +237,27 @@ console.log('item',item)
                   const fournisseurNom = selectedFournisseur ? selectedFournisseur.nom : '';
 
                   return (
-                    <div key={index} className="grid grid-cols-12 check" id={`check-${index}`} style={{ width: '687.87401575px', height: '309.92125984px', display: 'block' }}>
-                      <img src={atbImage} style={{ width: '100%', height: '100%' }} alt="Check" />
-                      <span className="check_data montant" id={`montant-${index}`}>
-                        {check?.montant || '------------'}
-                      </span>
-                      <span className="check_data montant_ecrit montant_ecrit_line1" id={`montant_ecrit_line1-${index}`}>
-                        {numberToWordsFR(check?.montant || 0).slice(0, 17)}
-                      </span>
-                      <span className="check_data montant_ecrit montant_ecrit_line2" id={`montant_ecrit_line2-${index}`}>
-                        {numberToWordsFR(check?.montant || 0).slice(17)}
-                      </span>
-                      <span className="check_data montant_to" id={`montant_to-${index}`}>
-                        {fournisseurNom || '----------------------------------------------------'}
-                      </span>
-                      <span className="check_data date montant_a_fr">Kélibia</span>
-                      <span className="check_data date montant_a_ar">قليبية</span>
-                      <span className="check_data date montant_le" id={`montant_le-${index}`}>
-                        {formattedDate || '--/--/----'}
-                      </span>
+                    <div className='print'>  
+                      <div key={index} className="grid grid-cols-12 check"  id={`check-${index}`} style={{ width: '687.87401575px', height: '309.92125984px', display: 'block' }}>
+                        <img src={atbImage} style={{ width: '100%', height: '100%' }} alt="Check" />
+                        <span className="check_data montant" id={`montant-${index}`}>
+                          {check?.montant || '------------'}
+                        </span>
+                        <span className="check_data montant_ecrit montant_ecrit_line1" id={`montant_ecrit_line1-${index}`}>
+                          {numberToWordsFR(check?.montant || 0).slice(0, 17)}
+                        </span>
+                        <span className="check_data montant_ecrit montant_ecrit_line2" id={`montant_ecrit_line2-${index}`}>
+                          {numberToWordsFR(check?.montant || 0).slice(17)}
+                        </span>
+                        <span className="check_data montant_to" id={`montant_to-${index}`}>
+                          {fournisseurNom || '----------------------------------------------------'}
+                        </span>
+                        <span className="check_data date montant_a_fr">Kélibia</span>
+                        <span className="check_data date montant_a_ar">قليبية</span>
+                        <span className="check_data date montant_le" id={`montant_le-${index}`}>
+                          {formattedDate || '--/--/----'}
+                        </span>
+                      </div>
                     </div>
                   );
                 })}
@@ -228,7 +266,7 @@ console.log('item',item)
               <RegularButton
                 styleType="primary"
                 type="submit"
-                onClick={() => window.print()}
+                onClick={printSection}
               >
                 Imprimer chéque
               </RegularButton>

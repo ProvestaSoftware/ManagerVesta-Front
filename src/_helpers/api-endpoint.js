@@ -14,5 +14,10 @@ export const ApiConfigs = {
   check: {
     checkDueDateExists: 'check/check-due-date-exists',
   },
+  setting: {
+    index: 'setting/',
+    store: 'setting/',
+  },
+ 
  
 }

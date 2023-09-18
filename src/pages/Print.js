@@ -156,11 +156,11 @@ const Print = () => {
       for (let i = 0; i < remainingAmount; i++) {
         checkAmounts[i] += 1;
       }
-  
+  console.log(checkAmounts,'checkAmounts')
       const updatedCheckGroupData = checkAmounts.map((amount, index) => ({
         id: index + 1,
         num: '',
-        montant: amount,
+        montant: checkAmounts[index],
         dueDate: '',
         type: checkType === 'Chéque' ? 'Chéque' : 'Traite',
         fournisseur_id: paymentData.fournisseur_id,
@@ -222,7 +222,7 @@ const Print = () => {
       console.error('Error checking due date:', error);
     }
   };
-  
+  console.log('checkGroupData',checkGroupData)
   const [ montanterror, setMontantError] = useState('');
 
   const handleMontanteBlur = (value) => {
@@ -265,7 +265,6 @@ const Print = () => {
   };
   const [ newfornisseur, setNewFornisseur] = useState(' ');
 
-  console.log('dddd',checks)
   return (
     <ContentWrapper>
       {isLoading ? (
@@ -349,11 +348,11 @@ const Print = () => {
                         name="num"
                         onChange={(e) => handleInputChange(item.id, 'num', e.target.value)}
                       />
-                      <Input
+                     <Input
                         label="Montant:"
                         placeholder="Montant en dinars"
                         type="text"
-                        defaultValue={item.montant}
+                        value={checkGroupData[index].montant} 
                         name="montant"
                         onChange={(e) => handleInputChange(item.id, 'montant', e.target.value)}
                         onBlur={(e) => handleMontanteBlur(e.target.value)}
