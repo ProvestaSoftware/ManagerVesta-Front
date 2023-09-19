@@ -5,7 +5,7 @@ import Header from '../Header'
 const TopIcomesFournisseurs = ({ fournisseurs, checks }) => {
 
     // Transform data
-    const transformedData = fournisseurs.map((fournisseur) => {
+    const transformedData = fournisseurs?.map((fournisseur) => {
         const dataForFournisseur = checks.filter(
             (check) => check.fournisseur_id === fournisseur.id
         );

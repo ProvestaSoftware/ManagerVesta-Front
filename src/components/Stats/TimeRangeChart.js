@@ -31,25 +31,11 @@ const TimeRangeChart = ({ checks }) => {
         }));
 
         setRangeData(processedData);
-    };
 
-    useEffect(() => {
-        processRangeData();
-        // console.log("rangeData", rangeData);
-    }, [checks]);
-
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-
-    // console.log("rangeData", rangeData);
-
-    const maxValue = Math.max(...rangeData.map(item => item.value));
-
-    const processData = () => {
         let earliest = null;
         let latest = null;
 
-        for (const item of rangeData) {
+        for (const item of processedData) {
             const date = item.day.split('T')[0];
 
             if (!earliest || date < earliest) {
@@ -66,8 +52,16 @@ const TimeRangeChart = ({ checks }) => {
     };
 
     useEffect(() => {
-        processData();
-    }, [rangeData]);
+        processRangeData();
+        // console.log("rangeData", rangeData);
+    }, []);
+
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+
+    // console.log("rangeData", rangeData);
+
+    const maxValue = Math.max(...rangeData.map(item => item.value));
 
     const legendRanges = [
         { from: 0, to: Math.floor(maxValue / 2), label: `0 - ${Math.floor(maxValue / 2)}`, color: '#ee8432' },

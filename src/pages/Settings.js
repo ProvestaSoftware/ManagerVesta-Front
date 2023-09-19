@@ -10,8 +10,6 @@ const Settings = () => {
 
     const userProfile = useState(JSON.parse(localStorage.getItem("profile")));
     const user = userProfile[0]?.data?.user;
-console.log(userProfile,'userProfile')
-console.log(user,'user')
 
 
     return (

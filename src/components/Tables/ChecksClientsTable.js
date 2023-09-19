@@ -1,10 +1,15 @@
 import React from 'react'
 import CheckClientTableRow from './CheckClientTableRow'
+import Skeleton from 'react-loading-skeleton'
 
-const ChecksClientsTable = ({ columns, rows, fournisseurs, onSerach ,Filters,getData,setLoader}) => {
+const ChecksClientsTable = ({ columns, rows, fournisseurs, onSerach ,Filters,getData,setLoader,loader}) => {
 
 console.log('Filters',rows)
     return (
+        <>
+        {loader  ? (
+            <Skeleton count={5} />
+        ) : (
         <div style={{
             width: '100%',
         }} class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -56,6 +61,8 @@ console.log('Filters',rows)
                 </tbody>
             </table>
         </div>
+        )}
+        </>
 
     )
 }

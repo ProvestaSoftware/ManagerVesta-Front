@@ -6,6 +6,7 @@ import '../assets/css/Stats.css'
 import StatCard from '../components/Cards/StatCard'
 
 const Stats = ({ data }) => {
+    console.log('data',data)
     return (
         <ContentWrapper>
             <div className='stat-wrapper'>

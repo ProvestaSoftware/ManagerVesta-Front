@@ -8,8 +8,8 @@ const TopFournisseursTable = ({ fournisseurs, checks }) => {
     useEffect(() => {
         const fournisseurCheckCounts = {};
 
-        checks.forEach(check => {
-            const fournisseurId = check.fournisseur_id;
+        checks?.forEach(check => {
+            const fournisseurId = check?.fournisseur_id;
             if (fournisseurCheckCounts[fournisseurId]) {
                 fournisseurCheckCounts[fournisseurId]++;
             } else {
@@ -18,16 +18,16 @@ const TopFournisseursTable = ({ fournisseurs, checks }) => {
         });
 
         const tableData = fournisseurs.map(fournisseur => ({
-            id: fournisseur.id.toString(),
-            nom: fournisseur.nom,
-            email: fournisseur.email,
-            numberOfChecks: fournisseurCheckCounts[fournisseur.id] || 0,
+            id: fournisseur?.id.toString(),
+            nom: fournisseur?.nom,
+            email: fournisseur?.email,
+            numberOfChecks: fournisseurCheckCounts[fournisseur?.id] || 0,
         }));
 
         const top5 = tableData.slice(0, 5);
 
         setData(top5);
-    }, [fournisseurs, checks]);
+    }, []);
 
     return (
         <div style={{ height: 'auto' }}>
@@ -54,7 +54,7 @@ const TopFournisseursTable = ({ fournisseurs, checks }) => {
                     </thead>
                     <tbody>
                         {data.map((item, index) => (
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <tr key={item?.id+'fornisseurtable'} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <td class="px-6 py-4">
                                     {index + 1}.
                                 </td>

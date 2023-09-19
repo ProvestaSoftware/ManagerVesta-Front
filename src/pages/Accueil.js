@@ -8,7 +8,7 @@ const Accueil = () => {
         <ContentWrapper>
             <img src={'/logo_cca.png'} className='rounded' />
             <span className='text-sm absolute bottom-10 right-10'>  
-                Copyright {currentYear} All rights are reserved - Powered by <a href='https://provestasoft.com'>ProvestaSoft</a>.
+                 Droit d'auteur {currentYear} Tous droits réservés - Propulsé par <a href='https://provestasoft.com'>ProvestaSoft</a>.
             </span>
         </ContentWrapper>
     )

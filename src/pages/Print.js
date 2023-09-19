@@ -23,6 +23,7 @@ import { Checks } from '../_services/checks.service';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import { useNavigate } from 'react-router-dom'
 import PrintModal from '../components/Modals/PrintModal'
+import { SettingService } from '../_services/setting.service'
 
 const Print = () => {
 
@@ -38,6 +39,26 @@ const Print = () => {
       console.log('Error refreshing fournisseurs list:', error);
     }
   };
+
+
+  const [currentCheckNumber, setCurrentCheckNumber] = useState(null);
+
+    const getCurrentCheckNumber = async () => {
+      try {
+        const settingData = await SettingService.index();
+        if (settingData && settingData.data.current_cheque_number) {
+          setCurrentCheckNumber(settingData.data.current_cheque_number);
+          console.log(settingData, "settingData");
+          console.log(currentCheckNumber, "currentCheckNumber");
+        }
+      } catch (error) {
+        console.error('Error fetching current check number:', error);
+      }
+    };
+
+    useEffect(() => {
+      getCurrentCheckNumber();
+    }, []);
 
   const handleChangeNumberOfChecks = (e) => {
     const newNumberOfChecks = parseInt(e.target.value, 10);
@@ -91,7 +112,7 @@ const Print = () => {
 
 
   const handleSubmit = async (event) => {
-    if( event ){
+    if (event) {
       event.preventDefault();
     }
   
@@ -102,7 +123,7 @@ const Print = () => {
   
       if (totalMontant != parseInt(paymentData.montantTotal, 10)) {
         alert("Total montant does not match montantTotal. Please check the values.");
-        return; 
+        return;
       }
   
       const updatedPaymentData = {
@@ -124,10 +145,14 @@ const Print = () => {
       await dispatch(createCheck(checksWithPaymentId));
   
       await filterDataByFournisseurId(checks, updatedPaymentData.fournisseur_id);
-
-      if( event ){
+  
+      if (event) {
         navigate('/cheques-fournisseurs');
       }
+  
+      const newCurrentCheckNumber = checkGroupData[checkGroupData.length - 1].num + 1;
+  
+      await SettingService.store({ current_cheque_number: newCurrentCheckNumber });
   
     } catch (error) {
       console.log('Error:', error);
@@ -156,18 +181,19 @@ const Print = () => {
       for (let i = 0; i < remainingAmount; i++) {
         checkAmounts[i] += 1;
       }
-  console.log(checkAmounts,'checkAmounts')
       const updatedCheckGroupData = checkAmounts.map((amount, index) => ({
         id: index + 1,
-        num: '',
+        num: currentCheckNumber + index +1,
         montant: checkAmounts[index],
         dueDate: '',
         type: checkType === 'Chéque' ? 'Chéque' : 'Traite',
         fournisseur_id: paymentData.fournisseur_id,
         payment_id: '',
       }));
-  
+  console.log('updatedCheckGroupData',updatedCheckGroupData)
       setCheckGroupData(updatedCheckGroupData);
+  console.log('updatedCheckGroupData',updatedCheckGroupData)
+
     }
   };
 
@@ -207,22 +233,28 @@ const Print = () => {
       return { exists: false, message: 'An error occurred while checking the due date.' };
     }
   };
-  
-  const handleDateBlur = async (dueDate) => {
+  const [inputErrors, setInputErrors] = useState({});
+
+
+  const handleDateBlur = async (dueDate, inputId) => {
     try {
       const dateExists = await checkIfDateExists(dueDate);
       if (dateExists.exists) {
-        setDateError(dateExists.message);
-        console.log(dateExists.message);
+        setInputErrors((prevErrors) => ({
+          ...prevErrors,
+          [inputId]: dateExists.message,
+        }));
       } else {
-        setDateError('');  
-        console.log('Date is valid');
+        setInputErrors((prevErrors) => ({
+          ...prevErrors,
+          [inputId]: '',
+        }));
       }
     } catch (error) {
       console.error('Error checking due date:', error);
     }
   };
-  console.log('checkGroupData',checkGroupData)
+  
   const [ montanterror, setMontantError] = useState('');
 
   const handleMontanteBlur = (value) => {
@@ -242,27 +274,32 @@ const Print = () => {
 
   const handleInputChange = (id, field, value) => {
     if (field === 'dueDate') {
-     
       const formattedDate = value;
-  
-      setCheckGroupData(prevData =>
-        prevData.map(item => (item.id === id ? { ...item, [field]: formattedDate } : item))
+      setCheckGroupData((prevData) =>
+        prevData.map((item) =>
+          item.id === id ? { ...item, [field]: formattedDate } : item
+        )
       );
-      handleDateBlur(formattedDate);
-    } 
-    if (field === 'montant') {
-     
-      const formattedDate = value;
-       setCheckGroupData(prevData =>
-        prevData.map(item => (item.id === id ? { ...item, [field]: formattedDate } : item))
+      handleDateBlur(formattedDate, id);
+    } else if (field === 'montant') {
+      const formattedMontant = value;
+      setCheckGroupData((prevData) =>
+        prevData.map((item) =>
+          item.id === id ? { ...item, [field]: formattedMontant } : item
+        )
       );
-      handleMontanteBlur(formattedDate);
+      handleMontanteBlur(formattedMontant);
     } else {
-      setCheckGroupData(prevData =>
-        prevData.map(item => (item.id === id ? { ...item, [field]: field === 'montant' ? parseInt(value, 10) : value } : item))
+      setCheckGroupData((prevData) =>
+        prevData.map((item) =>
+          item.id === id ? { ...item, [field]: field === 'montant' ? parseInt(value, 10) : value } : item
+        )
       );
     }
+  
+    setInputErrors((prevErrors) => ({ ...prevErrors, [id]: '' })); 
   };
+  
   const [ newfornisseur, setNewFornisseur] = useState(' ');
 
   return (
@@ -296,11 +333,11 @@ const Print = () => {
               <Select
                 label="Fournisseur:"
                 title="Recherche fournisseurs"
-                options={fournisseurs}
+                options={fournisseurs || ''}
                 name="fournisseur_id"
                 onChange={handleChange}
                 object={false}
-                defaultValue={newfornisseur.id}
+                defaultValue={newfornisseur?.id}
               />
               <Input
                 label="Montant total:"
@@ -308,6 +345,7 @@ const Print = () => {
                 type="text"
                 name="montantTotal"
                 onChange={handleChange}
+                value={paymentData?.montantTotal || ''}
               />
               <Input
                   label="Nombre d'écheances:"
@@ -315,7 +353,7 @@ const Print = () => {
                   type="number"
                   name="dueDatesNumber"
                   onChange={handleChangeNumberOfChecks}
-                  value={numberOfChecks}
+                  value={numberOfChecks || ''}
                 />
               {/* )} */}
               <RegularButton
@@ -346,6 +384,7 @@ const Print = () => {
                         type="text"
                         defaultValue={item.num}
                         name="num"
+                        value={checkGroupData[index].num}
                         onChange={(e) => handleInputChange(item.id, 'num', e.target.value)}
                       />
                      <Input
@@ -356,16 +395,17 @@ const Print = () => {
                         name="montant"
                         onChange={(e) => handleInputChange(item.id, 'montant', e.target.value)}
                         onBlur={(e) => handleMontanteBlur(e.target.value)}
-                        helpertext={montanterror} 
+                        error={montanterror} 
                       />
                       <Input
-                          label="Date:"
-                          type="date"
-                          defaultValue={item.dueDate}
-                          name="dueDate"
-                          onChange={(e) => handleInputChange(item.id, 'dueDate', e.target.value)}
-                          onBlur={(e) => handleDateBlur(e.target.value)}
-                          helpertext={dateError}  
+                        label="Date:"
+                        type="date"
+                        inputId={item.id}
+                        defaultValue={item.dueDate}
+                        name="dueDate"
+                        onChange={(e) => handleInputChange(item.id, 'dueDate', e.target.value)}
+                        onBlur={() => handleDateBlur(item.dueDate, item.id)} 
+                        error={inputErrors[item.id]}
                       />
                     </div>
                   </form>

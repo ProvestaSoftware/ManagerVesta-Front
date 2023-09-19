@@ -156,6 +156,7 @@ const CheckClient = () => {
             onSerach={(e) => handleFiltersChange('keyword', e.target.value)}
             Filters={Filters}
             setLoader={setLoader}
+            loader={loader}
           />
         )}
       </div>

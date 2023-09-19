@@ -1,6 +1,6 @@
 import { authHeader, ApiConfigs } from '../_helpers'
 
-export const Setting = {
+export const SettingService = {
   index,
   store
 }

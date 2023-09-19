@@ -4,21 +4,21 @@ import '../../assets/css/StatCard.css'
 const StatCard = ({ item }) => {
     return (
         <div style={{
-            color: item.color,
-            backgroundColor: item.backgroundColor
+            color: item?.color,
+            backgroundColor: item?.backgroundColor
         }} class="max-w-sm p-6 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
             <div className='stat-icon'>
                 {item.icon}
             </div>
             <h5 style={{
-                color: item.color,
+                color: item?.color,
                 fontSize: '18px'
-            }} class="mb-2 text-2xl font-semibold tracking-tight">{item.title}</h5>
+            }} class="mb-2 text-2xl font-semibold tracking-tight">{item?.title}</h5>
             {item.divider}
             <p style={{
                 color: item.color,
                 fontSize: '28px'
-            }} class="mb-3 font-normal">{item.amount} {item.unity}</p>
+            }} class="mb-3 font-normal">{item?.amount} {item?.unity}</p>
         </div>
     )
 }

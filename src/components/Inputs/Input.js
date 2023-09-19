@@ -12,6 +12,7 @@ const Input = ({
   required = false,
   helpertext,
   inputId,
+  error // Include error as a prop
 }) => {
   return (
     <div className="form-group">
@@ -42,11 +43,11 @@ const Input = ({
         required={required}
         type={type}
         id={inputId}
-        className="block p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        className={`block p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${error ? 'border-red-500' : ''}`} // Add border-red-500 if error exists
       />
-      {helpertext && (
+      {error && (
         <div style={{ color: 'red', fontSize: '14px', marginTop: 2 }}>
-          {helpertext}
+          {error}
         </div>
       )}
     </div>
