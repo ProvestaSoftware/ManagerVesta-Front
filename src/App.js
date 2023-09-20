@@ -36,49 +36,49 @@ function App() {
     const [checksOverallAverageMontant, setChecksOverallAverageMontant] = useState(null);
     const [traitesOverallAverageMontant, setTraitesOverallAverageMontant] = useState(null);
 
-    const processData = () => {
-        let totalMontant = 0;
-        let totalCount = 0;
+    // const processData = () => {
+    //     let totalMontant = 0;
+    //     let totalCount = 0;
 
-        let checksMontant = 0;
-        let checksCount = 0;
+    //     let checksMontant = 0;
+    //     let checksCount = 0;
 
-        let traitesMontant = 0;
-        let traitesCount = 0;
+    //     let traitesMontant = 0;
+    //     let traitesCount = 0;
 
-        for (const item of allChecks) {
-            totalMontant += item.montant;
-            totalCount++;
-        }
+    //     for (const item of allChecks) {
+    //         totalMontant += item.montant;
+    //         totalCount++;
+    //     }
         
-        for (const item of checks) {
-            checksMontant += item.montant;
-            checksCount++;
-        }
+    //     for (const item of checks) {
+    //         checksMontant += item.montant;
+    //         checksCount++;
+    //     }
         
-        for (const item of traites) {
-            traitesMontant += item.montant;
-            traitesCount++;
-        }
+    //     for (const item of traites) {
+    //         traitesMontant += item.montant;
+    //         traitesCount++;
+    //     }
 
-        if (totalCount > 0) {
-            const calculatedAverage = totalMontant / totalCount;
-            setOverallAverageMontant(calculatedAverage);
-        }
+    //     if (totalCount > 0) {
+    //         const calculatedAverage = totalMontant / totalCount;
+    //         setOverallAverageMontant(calculatedAverage);
+    //     }
 
-        if (checksCount > 0) {
-            const calculatedAverage = checksMontant / checksCount;
-            setChecksOverallAverageMontant(calculatedAverage);
-        }
+    //     if (checksCount > 0) {
+    //         const calculatedAverage = checksMontant / checksCount;
+    //         setChecksOverallAverageMontant(calculatedAverage);
+    //     }
 
-        if (traitesCount > 0) {
-            const calculatedAverage = traitesMontant / traitesCount;
-            setTraitesOverallAverageMontant(calculatedAverage);
-        }
-    };
+    //     if (traitesCount > 0) {
+    //         const calculatedAverage = traitesMontant / traitesCount;
+    //         setTraitesOverallAverageMontant(calculatedAverage);
+    //     }
+    // };
 
 
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
     useEffect(() => {
         // dispatch(getChecks());

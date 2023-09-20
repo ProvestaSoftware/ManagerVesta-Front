@@ -8,7 +8,7 @@ import Input from '../components/Inputs/Input'
 import Select from '../components/Inputs/Select'
 // import { fournisseursData } from '../data/MockData'
 import { BsCheckLg, BsWindowDock } from 'react-icons/bs'
-import { AiOutlinePlus } from 'react-icons/ai'
+// import { AiOutlinePlus } from 'react-icons/ai'
 import { FaSave } from 'react-icons/fa'
 import RegularLink from '../components/RegularLink'
 import RegularDivider from '../components/RegularDivider'
@@ -95,7 +95,7 @@ const Print = () => {
     fournisseur_id: '',
     checks: checkGroupData,
   });
-  const [isAddCheckDisabled, setIsAddCheckDisabled] = useState(true);
+  const [isAddCheckDisabled, setIsAddCheckDisabled] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -212,7 +212,6 @@ const Print = () => {
   const handleTraiteType = () => {
     setCheckType("Traite")
   }
-  const [ dateError, setDateError] = useState('');
 
   const checkIfDateExists = async (dueDate) => {
     try {
@@ -328,6 +327,7 @@ const Print = () => {
               Traite
             </RegularButton>
           </div>
+          {JSON.stringify(isAddCheckDisabled)}
           <form>
             <div className='print-form-container'>
               <Select
@@ -359,7 +359,7 @@ const Print = () => {
               <RegularButton
                 styleType="print-btn"
                 onClick={addCheck}
-                disabled={isAddCheckDisabled}
+                disabled={!isAddCheckDisabled}
               >
                 <BsCheckLg />
               </RegularButton>

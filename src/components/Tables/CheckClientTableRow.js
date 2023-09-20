@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import CheckClientModal from '../Modals/CheckClientModal';
 import { useDispatch } from 'react-redux';
-import { deleteCheckClient, getChecksClients } from '../../actions/checkClient';
+import { deleteCheckClient } from '../../actions/checkClient';
 import ConfirmModal from '../Modals/ConfirmModal';
 import moment from 'moment'
 

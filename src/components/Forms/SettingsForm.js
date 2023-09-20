@@ -45,7 +45,6 @@ const [loadersettings,setLoaderSettings] = useState(false)
 
     const [formData, setFormData] = useState(initState);
     const [passFormData, setPassFormData] = useState(passInitState);
-    const [loader, setLoader] = useState(false);
     const [passLoader, setPassLoader] = useState(false);
     const [loadersumbit , setLoaderSumbit] = useState(false);
 

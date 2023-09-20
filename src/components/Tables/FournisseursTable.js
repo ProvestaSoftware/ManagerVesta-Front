@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import FournisseurTableRow from './FournisseurTableRow'
 import Skeleton from 'react-loading-skeleton';
 
@@ -93,7 +93,7 @@ console.log('rowfor',rows)
                             color={getBankColor(item.banque)}
                         />
                     )) : (
-                        <p className='no-data-msg'>There are no fournisseurs...</p>
+                        <p className='no-data-msg'>Il n'y a pas de fournisseurs...</p>
                     )}
                 </tbody>
             </table>

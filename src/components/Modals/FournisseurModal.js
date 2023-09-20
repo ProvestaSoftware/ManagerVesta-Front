@@ -3,9 +3,7 @@ import Input from '../Inputs/Input'
 import RegularButton from '../Buttons/RegularButton'
 import { useDispatch } from 'react-redux'
 import { createFournisseur, getFournisseurs, updateFournisseur } from '../../actions/fournisseurs'
-import { useNavigate } from 'react-router-dom'
 
-import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
 const FournisseurModal = ({ item, handleModal,refreshFournisseursList,setNewFornisseur }) => {
@@ -22,7 +20,6 @@ const FournisseurModal = ({ item, handleModal,refreshFournisseursList,setNewForn
         rib: item ? item.rib : '',
     });
 
-    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     useEffect(() => {

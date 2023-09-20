@@ -74,7 +74,7 @@ const ChecksTable = ({ columns, rows, fournisseurs, onSerach ,Filters}) => {
                         fournisseurs={fournisseurs}
                         />
                     )) : (
-                        <p className='no-data-msg'>There are no checks...</p>
+                        <p className='no-data-msg'>Il n'y a pas de chèques...</p>
                     )}
                 </tbody>
             </table>

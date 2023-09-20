@@ -8,7 +8,6 @@ import BreakdownCheckTypeChart from '../components/Stats/BreakdownCheckTypeChart
 import DailyChart from '../components/Stats/DailyChart'
 import { useDispatch, useSelector } from 'react-redux'
 import TopFournisseursTable from '../components/Stats/TopFournisseursTable'
-import TimeRangeChart from '../components/Stats/TimeRangeChart'
 import TopIcomesFournisseurs from '../components/Stats/TopIcomesFournisseurs'
 import TopMonths from '../components/Stats/TopMonths'
 import BreakdownCheckStatusChart from '../components/Stats/BreakdownCheckStatusChart'

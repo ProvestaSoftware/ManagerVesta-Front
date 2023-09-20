@@ -90,7 +90,7 @@ const ClientsTable = ({ columns, rows,onSearch,searchKeyword,loadingSearch }) =>
                             color={getBankColor(item.banque)}
                         />
                     )) : (
-                        <p className='no-data-msg'>There are no clients...</p>
+                        <p className='no-data-msg'>Il n'y a pas de clients...</p>
                     )}
                 </tbody>
             </table>
