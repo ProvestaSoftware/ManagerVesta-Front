@@ -359,7 +359,7 @@ const Print = () => {
               <RegularButton
                 styleType="print-btn"
                 onClick={addCheck}
-                disabled={!isAddCheckDisabled}
+                // disabled={!isAddCheckDisabled}
               >
                 <BsCheckLg />
               </RegularButton>
