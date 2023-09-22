@@ -13,7 +13,11 @@ const CheckModal = ({ item, handleModal }) => {
         status: item ? item.status : '',
     });
 
+
+    
     const dispatch = useDispatch();
+
+
 
     useEffect(() => {
         if (item) setCheckData(item);
@@ -26,7 +30,6 @@ const CheckModal = ({ item, handleModal }) => {
         dispatch(getChecks());
         handleModal();
     };
-
 
     return (
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 9999 }}>

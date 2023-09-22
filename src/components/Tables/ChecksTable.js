@@ -3,7 +3,6 @@ import CheckTableRow from './CheckTableRow'
 
 const ChecksTable = ({ columns, rows, fournisseurs, onSerach ,Filters}) => {
 
-    console.log('rows',rows)
     return (
         <div style={{
             width: '100%',
@@ -69,9 +68,9 @@ const ChecksTable = ({ columns, rows, fournisseurs, onSerach ,Filters}) => {
                 <tbody>
                     {rows.length !== 0 ? rows.map((item, index) => (
                         <CheckTableRow
-                        key={index}
-                        item={item}
-                        fournisseurs={fournisseurs}
+                            key={index}
+                            item={item}
+                            fournisseurs={fournisseurs}
                         />
                     )) : (
                         <p className='no-data-msg'>Il n'y a pas de chèques...</p>

@@ -43,7 +43,7 @@ export const updateCheck = (id, check) => async (dispatch) => {
 
 export const deleteCheck = (id) => async (dispatch) => {
     try {
-        await await api.deleteCheck(id);
+        await  api.deleteCheck(id);
 
         dispatch({ type: DELETE, payload: id });
 
