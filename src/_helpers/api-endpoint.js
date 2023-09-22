@@ -18,6 +18,9 @@ export const ApiConfigs = {
     index: 'setting/',
     store: 'setting/',
   },
+  statistics: {
+    totalImpressions: 'statistique/',
+  },
  
  
 }
