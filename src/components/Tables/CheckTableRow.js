@@ -29,7 +29,6 @@ const CheckTableRow = ({ item, fournisseurs }) => {
     }
 
     const created_at = new Date(item?.created_at);
-
  
     const state_colors = {
         'En attente' : '#333333',

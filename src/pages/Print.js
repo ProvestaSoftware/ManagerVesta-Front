@@ -139,7 +139,11 @@ const Print = () => {
       const paymentId = response.payment.id;
   
       const checksWithPaymentId = checkGroupData.map((check) => ({
-        ...check,
+        num: check.num,
+        montant: check.montant,
+        dueDate: check.dueDate,
+        type: check.type,
+        fournisseur_id: check.fournisseur_id,
         payment_id: paymentId,
       }));
   
@@ -191,6 +195,7 @@ const Print = () => {
         fournisseur_id: paymentData.fournisseur_id,
         payment_id: '',
       }));
+      
   console.log('updatedCheckGroupData',updatedCheckGroupData)
       setCheckGroupData(updatedCheckGroupData);
   console.log('updatedCheckGroupData',updatedCheckGroupData)
@@ -298,7 +303,8 @@ const Print = () => {
         )
       );
     }
-  
+    console.log('After Update:', checkGroupData);
+
     setInputErrors((prevErrors) => ({ ...prevErrors, [id]: '' })); 
   };
   
