@@ -10,7 +10,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings }) => {
     if (isNaN(num) || num < 1 || num > 999999999) {
         return "------------";
     }
-
+console.log('fournisseursfournisseursfournisseurs',fournisseurs)
     let result = "";
 
     // handle millions
@@ -354,7 +354,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings }) => {
           <div className="relative bg-white rounded-lg dark:bg-gray-700">
             <div className="check-num-print flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                Cheque(s) &nbsp;
+              {item.type ='traite' ? 'Traite(s)' : 'Chéque(s)'} &nbsp;
                 {
                   item?.map((check, index) => 
                     <span key={'ChecksPrintModal'+index}>
@@ -398,26 +398,48 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings }) => {
                       >
                         <img src={TraiteImage} alt="Check" />
                         <div className='extra_margin_parameters' style={{marginLeft: `${settings.cheque_margin_left}px`, marginTop: `${settings.cheque_margin_right}px`}}>
-                          <span className="check_data num_check" id={`montant-${index}`} style={{left: '80px', top: '28px'}}>
+                          {/* <span className="check_data num_check" id={`montant-${index}`} style={{left: '80px', top: '28px'}}>
                             <b>{check?.num ?? '------'}</b>
+                          </span> */}
+                          <span className="check_data montant" id={`montant-${index}`} style={{left: '540px', top: '90px'}}>
+                            #{(check?.montant || 0).toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}#
                           </span>
-                          <span className="check_data montant" id={`montant-${index}`} style={{left: '540px', top: '21px'}}>
-                            {check?.montant?.toLocaleString('fr-FR') || '------------'}
+                          <span className="check_data montant" id={`montant-${index}`} style={{left: '200px', top: '90px'}}>
+                              {settings.rib_bank}
                           </span>
-                          <span className="check_data montant_ecrit montant_ecrit_line1" id={`montant_ecrit_line1-${index}`} style={{left: 'calc(50% + 30px)', top: '65px'}}>
+                          <span className="check_data montant" id={`montant-${index}`} style={{left: '540px', top: '150px'}}>
+                            #{(check?.montant || 0).toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}#
+                          </span>
+                          <span className="check_data montant_ecrit montant_ecrit_line1" id={`montant_ecrit_line1-${index}`} style={{left: 'calc(20% + 20px)', top: '185px'}}>
                             {`${numberToWordsFR(check?.montant || 0)} dinars`.split(' ', 4).join(' ')}
                           </span>
-                          <span className="check_data montant_ecrit montant_ecrit_line2" id={`montant_ecrit_line2-${index}`} style={{left: 'calc(50% + 30px)', top: '90px'}}>
+                          {/* <span className="check_data montant_ecrit montant_ecrit_line2" id={`montant_ecrit_line2-${index}`} style={{left: 'calc(50% + 30px)', top: '90px'}}>
                             {`${numberToWordsFR(check?.montant || 0)} dinars`.split(' ').slice(4).join(' ')}
-                          </span>
-                          <span className="check_data montant_to" id={`montant_to-${index}`} style={{left: '110px', top: '120px'}}>
+                          </span> */}
+                          <span className="check_data montant_to" id={`montant_to-${index}`} style={{left: '310px', top: '160px'}}>
                             {fournisseurNom || '----------------------------------------------------'}
                           </span>
-                          <span className="check_data date montant_a_fr" style={{left: '230px'}}>{settings.paye_de_signature ?? 'Kélibia'}</span>
-                          <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '315px'}}>
+                          <span className="check_data date montant_a_fr" style={{left: '340px',top:'310px'}}>{settings.business_name}</span>
+                          <span className="check_data date montant_a_fr" style={{left: '480px',top:'280px'}}>{settings.bank_name}</span>
+                          <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '200px',top:'60px'}}>
                             {moment(check.dueDate).format('DD/MM/YYYY') || '--/--/----'}
                           </span>
-                          <span className="check_data date montant_a_ar" style={{left: '430px'}}>{settings.paye_de_signature_ar ?? 'قليبية'}</span>
+                          <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '350px',top:'60px'}}>
+                            {moment(check.created_at).format('DD/MM/YYYY') || '--/--/----'}
+                          </span>
+                          <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '350px',top:'40px'}}>
+                                {settings.paye_de_signature}
+                          </span>
+                          <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '25px',top:'270px'}}>
+                                {settings.rib_bank}
+                          </span>
+                          <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '130px',top:'230px'}}>
+                            {moment(check.created_at).format('DD/MM/YYYY') || '--/--/----'}
+                          </span>
+                          <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '230px',top:'230px'}}>
+                            {moment(check.dueDate).format('DD/MM/YYYY') || '--/--/----'}
+                          </span>
+                          <span className="check_data date montant_a_ar" style={{left: '50px',top:'230px'}}>{settings.paye_de_signature}</span>
                         </div>
                       </div>
                     </div>

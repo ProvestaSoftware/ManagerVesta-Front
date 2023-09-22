@@ -134,13 +134,50 @@ console.log('setting',setting)
                             </RegularButton>
                     </form>
                  )}
+                   <RegularDivider size="0.5px" />
+                {loadersettings ? (
+                     <Skeleton count={5} />
+                 ) : (
+                    <div style={{ backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '10px' }}>
+                        <form onSubmit={handleSubmit} className='settings-form-container'>
+                            <Input
+                                label="Nom de l'entreprise"
+                                placeholder="Nom de l'entreprise"
+                                type='text'
+                                value={setting.business_name}
+                                onChange={(e) => handleInputChange('business_name', e.target.value)}
+                                style={{ width: '100%', marginBottom: '10px',height: '40px' }}
+                            />
+                            <Input
+                                label='Nom de la banque et le lieux pour la banque'
+                                placeholder='Example (ATB Kelibia)'
+                                type='text'
+                                value={setting.bank_name}
+                                onChange={(e) => handleInputChange('bank_name', e.target.value)}
+                                style={{ width: '100%', marginBottom: '10px',height: '40px' }}
+                            />
+                            <br />
+                           
+                            <Input
+                                label='RIB Bank'
+                                placeholder='Example (01 061 0141100004218 54)'
+                                type='text'
+                                value={setting.rib_bank}
+                                onChange={(e) => handleInputChange('rib_bank', e.target.value)}
+                                style={{ width: '100%', marginBottom: '10px',height: '40px' }}
+                            />
+                            <button className='custom-button primary' type='submit'>
+                                Enregistrer
+                            </button>
+                        </form>
+                    </div>
+                )} 
                 <RegularDivider size="0.5px" />
                 {loadersettings ? (
                      <Skeleton count={5} />
                  ) : (
                     <div style={{ backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '10px' }}>
                         <form onSubmit={handleSubmit} className='settings-form-container'>
-
                             <Input
                                 label='Numéro de chèque actuel'
                                 placeholder='Numéro de chèque actuel'
@@ -198,7 +235,8 @@ console.log('setting',setting)
                                 label='Paye de la signature en arabe'
                                 placeholder='Paye de la signature en arabe'
                                 type='text'
-                                value={'قليبية'}
+                                value={setting.paye_de_signature_ar}
+                                onChange={(e) => handleInputChange('paye_de_signature_ar', e.target.value)}
                                 style={{ width: '100%', marginBottom: '10px',height: '40px', direction: 'rtl' }}
                             />
                             <button className='custom-button primary' type='submit'>
