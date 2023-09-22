@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import atbImage from '../../assets/images/ATBcheck2.jpg';
+import TraiteImage from '../../assets/images/traite_vierge.jpg';
 import '../../assets/css/PrintModal.css';
 import RegularButton from '../Buttons/RegularButton';
 import moment from 'moment'
@@ -384,7 +385,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings }) => {
                         id={`check-${index}`} 
                         style={{ 
                           width: '687.87401575px', 
-                          height: '309.92125984px', 
+                          height: '509.92125984px', 
                           display: 'block', 
                           border: '1px solid #ddd', 
                           borderRadius: '3px', 
@@ -395,7 +396,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings }) => {
                           },
                         }}
                       >
-                        <img src={atbImage} alt="Check" />
+                        <img src={TraiteImage} alt="Check" />
                         <div className='extra_margin_parameters' style={{marginLeft: `${settings.cheque_margin_left}px`, marginTop: `${settings.cheque_margin_right}px`}}>
                           <span className="check_data num_check" id={`montant-${index}`} style={{left: '80px', top: '28px'}}>
                             <b>{check?.num ?? '------'}</b>

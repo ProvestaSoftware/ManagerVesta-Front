@@ -23,6 +23,7 @@ import { Checks } from '../_services/checks.service';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import { useNavigate } from 'react-router-dom'
 import PrintModal from '../components/Modals/PrintModal'
+import PrintModalTraite from '../components/Modals/PrintModalTraite'
 import { SettingService } from '../_services/setting.service'
 
 const Print = () => {
@@ -42,14 +43,14 @@ const Print = () => {
 
 
   const [currentCheckNumber, setCurrentCheckNumber] = useState(null);
+  const [settings, setSettings] = useState(null);
 
     const getCurrentCheckNumber = async () => {
       try {
         const settingData = await SettingService.index();
         if (settingData && settingData.data.current_cheque_number) {
           setCurrentCheckNumber(settingData.data.current_cheque_number);
-          console.log(settingData, "settingData");
-          console.log(currentCheckNumber, "currentCheckNumber");
+          setSettings(settingData.data);
         }
       } catch (error) {
         console.error('Error fetching current check number:', error);
@@ -183,7 +184,7 @@ const Print = () => {
       }
       const updatedCheckGroupData = checkAmounts.map((amount, index) => ({
         id: index + 1,
-        num: currentCheckNumber + index +1,
+        num: currentCheckNumber + index,
         montant: checkAmounts[index],
         dueDate: '',
         type: checkType === 'Chéque' ? 'Chéque' : 'Traite',
@@ -216,16 +217,18 @@ const Print = () => {
   const checkIfDateExists = async (dueDate) => {
     try {
       const response = await Checks.checkDueDateExists(dueDate);
-      const { exists, message, checksWithinRange } = response;
+      const { exists, message, checksWithinRange, checksAmountWithinRange } = response;
   
       if (exists) {
         if (checksWithinRange > 0) {
-          return { exists: true, message: `You have ${checksWithinRange} checks.` };
-        } else {
-          return { exists: true, message };
+          return { exists: true, type: 'error', message: `Vous avez ${checksWithinRange} chèques à cette date avec un montant total de ${checksAmountWithinRange}dt` };
         }
       } else {
-        return { exists: false, message };
+        if (checksWithinRange > 0) {
+          return { exists: true, type: 'warning', message: `Vous avez ${checksWithinRange} chèques proches cette date avec un montant total de ${checksAmountWithinRange}dt` };
+        }else{
+          return { exists: false, message };
+        }
       }
     } catch (error) {
       console.error('Error checking due date:', error);
@@ -241,7 +244,7 @@ const Print = () => {
       if (dateExists.exists) {
         setInputErrors((prevErrors) => ({
           ...prevErrors,
-          [inputId]: dateExists.message,
+          [inputId]: dateExists,
         }));
       } else {
         setInputErrors((prevErrors) => ({
@@ -303,6 +306,7 @@ const Print = () => {
 
   return (
     <ContentWrapper>
+      <div className='non-printable'>
       {isLoading ? (
         <div className="fixed-loader-container">
             <div className="fixed-loader"></div>
@@ -327,7 +331,6 @@ const Print = () => {
               Traite
             </RegularButton>
           </div>
-          {JSON.stringify(isAddCheckDisabled)}
           <form>
             <div className='print-form-container'>
               <Select
@@ -434,12 +437,22 @@ const Print = () => {
           }
         </div>
       )}
+      </div>
       {showPrintModal && (
-        <PrintModal
-          handleModal={() => setShowPrintModal(false)} 
-          fournisseurs={fournisseurs}
-          item={checkGroupData}
-        />
+        checkType == 'Chéque' ?
+          <PrintModal
+            handleModal={() => setShowPrintModal(false)} 
+            fournisseurs={fournisseurs}
+            item={checkGroupData}
+            settings={settings}
+          />
+        :
+          <PrintModalTraite
+            handleModal={() => setShowPrintModal(false)} 
+            fournisseurs={fournisseurs}
+            item={checkGroupData}
+            settings={settings}
+          />
       )}
       {modal && <FournisseurModal handleModal={handleModal} refreshFournisseursList={refreshFournisseursList} setNewFornisseur={setNewFornisseur} />}
     </ContentWrapper>

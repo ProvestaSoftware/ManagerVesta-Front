@@ -46,8 +46,8 @@ const Input = ({
         className={`block p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${error ? 'border-red-500' : ''}`} // Add border-red-500 if error exists
       />
       {error && (
-        <div style={{ color: 'red', fontSize: '14px', marginTop: 2 }}>
-          {error}
+        <div style={{ color: error.type=='error' ? 'red':'#b3b31d', fontSize: '14px', marginTop: 2 }}>
+          {error.message}
         </div>
       )}
     </div>

@@ -153,21 +153,22 @@ console.log('setting',setting)
                         <RegularDivider size="0.5px" />
                         <form onSubmit={handleSubmit} className='settings-form-container'>
                             <Input
-                                label='Marge à gauche'
-                                placeholder='Marge à gauche du chèque'
+                                label='Marge à gauche d`impression des chéques'
+                                placeholder='Marge à gauche des chèques'
                                 type='number'
                                 value={setting.cheque_margin_left}
                                 onChange={(e) => handleInputChange('cheque_margin_left', e.target.value)}
                                 style={{ width: '100%', marginBottom: '10px',height: '40px' }}
                             />
                             <Input
-                                label='Marge à droite'
-                                placeholder='Marge à droite du chèque'
+                                label='Marge en haut d`impression des chéques'
+                                placeholder='Marge en haut du chèque'
                                 type='number'
                                 value={setting.cheque_margin_right}
                                 onChange={(e) => handleInputChange('cheque_margin_right', e.target.value)}
                                 style={{ width: '100%', marginBottom: '10px',height: '40px' }}
                             />
+                            <br />
                             <Input
                                 label='Marge à gauche des opérations'
                                 placeholder='Marge à gauche des opérations chèques'
@@ -184,17 +185,25 @@ console.log('setting',setting)
                                 onChange={(e) => handleInputChange('cheque_margin_right_trades', e.target.value)}
                                 style={{ width: '100%', marginBottom: '10px',height: '40px'}}
                             />
+                            <br />
                             <Input
-                                label='Paye de la signature'
-                                placeholder='Paye de la signature'
+                                label='Paye de la signature en français'
+                                placeholder='Paye de la signature en français'
                                 type='text'
                                 value={setting.paye_de_signature}
                                 onChange={(e) => handleInputChange('paye_de_signature', e.target.value)}
                                 style={{ width: '100%', marginBottom: '10px',height: '40px' }}
                             />
-                                <button className='custom-button primary' type='submit'>
-                                    Enregistrer
-                                </button>
+                            <Input
+                                label='Paye de la signature en arabe'
+                                placeholder='Paye de la signature en arabe'
+                                type='text'
+                                value={'قليبية'}
+                                style={{ width: '100%', marginBottom: '10px',height: '40px', direction: 'rtl' }}
+                            />
+                            <button className='custom-button primary' type='submit'>
+                                Enregistrer
+                            </button>
                         </form>
                     </div>
                 )} 
