@@ -329,8 +329,8 @@ console.log('fournisseursfournisseursfournisseurs',fournisseurs)
     const printingStyles = `
         @media print {
           .check {
-            margin-left: -${189-Number(settings.cheque_margin_right)}px !important;
-            margin-top: ${189+Number(settings.cheque_margin_left)}px;
+            margin-left: -${130-Number(settings.cheque_margin_right)}px !important;
+            margin-top: ${40+Number(settings.cheque_margin_left)}px;
           }
         }
     `;
@@ -347,6 +347,18 @@ console.log('fournisseursfournisseursfournisseurs',fournisseurs)
     };
   }, [settings]);
 
+
+  const segments = [
+    settings.rib_bank.slice(0, 2),         
+    settings.rib_bank.slice(2, 5),         
+    settings.rib_bank.slice(5, 16),        
+    settings.rib_bank.slice(16)            
+  ];
+  const segments1 = settings.rib_bank.slice(0, 2);
+  const segments2 = settings.rib_bank.slice(2, 5);
+  const segments3 = settings.rib_bank.slice(5, 18);
+  const segments4 = settings.rib_bank.slice(18);
+  
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 9999 }}>
       <div style={{ position: 'fixed', top: '0%', left: '50%', transform: 'translate(-50%, 0%)', padding: '20px', borderRadius: '8px', width: '800px', height: '90vh' }}>
@@ -405,7 +417,16 @@ console.log('fournisseursfournisseursfournisseurs',fournisseurs)
                             #{(check?.montant || 0).toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}#
                           </span>
                           <span className="check_data montant" id={`montant-${index}`} style={{left: '200px', top: '90px'}}>
-                              {settings.rib_bank}
+                              {segments1}
+                          </span>
+                          <span className="check_data montant" id={`montant-${index}`} style={{left: '240px', top: '90px'}}>
+                              {segments2}
+                          </span>
+                          <span className="check_data montant" id={`montant-${index}`} style={{left: '300px', top: '90px'}}>
+                              {segments3}
+                          </span>
+                          <span className="check_data montant" id={`montant-${index}`} style={{left: '460px', top: '90px'}}>
+                              {segments4}
                           </span>
                           <span className="check_data montant" id={`montant-${index}`} style={{left: '540px', top: '150px'}}>
                             #{(check?.montant || 0).toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}#
@@ -419,7 +440,7 @@ console.log('fournisseursfournisseursfournisseurs',fournisseurs)
                           <span className="check_data montant_to" id={`montant_to-${index}`} style={{left: '310px', top: '160px'}}>
                             {fournisseurNom || '----------------------------------------------------'}
                           </span>
-                          <span className="check_data date montant_a_fr" style={{left: '340px',top:'310px'}}>{settings.business_name}</span>
+                          <span className="check_data date montant_a_fr" style={{left: '330px',top:'300px',maxWidth: '100px',maxHeight:'100px'}}>{settings.business_name}</span>
                           <span className="check_data date montant_a_fr" style={{left: '480px',top:'280px'}}>{settings.bank_name}</span>
                           <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '200px',top:'60px'}}>
                             {moment(check.dueDate).format('DD/MM/YYYY') || '--/--/----'}
@@ -430,8 +451,17 @@ console.log('fournisseursfournisseursfournisseurs',fournisseurs)
                           <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '350px',top:'40px'}}>
                                 {settings.paye_de_signature}
                           </span>
-                          <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '25px',top:'270px'}}>
-                                {settings.rib_bank}
+                          <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '22px',top:'270px'}}>
+                                {segments1}
+                          </span>
+                          <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '48px',top:'270px'}}>
+                                {segments2}
+                          </span>
+                          <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '95px',top:'270px'}}>
+                                {segments3}
+                          </span>
+                          <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '270px',top:'270px'}}>
+                                {segments4}
                           </span>
                           <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '130px',top:'230px'}}>
                             {moment(check.created_at).format('DD/MM/YYYY') || '--/--/----'}

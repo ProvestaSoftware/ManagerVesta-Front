@@ -167,7 +167,7 @@ const Print = () => {
   };
   
   const handleModalPrint = () => {
-    // handleSubmit();
+    handleSubmit();
     setShowPrintModal(!showPrintModal);
   }
   
@@ -388,14 +388,17 @@ const Print = () => {
                     <div className='check-print-form-container'>
                       <p>{index + 1}.</p>
                       <Input
-                        label="Numéro de chéque:"
-                        placeholder="Num"
-                        type="text"
-                        defaultValue={item.num}
-                        name="num"
-                        value={checkGroupData[index].num}
-                        onChange={(e) => handleInputChange(item.id, 'num', e.target.value)}
-                      />
+                          label="Numéro de chèque:"
+                          placeholder="Num"
+                          type="text"
+                          defaultValue={item.num}
+                          name="num"
+                          value={
+                            checkType === 'Chéque' ? checkGroupData[index].num : 
+                            checkType === 'Traite' ? checkGroupData.num : '' 
+                          }
+                          onChange={(e) => handleInputChange(item.id, 'num', e.target.value)}
+                        />
                      <Input
                         label="Montant:"
                         placeholder="Montant en dinars"
