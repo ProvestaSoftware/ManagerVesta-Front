@@ -327,53 +327,61 @@ console.log('fournisseursfournisseursfournisseurs',fournisseurs)
 
     // Define the printing styles based on the state variable
     const printingStyles = `
-        @media print {
-          .check {
-            margin-left: -${135-Number(settings.cheque_margin_right)}px !important;
-            margin-top: ${35+Number(settings.cheque_margin_left)}px;
-          }
-          .print .segments1{
-            left: 210px;
-            top: 90px;
-          }
-          .print .segments2{
-            left: '250px';
-            top: '90px';
-          }
-          .print .checkmontanttop{
-            left: '520px';
-            top: '90px';
-          }
-          .print .checkmontantbas{
-            left: '520px';
-            top: '140px';
-          }
-          .print .created_at{
-            left: '150px';
-            top:'230px';
-          }
-          .print .dueDate{
-            left: '260px';
-            top:'230px';
-          }
-          .print .segments11 {
-            left: '35px';
-            top:'270px';
-          }
-          .print .segments22 {
-            left: '60px';
-            top:'270px;
-          }
-          .print .segments33 {
-            left: '120px';
-            top:'270px;
-          }
-          .print .segments44 {
-            left: '290px';
-            top: 270px;
-          }
-        }
-    `;
+    @media print {
+      .check {
+        margin-left: -${135 - Number(settings.cheque_margin_right)}px !important;
+        margin-top: ${70 + Number(settings.cheque_margin_left)}px;
+      }
+   
+      .check_data.date.segments11 {
+        left:-20px !important;
+        top: 280px !important;
+      }
+      .check_data.date.segments22 {
+        left: 15px !important;
+        top: 280px !important;
+      }
+      .check_data.date.segments33 {
+        left: 95px !important;
+        top: 280px !important;
+      }
+      .check_data.date.segments44 {
+        left: 260px !important;
+        top: 280px !important;
+      }
+      .check_data.data.paye {
+        left:10px !important;
+        top:250px !important;
+      }
+      .check_data.date.created_at{
+        left: 130px !important;
+        top: 230px !important ;
+      }
+      .check_data date dueDate{
+        left: 230px !important;
+        top: 250px !important ;
+      }
+      .check_data.montant.segments1 {
+        left: 180px !important;
+        top: 90px !important ;
+      }
+      .check_data.montant.segments2 {
+        left: 230px !important;
+        top: 90px !important ;
+      }
+      .check_data.date.business_name {
+        left: 330px !important;
+        top: 320px !important ;
+      }
+      .check_data date.bankname {
+        left: 490px !important;
+        top: 310px !important ;
+      }
+
+    }
+    }
+`;
+
 
     // Set the styles for the <style> element
     styleElement.innerHTML = printingStyles;
@@ -460,7 +468,7 @@ console.log('fournisseursfournisseursfournisseurs',fournisseurs)
                           <span className="check_data montant" id={`montant-${index}`} style={{left: '300px', top: '90px'}}>
                               {segments3}
                           </span>
-                          <span className="check_data montant" id={`montant-${index}`} style={{left: '460px', top: '90px'}}>
+                          <span className="check_data montant" id={`montant-${index}`} style={{left: '464px', top: '90px'}}>
                               {segments4}
                           </span>
                           <span className="check_data montant checkmontantbas" id={`montant-${index}`} style={{ left: '540px', top: '150px' }}>
@@ -475,8 +483,8 @@ console.log('fournisseursfournisseursfournisseurs',fournisseurs)
                           <span className="check_data montant_to" id={`montant_to-${index}`} style={{left: '310px', top: '160px'}}>
                             {fournisseurNom || '----------------------------------------------------'}
                           </span>
-                          <span className="check_data date montant_a_fr" style={{left: '330px',top:'300px',maxWidth: '100px',maxHeight:'100px',textAlign: 'center'}}>{settings.business_name}</span>
-                          <span className="check_data date montant_a_fr" style={{ left: '480px', top: '280px',maxWidth: '200px', textAlign: 'center' }}>{settings.bank_name}</span>
+                          <span className="check_data date business_name" style={{left: '330px',top:'300px',maxWidth: '100px',maxHeight:'100px',textAlign: 'center'}}>{settings.business_name}</span>
+                          <span className="check_data date bankname" style={{ left: '480px', top: '280px',maxWidth: '200px', textAlign: 'center' }}>{settings.bank_name}</span>
                           <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '200px',top:'60px'}}>
                             {moment(check.dueDate).format('DD/MM/YYYY') || '--/--/----'}
                           </span>
@@ -486,10 +494,10 @@ console.log('fournisseursfournisseursfournisseurs',fournisseurs)
                           <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '350px',top:'40px'}}>
                                 {settings.paye_de_signature}
                           </span>
-                          <span className="check_data date segments11" id={`montant_le-${index}`} style={{left: '22px',top:'270px'}}>
+                          <span className="check_data date segments11" id={`montant_le-${index}`} style={{left: '15px',top:'270px'}}>
                                 {segments1}
                           </span>
-                          <span className="check_data date segments22" id={`montant_le-${index}`} style={{left: '48px',top:'270px'}}>
+                          <span className="check_data date segments22" id={`montant_le-${index}`} style={{left: '42px',top:'270px'}}>
                                 {segments2}
                           </span>
                           <span className="check_data date segments33" id={`montant_le-${index}`} style={{left: '95px',top:'270px'}}>
@@ -504,7 +512,7 @@ console.log('fournisseursfournisseursfournisseurs',fournisseurs)
                           <span className="check_data date dueDate" id={`montant_le-${index}`} style={{left: '230px',top:'230px'}}>
                             {moment(check.dueDate).format('DD/MM/YYYY') || '--/--/----'}
                           </span>
-                          <span className="check_data date montant_a_ar" style={{left: '50px',top:'230px'}}>{settings.paye_de_signature}</span>
+                          <span className="check_data date paye" style={{left: '30px',top:'230px'}}>{settings.paye_de_signature}</span>
                         </div>
                       </div>
                     </div>
