@@ -334,32 +334,32 @@ console.log('fournisseursfournisseursfournisseurs',fournisseurs)
       }
    
       .check_data.date.segments11 {
-        left:-20px !important;
-        top: 280px !important;
+        left:-30px !important;
+        top: 290px !important;
       }
       .check_data.date.segments22 {
-        left: 15px !important;
-        top: 280px !important;
+        left: 10px !important;
+        top: 290px !important;
       }
       .check_data.date.segments33 {
         left: 95px !important;
-        top: 280px !important;
+        top: 290px !important;
       }
       .check_data.date.segments44 {
         left: 260px !important;
-        top: 280px !important;
+        top: 290px !important;
       }
       .check_data.data.paye {
-        left:10px !important;
+        left:5px !important;
         top:250px !important;
       }
       .check_data.date.created_at{
-        left: 130px !important;
+        left: 125px !important;
         top: 230px !important ;
       }
       .check_data date dueDate{
-        left: 230px !important;
-        top: 250px !important ;
+        left: 210px !important;
+        top: 240px !important ;
       }
       .check_data.montant.segments1 {
         left: 180px !important;
@@ -375,7 +375,7 @@ console.log('fournisseursfournisseursfournisseurs',fournisseurs)
       }
       .check_data date.bankname {
         left: 490px !important;
-        top: 310px !important ;
+        top: 330px !important ;
       }
 
     }
