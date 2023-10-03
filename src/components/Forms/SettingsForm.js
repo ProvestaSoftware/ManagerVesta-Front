@@ -194,7 +194,7 @@ const [loadersettings,setLoaderSettings] = useState(false)
                         <RegularDivider size="0.5px" />
                         <form onSubmit={handleSubmit} className='settings-form-container'>
                             <Input
-                                label='Marge à gauche d`impression des chéques'
+                                label='Marge à gauche d`impression des chéques (CM)'
                                 placeholder='Marge à gauche des chèques'
                                 type='number'
                                 value={setting.cheque_margin_left}
@@ -202,7 +202,7 @@ const [loadersettings,setLoaderSettings] = useState(false)
                                 style={{ width: '100%', marginBottom: '10px',height: '40px' }}
                             />
                             <Input
-                                label='Marge en haut d`impression des chéques'
+                                label='Marge en haut d`impression des chéques (CM)'
                                 placeholder='Marge en haut du chèque'
                                 type='number'
                                 value={setting.cheque_margin_right}
@@ -211,7 +211,7 @@ const [loadersettings,setLoaderSettings] = useState(false)
                             />
                             <br />
                             <Input
-                                label='Marge à gauche des traites'
+                                label='Marge à gauche des traites (CM)'
                                 placeholder='Marge à gauche des traites chèques'
                                 type='number'
                                 value={setting.cheque_margin_left_trades}
@@ -219,7 +219,7 @@ const [loadersettings,setLoaderSettings] = useState(false)
                                 style={{ width: '100%', marginBottom: '10px',height: '40px' }}
                             />
                             <Input
-                                label='Marge en haut des traites'
+                                label='Marge en haut des traites (CM)'
                                 placeholder='Marge en haut des traites chèques'
                                 type='number'
                                 value={setting.cheque_margin_right_trades}
