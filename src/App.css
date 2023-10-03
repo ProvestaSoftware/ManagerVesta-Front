@@ -39,12 +39,14 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
+
 .warning-text {
-  color: orange; 
+  color: orange;
   font-weight: bold;
 }
 
@@ -65,8 +67,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .fixed-loader-container {
@@ -93,17 +100,23 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
+
 .event-popup {
   background-color: white;
   padding: 30px;
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   max-width: 600px;
-  font-size: 16px; 
-  line-height: 1.6; 
+  font-size: 16px;
+  line-height: 1.6;
   text-align: center;
 }
 
@@ -124,57 +137,68 @@
   transform: translate(-50%, -50%);
   z-index: 1000;
 }
-.event-popup-text{
+
+.event-popup-text {
   text-align: left;
 }
 
-body{
+body {
   margin: 0 !important;
 }
-.check{
+
+.check {
   position: relative;
   margin: 0;
   /* margin-left: -189px !important;
   margin-top: 189px;
   transform: rotate(270deg); */
 }
-.check_data{
+
+.check_data {
   position: absolute;
   font-family: 'DM Mono';
 }
-.montant{
+
+.montant {
   left: 540px;
   top: 20px;
 }
-.montant_ecrit_line1{
+
+.montant_ecrit_line1 {
   left: calc(50% + 30px);
   transform: translate(-50%);
   top: 65px;
 }
-.montant_ecrit_line2{
+
+.montant_ecrit_line2 {
   left: calc(50% + 30px);
   top: 90px;
   transform: translate(-50%);
   width: 100%;
   text-align: center;
 }
-.montant_to{
+
+.montant_to {
   left: 110px;
   top: 120px;
 }
-.date{
+
+.date {
   top: 219px;
   font-size: 14px;
 }
-.montant_a_fr{
+
+.montant_a_fr {
   left: 230px;
   font-size: 13px;
 }
-.montant_le{
+
+.montant_le {
   left: 315px;
   font-size: 12px;
 }
-.montant_a_ar{
+
+.montant_a_ar {
   left: 420px;
   font-size: 14px;
 }
@@ -182,16 +206,25 @@ body{
 @media print {
   body {
     overflow: hidden;
-    
+
   }
-#check{
-  page-break-before: always;
-}
-.print {
-    page-break-before: always;  
+
+  #check {
+    page-break-before: always;
   }
-  .__check_data { display: none; }
-  img { display: none; }
+
+  .print {
+    page-break-before: always;
+  }
+
+  .__check_data {
+    display: none;
+  }
+
+  img {
+    display: none;
+  }
+
   ::-webkit-scrollbar {
     display: none;
   }

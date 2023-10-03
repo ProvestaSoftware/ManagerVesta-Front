@@ -13,3 +13,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.settings-form-container label, .settings-password, .settings-password label{
+  color: #fff !important;
+  cursor: pointer;
+}

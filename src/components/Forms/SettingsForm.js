@@ -73,8 +73,6 @@ const [loadersettings,setLoaderSettings] = useState(false)
       [field]: value,
     });
   };
-console.log('setting',setting)
-
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -106,7 +104,7 @@ console.log('setting',setting)
                   {loadersettings ? (
                      <Skeleton count={2} />
                  ) : (
-                    <form onSubmit={handleSubmitData} className='settings-form-container'>
+                    <form onSubmit={handleSubmitData} className='settings-form-container' style={{ backgroundColor: '#254c75', padding: '20px', borderRadius: '10px' }}>
                         <Input
                             label="Nom:"
                             placeholder="Nom"
@@ -134,11 +132,14 @@ console.log('setting',setting)
                             </RegularButton>
                     </form>
                  )}
-                   <RegularDivider size="0.5px" />
+                    <RegularDivider size="0.5px" />
+                    <div style={{textAlign: 'left'}}>
+                        <h3 style={{fontSize: '20px', fontWeight: '600'}}>Paramétres d'entreprise</h3>
+                    </div>
                 {loadersettings ? (
                      <Skeleton count={5} />
                  ) : (
-                    <div style={{ backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '10px' }}>
+                    <div style={{ backgroundColor: '#254c75', padding: '20px', borderRadius: '10px' }}>
                         <form onSubmit={handleSubmit} className='settings-form-container'>
                             <Input
                                 label="Nom de l'entreprise"
@@ -149,8 +150,8 @@ console.log('setting',setting)
                                 style={{ width: '100%', marginBottom: '10px',height: '40px' }}
                             />
                             <Input
-                                label='Nom de la banque et le lieux pour la banque'
-                                placeholder='Example (ATB Kelibia)'
+                                label='Nom et lieux de la banque'
+                                placeholder='Example : ATB Kélibia'
                                 type='text'
                                 value={setting.bank_name}
                                 onChange={(e) => handleInputChange('bank_name', e.target.value)}
@@ -173,10 +174,13 @@ console.log('setting',setting)
                     </div>
                 )} 
                 <RegularDivider size="0.5px" />
+                <div style={{textAlign: 'left'}}>
+                    <h3 style={{fontSize: '20px', fontWeight: '600'}}>Paramétres d'impression</h3>
+                </div>
                 {loadersettings ? (
                      <Skeleton count={5} />
                  ) : (
-                    <div style={{ backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '10px' }}>
+                    <div style={{ backgroundColor: '#254c75', padding: '20px', borderRadius: '10px' }}>
                         <form onSubmit={handleSubmit} className='settings-form-container'>
                             <Input
                                 label='Numéro de chèque actuel'
@@ -207,16 +211,16 @@ console.log('setting',setting)
                             />
                             <br />
                             <Input
-                                label='Marge à gauche des opérations'
-                                placeholder='Marge à gauche des opérations chèques'
+                                label='Marge à gauche des traites'
+                                placeholder='Marge à gauche des traites chèques'
                                 type='number'
                                 value={setting.cheque_margin_left_trades}
                                 onChange={(e) => handleInputChange('cheque_margin_left_trades', e.target.value)}
                                 style={{ width: '100%', marginBottom: '10px',height: '40px' }}
                             />
                             <Input
-                                label='Marge à droite des opérations'
-                                placeholder='Marge à droite des opérations chèques'
+                                label='Marge en haut des traites'
+                                placeholder='Marge en haut des traites chèques'
                                 type='number'
                                 value={setting.cheque_margin_right_trades}
                                 onChange={(e) => handleInputChange('cheque_margin_right_trades', e.target.value)}
@@ -246,8 +250,10 @@ console.log('setting',setting)
                     </div>
                 )} 
                 <RegularDivider size="0.5px" />
-
-                <div style={{ backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '10px' }}>
+                <div style={{textAlign: 'left'}}>
+                    <h3 style={{fontSize: '20px', fontWeight: '600'}}>Mot de passe du compte</h3>
+                </div>
+                <div className='settings-password' style={{ backgroundColor: '#254c75', padding: '20px', borderRadius: '10px' }}>
 
                         <div style={{ marginBottom: '10px' }}>
                             <label style={{ display: 'flex', alignItems: 'center' }}>
@@ -256,7 +262,7 @@ console.log('setting',setting)
                                 name='passwordOption'
                                 checked={changePassword}
                                 onChange={handlePasswordOptionChange}
-                                style={{ marginRight: '10px' }}
+                                style={{ marginRight: '10px', color: '#fffs' }}
                             />
                                   Voulez-vous changer le mot de passe ?
                             </label>

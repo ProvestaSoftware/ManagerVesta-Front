@@ -401,7 +401,8 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings }) => {
                             <b>{check?.num ?? '------'}</b>
                           </span>
                           <span className="check_data montant" id={`montant-${index}`} style={{left: '540px', top: '21px'}}>
-                            {check?.montant?.toLocaleString('fr-FR') || '------------'}
+                            {/* {check?.montant?.toLocaleString('fr-FR') || '------------'} */}
+                            #{(check?.montant || 0).toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}#
                           </span>
                           <span className="check_data montant_ecrit montant_ecrit_line1" id={`montant_ecrit_line1-${index}`} style={{left: 'calc(50% + 30px)', top: '65px'}}>
                             {`${numberToWordsFR(check?.montant || 0)} dinars`.split(' ', 4).join(' ')}
