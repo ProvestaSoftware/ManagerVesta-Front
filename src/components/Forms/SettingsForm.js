@@ -22,13 +22,38 @@ const SettingsForm = ({ user }) => {
     }
 
     const [setting, setSetting] = useState([]);
-const [loadersettings,setLoaderSettings] = useState(false)
+    const [loadersettings,setLoaderSettings] = useState(false)
+
+    const cmToPixels = (cmValue) => {
+        return cmValue * 37.79;
+      };
+      const PixelsToCm = (cmValue) => {
+        return cmValue / 37.79;
+      };
 
   const getData = () => {
     setLoaderSettings(true)
     SettingService.index()
       .then(res => {
-        setSetting(res?.data)
+        setFormSubmissionData(res?.data)
+        const convertedData = { ...res?.data };
+        const fieldsToConvert = [
+          'cheque_margin_left',
+          'cheque_margin_right',
+          'cheque_margin_left_trades',
+          'cheque_margin_right_trades',
+        ];
+
+        fieldsToConvert.forEach((field) => {
+            const pixelsValue = parseFloat(convertedData[field]);
+            if (!isNaN(pixelsValue)) {
+              const cmValue = PixelsToCm(pixelsValue);
+              convertedData[field] = cmValue;
+            }
+          });
+
+
+          setSetting(convertedData)
       })
       .catch(err => {
         console.log(err)
@@ -65,20 +90,39 @@ const [loadersettings,setLoaderSettings] = useState(false)
         await dispatch(updateUserPassword(user?.id, passFormData));
         await setPassLoader(false);
     };
+    const [formSubmissionData, setFormSubmissionData] = useState({});
 
+  
+      const handleInputChange = (field, value) => {
+        let convertedValue = value;
+      
+        if (field === 'cheque_margin_left' || field === 'cheque_margin_right' || field === 'cheque_margin_left_trades' || field === 'cheque_margin_right_trades') {
+          const cmValue = parseFloat(value);
+          if (!isNaN(cmValue)) {
+            const pixelsValue = cmToPixels(cmValue);
+            convertedValue = pixelsValue.toFixed(2);
+          }
 
-  const handleInputChange = (field, value) => {
-    setSetting({
-      ...setting,
-      [field]: value,
-    });
-  };
-
+          setFormSubmissionData((prevData) => ({
+            ...prevData,
+            [field]: convertedValue,
+          }));
+        }
+      
+        setSetting({
+          ...setting,
+          [field]: value,
+        });
+      
+        
+      };
+      
+      
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoaderSumbit(true);
     
-        SettingService.store(setting)
+        SettingService.store(formSubmissionData)
           .then(() => {
             setLoaderSumbit(false);
           })
