@@ -4,7 +4,6 @@ import Skeleton from 'react-loading-skeleton'
 
 const ChecksClientsTable = ({ columns, rows, fournisseurs, onSerach ,Filters,getData,setLoader,loader}) => {
 
-console.log('Filters',rows)
     return (
         <>
         {loader  ? (

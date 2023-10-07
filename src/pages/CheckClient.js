@@ -100,6 +100,8 @@ const CheckClient = () => {
 
     }
   };
+  const [ newclient, setNewClient] = useState(' ');
+
   return (
     <ContentWrapper>
       <div className='check-wrapper'>

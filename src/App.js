@@ -259,7 +259,6 @@ function App() {
 
     const userProfile = useState(JSON.parse(localStorage.getItem("profile")));
     const user = userProfile[0]?.data?.user;
-    // console.log(user);
 
     return (
         <div className="App">

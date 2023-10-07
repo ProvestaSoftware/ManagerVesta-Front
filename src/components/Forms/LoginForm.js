@@ -12,7 +12,6 @@ const LoginForm = () => {
     const [loader, setLoader] = useState(false);
 
     const message = useSelector((state) => state?.auth?.error);
-    // console.log(message);
 
     const initState = {
         email: "",
@@ -24,7 +23,6 @@ const LoginForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         await setLoader(true);
-        // await console.log(formData);
         await dispatch(login(formData));
         await setLoader(false);
     };

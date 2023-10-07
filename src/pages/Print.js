@@ -196,9 +196,7 @@ const Print = () => {
         payment_id: '',
       }));
       
-  console.log('updatedCheckGroupData',updatedCheckGroupData)
       setCheckGroupData(updatedCheckGroupData);
-  console.log('updatedCheckGroupData',updatedCheckGroupData)
 
     }
   };
@@ -303,13 +301,11 @@ const Print = () => {
         )
       );
     }
-    console.log('After Update:', checkGroupData);
 
     setInputErrors((prevErrors) => ({ ...prevErrors, [id]: '' })); 
   };
   
   const [ newfornisseur, setNewFornisseur] = useState(' ');
-
   return (
     <ContentWrapper>
       <div className='non-printable'>

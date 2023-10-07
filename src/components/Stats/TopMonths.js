@@ -12,7 +12,6 @@ function TopMonths() {
 
     const checks = useSelector((state) => state.checks);
 
-    console.log("checks", checks);
 
     // const [monthlyData, setMonthlyData] = useState([]);
     const [topMonths, setTopMonths] = useState([]);
@@ -41,7 +40,6 @@ function TopMonths() {
 
         const processedMonthlyData = Object.values(monthlyDataMap);
 
-        console.log("processedMonthlyData", processedMonthlyData);
 
         const sortedTopMonths = [...processedMonthlyData]
             .sort((a, b) => b.montant - a.montant)
