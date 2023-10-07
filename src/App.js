@@ -267,10 +267,10 @@ function App() {
                 <Routes>
                     <Route element={<Layout />}>
                         <Route path="/" element={user ? (
-                            <Navigate to="/accueil" replace />
+                            <Navigate to="accueil" replace />
                         ) : <Navigate to="/login" replace />
                         } />
-                        <Route path="/accueil" element={user ? <Accueil /> : <Navigate to="/login" replace />} />
+                        <Route path="accueil" element={user ? <Accueil /> : <Navigate to="/login" replace />} />
                         <Route path="/imprimer" element={user ? <Print /> : <Navigate to="/login" replace />} />
                         <Route path="/cheques-fournisseurs" element={user ? <CheckFournisseur /> : <Navigate to="/login" replace />} />
                         <Route path="/calendrier" element={user ? <Calendrier /> : <Navigate to="/login" replace />} />
