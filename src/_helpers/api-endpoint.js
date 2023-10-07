@@ -21,6 +21,9 @@ export const ApiConfigs = {
   statistics: {
     totalImpressions: 'statistique/',
   },
+  client: {
+    add: 'client/',  
+  },
  
  
 }

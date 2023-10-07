@@ -39,9 +39,6 @@ const Charts = () => {
       fetchData();
     }, [dispatch]);
   
-    console.log('checks', checks);
-    console.log('fournisseurs', fournisseurs);
-    console.log('loooder', loader);
   
     return (
       <ContentWrapper>

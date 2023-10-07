@@ -21,7 +21,6 @@ const[loader ,setLoader ] = useState (false)
         setLoader(true);
         StatistiqueService.index()
           .then(res => {
-            console.log('API response:', res.data);
             setStats(res.data);
           })
           .catch(err => {

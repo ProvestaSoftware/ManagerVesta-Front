@@ -6,6 +6,8 @@ import { createCheckClient, updateCheckClient } from '../../actions/checkClient'
 import { useNavigate } from 'react-router-dom'
 import RegularLink from '../../components/RegularLink'
 import { createClient, getClients, updateClient } from '../../actions/clients'
+import Select from '../Inputs/Select';
+import { Client } from '../../_services/client.service';
 
 const CheckFournisseurModal = ({ item, handleModal,clients,getData }) => {
     const [fournisseurData, setFournisseurData] = useState({
@@ -59,18 +61,18 @@ const CheckFournisseurModal = ({ item, handleModal,clients,getData }) => {
     useEffect(() => {
         if (item) setClientData(item);
     }, [item]);
+    const [ newclient, setNewClient] = useState(null);
 
     const handleAjout = async (e) => {
         e.preventDefault();
         // console.log(clientData);
-        if (item)
-            dispatch(updateClient(item.id, clientData));
-        else
-            dispatch(createClient(clientData));
+      
+        let createdClientData = await Client.add(clientData);
+        setNewClient(createdClientData?.client)
         dispatch(getClients());
+
         setShowAddNewClientPopup(false);
     };
-        console.log('clients',clients)
     return (
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 9999 }}>
             <div style={{
@@ -167,23 +169,15 @@ const CheckFournisseurModal = ({ item, handleModal,clients,getData }) => {
                                     </select>
                                 </div>
                                 <div className="col-span-6 sm:col-span-3">
-                                    <label htmlFor="client_id" className="block text-sm font-medium text-gray-700">
-                                        Client
-                                    </label>
-                                    <select
-                                            id="client_id"
-                                            name="client_id"
-                                            value={fournisseurData.client_id}
-                                            onChange={handleInputChange}
-                                            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                        >
-                                            <option value="" disabled>Select a client</option>
-                                            {clients.map((client) => (
-                                                <option key={client.id} value={client.id}>
-                                                    {client.nom}
-                                                </option>
-                                            ))}
-                                    </select>
+                                    <Select
+                                        label="Client:"
+                                        title="Recherche client"
+                                        options={clients || ''}
+                                        name="client_id"
+                                        onChange={handleInputChange}
+                                        object={false}
+                                        defaultValue={newclient?.id}
+                                    />
                                 </div>
                                 <div className='col-span-6 sm:col-span-3'>
                                     <RegularLink

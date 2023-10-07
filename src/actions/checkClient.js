@@ -11,7 +11,6 @@ import {
 export const getChecksClients = () => async (dispatch) => {
   try {
       const { data } = await api.fetchCheckClients();
-          console.log('_______data',data)
       dispatch({ type: FETCH_ALL_CHECK_CLIENTS, payload: data });
   } catch (error) {
       console.log(error);

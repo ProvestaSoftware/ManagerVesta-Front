@@ -12,7 +12,6 @@ function getBankColor(bank_name) {
 }
 
 const FournisseursTable = ({ columns, rows ,onSearch,searchKeyword,loadingSearch }) => {
-console.log('rowfor',rows)
 
 
 

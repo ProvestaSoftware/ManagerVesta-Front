@@ -5,7 +5,6 @@ import { logout } from "./auth.js";
 export const updateUserProfileData = (id, user) => async (dispatch) => {
     try {
         const { data } = await api.updateUserProfileData(id, user);
-        // console.log("data", data?.data);
 
         dispatch({ type: UPDATE, payload: data });
 
@@ -19,7 +18,6 @@ export const updateUserProfileData = (id, user) => async (dispatch) => {
 export const updateUserPassword = (id, user) => async (dispatch) => {
     try {
         const { data } = await api.updateUserPassword(id, user);
-        // console.log("pass data", data);
 
         dispatch({ type: UPDATE, payload: data });
 
@@ -29,7 +27,6 @@ export const updateUserPassword = (id, user) => async (dispatch) => {
 
     } catch (error) {
         dispatch(authError(error.response.data.message));
-        // console.log(error.message);
     }
 };
 
