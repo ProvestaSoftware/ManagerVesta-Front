@@ -1,7 +1,8 @@
 import { authHeader, ApiConfigs } from '../_helpers'
 
 export const Checks = {
-  checkDueDateExists
+  checkDueDateExists,
+  updateCheck
 }
 
 async function checkDueDateExists(dueDate) {
@@ -15,6 +16,17 @@ async function checkDueDateExists(dueDate) {
     `${ApiConfigs.base_url}${ApiConfigs.check.checkDueDateExists}`,
     requestOptions
   ).then(handleResponse);
+}
+async function updateCheck(checkId, updatedData) {
+  const requestOptions = {
+    method: 'PUT',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(updatedData),
+  };
+  const updateUrl = `${ApiConfigs.base_url}${ApiConfigs.check.update.replace('{check}', checkId)}`;
+
+  return await fetch(updateUrl, requestOptions)
+    .then(handleResponse);
 }
 
 async function handleResponse(response) {

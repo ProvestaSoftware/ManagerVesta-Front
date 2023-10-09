@@ -5,6 +5,7 @@ import { dropdownCheckStatusData } from '../../data/MenuData'
 import RegularButton from '../Buttons/RegularButton'
 import { useDispatch } from 'react-redux'
 import { getChecks, updateCheck } from '../../actions/checks'
+import { Checks } from '../../_services/checks.service'
 
 const CheckModal = ({ item, handleModal }) => {
 
@@ -13,7 +14,7 @@ const CheckModal = ({ item, handleModal }) => {
         status: item ? item.status : '',
     });
 
-
+console.log('itemitemitemitem',item)
     
     const dispatch = useDispatch();
 
@@ -23,13 +24,17 @@ const CheckModal = ({ item, handleModal }) => {
         if (item) setCheckData(item);
     }, [item]);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        // console.log(checkData);
-        dispatch(updateCheck(item.id, checkData));
-        dispatch(getChecks());
-        handleModal();
-    };
+        Checks.updateCheck(item?.id, checkData)
+          .then(() => {
+            dispatch(getChecks());
+            handleModal();
+          })
+          .catch((error) => {
+            console.log('Error updating check:', error);
+          });
+      };
 
     return (
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 9999 }}>

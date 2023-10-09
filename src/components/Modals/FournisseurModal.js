@@ -6,7 +6,7 @@ import { createFournisseur, getFournisseurs, updateFournisseur } from '../../act
 
 import 'react-circular-progressbar/dist/styles.css';
 
-const FournisseurModal = ({ item, handleModal,refreshFournisseursList,setNewFornisseur }) => {
+const FournisseurModal = ({ item, handleModal,setNewFornisseur }) => {
 
 
   const [Loading, setLoading] = useState(false);
@@ -25,7 +25,14 @@ const FournisseurModal = ({ item, handleModal,refreshFournisseursList,setNewForn
     useEffect(() => {
         if (item) setFournisseurData(item);
     }, [item]);
-
+    const refreshFournisseursList = async () => {
+        try {
+          await dispatch(getFournisseurs());
+        } catch (error) {
+          console.log('Error refreshing fournisseurs list:', error);
+        }
+      };
+      
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -35,17 +42,17 @@ const FournisseurModal = ({ item, handleModal,refreshFournisseursList,setNewForn
             let createdFournisseurData;
             if (item) {
                 await dispatch(updateFournisseur(item.id, fournisseurData));
-                refreshFournisseursList();
+                await refreshFournisseursList(); 
             } else {
                 createdFournisseurData = await dispatch(createFournisseur(fournisseurData));
-                refreshFournisseursList();
+                await refreshFournisseursList(); 
                 setNewFornisseur(createdFournisseurData?.fournisseur);
             }
     
             if (window.location.pathname === "/fournisseurs") {
                 await dispatch(getFournisseurs());
             }
-            refreshFournisseursList();
+            await refreshFournisseursList(); 
             handleModal();
             
         } catch (error) {

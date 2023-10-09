@@ -34,8 +34,6 @@ export const updateCheck = (id, check) => async (dispatch) => {
 
         dispatch({ type: UPDATE, payload: data });
 
-        // window.location.reload();
-
     } catch (error) {
         console.log(error);
     }
