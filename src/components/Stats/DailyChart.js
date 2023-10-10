@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useSelector } from "react-redux";
 import Header from "../Header";
+import moment from "moment"
 
 const DailyChart = () => {
 
@@ -85,18 +86,22 @@ const DailyChart = () => {
         const checksLine = {
             id: "Checks",
             color: "#2663a9",
-            data: [],
+            data: [
+                {x: '0', y: '0'},
+            ],
         };
         const traitesLine = {
             id: "Traites",
             color: "#ee8432",
-            data: [],
+            data: [
+                {x: '0', y: '0'},
+            ],
         };
 
         Object.values(checkDailyData).forEach(({ date, totalChecks }) => {
             const dateFormatted = new Date(date);
             if (dateFormatted >= startDate && dateFormatted <= endDate) {
-                const splitDate = date.substring(date.indexOf("-") + 1);
+                const splitDate = date//.substring(date.indexOf("-") + 1);
 
                 checksLine.data = [
                     ...checksLine.data,
@@ -107,7 +112,7 @@ const DailyChart = () => {
         Object.values(traiteDailyData).forEach(({ date, totalChecks }) => {
             const dateFormatted = new Date(date);
             if (dateFormatted >= startDate && dateFormatted <= endDate) {
-                const splitDate = date.substring(date.indexOf("-") + 1);
+                const splitDate = date//.substring(date.indexOf("-") + 1);
 
                 traitesLine.data = [
                     ...traitesLine.data,
@@ -116,7 +121,42 @@ const DailyChart = () => {
             }
         });
 
-        const formattedData = [checksLine, traitesLine];
+        checksLine.data = checksLine.data.sort((a, b) => { return a.x.localeCompare(b.x) })/*.map(item => {
+            return {
+                ...item,
+                x: item.x != '0' ? moment(item.x).format('DD MMM') : '0',
+            }
+        })*/
+        traitesLine.data = traitesLine.data.sort((a, b) => { return a.x.localeCompare(b.x) })/*.map(item => {
+            return {
+                ...item,
+                x: item.x != '0' ? moment(item.x).format('DD MMM') : '0',
+            }
+        })*/
+
+        const formattedData = [
+            checksLine, 
+            traitesLine
+        ];
+
+        // Step 1: Extract all unique dates
+        let allDates = [];
+        formattedData.forEach(item => {
+            allDates = allDates.concat(item.data.map(d => d.x));
+        });
+        allDates = [...new Set(allDates)].sort();
+
+        // Step 2: Ensure each dataset has all dates
+        formattedData.forEach(item => {
+            allDates.forEach(date => {
+                if (!item.data.some(d => d.x === date)) {
+                    item.data.push({ x: date, y: "0" });
+                }
+            });
+            item.data.sort((a, b) => a.x.localeCompare(b.x));
+        });
+
+        console.log('formattedData', formattedData)
         return [formattedData];
     }, [allChecks, checkDailyData, traiteDailyData, startDate, endDate]);
 
@@ -258,7 +298,7 @@ const DailyChart = () => {
                     ]}
                 />
             ) : (
-                <>Loading...</>
+                <>Chargement...</>
             )}
         </div>
     );

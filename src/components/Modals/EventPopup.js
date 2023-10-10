@@ -26,58 +26,57 @@ const EventPopup = ({ event, onClose }) => {
   }
 
   const isImpaye = status === 'Impayé';
-console.log('lala',event)
   return (
     <div className="event-popup" style={popupStyle}>
-        <div className="event-popup-title" style={{ color: isImpaye ? 'red' : 'white' }}>
+        <div className="event-popup-title" style={{ color: isImpaye ? 'white' : 'white' }}>
             {eventTypeTitle} Details
         </div>
       <div className="event-popup-text">
             <div>
-                <strong style={{ color: isImpaye ? 'red' : 'white' }}>Banque:</strong>{' '}
-                    <span style={{ color: isImpaye ? 'red' : 'white' }}>
+                <strong style={{ color: isImpaye ? 'white' : 'white' }}>Banque:</strong>{' '}
+                    <span style={{ color: isImpaye ? 'white' : 'white' }}>
                     {event?.cheque?.fournisseur ? event?.cheque?.fournisseur?.banque : event?.cheque?.client?.banque}
                     </span>
             </div>
             <div>
-                <strong style={{ color: isImpaye ? 'red' : 'white' }}>Num Chéque:</strong>{' '}
-                    <span style={{ color: isImpaye ? 'red' : 'white' }}>
+                <strong style={{ color: isImpaye ? 'white' : 'white' }}>Num Chéque:</strong>{' '}
+                    <span style={{ color: isImpaye ? 'white' : 'white' }}>
                         #{event?.cheque ? event?.cheque?.num : ''}
                     </span>
             </div>
             <div>
-                <strong style={{ color: isImpaye ? 'red' : 'white' }}>Nom:</strong>{' '}
-                    <span style={{ color: isImpaye ? 'red' : 'white' }}>
+                <strong style={{ color: isImpaye ? 'white' : 'white' }}>Nom:</strong>{' '}
+                    <span style={{ color: isImpaye ? 'white' : 'white' }}>
                     {event?.cheque?.fournisseur ? event?.cheque?.fournisseur?.nom : event?.cheque?.client?.nom}
                     </span>
             </div>
             <div>
-                <strong style={{ color: isImpaye ? 'red' : 'white' }}>Montant:</strong>{' '}
-                <span style={{ color: isImpaye ? 'red' : 'white' }}>{montant}</span>
+                <strong style={{ color: isImpaye ? 'white' : 'white' }}>Montant:</strong>{' '}
+                <span style={{ color: isImpaye ? 'white' : 'white' }}>{montant}</span>
             </div>
             <div>
-                <strong style={{ color: isImpaye ? 'red' : 'white' }}>Type:</strong>{' '}
-                <span style={{ color: isImpaye ? 'red' : 'white' }}>{type}</span>
+                <strong style={{ color:'white' }}>Type:</strong>{' '}
+                <span style={{ color: isImpaye ? 'white' : 'white' }}>{type}</span>
             </div>
             <div>
                 <strong style={{ color: isImpaye ? 'red' : 'white' }}>Status:</strong>{' '}
                 <span style={{ color: isImpaye ? 'red' : 'white' }}>{status}</span>
             </div>
             <div>
-                <strong style={{ color: isImpaye ? 'red' : 'white' }}>Num Chéque:</strong>{' '}
-                    <span style={{ color: isImpaye ? 'red' : 'white' }}>
+                <strong style={{ color: isImpaye ? 'white' : 'white' }}>Num Chéque:</strong>{' '}
+                    <span style={{ color: isImpaye ? 'white' : 'white' }}>
                         #{event?.cheque ? event?.cheque?.num : ''}
                     </span>
             </div>
             <div>
-                <strong style={{ color: isImpaye ? 'red' : 'white' }}>Date d'échéance:</strong>{' '}
-                    <span style={{ color: isImpaye ? 'red' : 'white' }}>
+                <strong style={{ color: isImpaye ? 'white' : 'white' }}>Date d'échéance:</strong>{' '}
+                    <span style={{ color: isImpaye ? 'white' : 'white' }}>
                     {event?.cheque ? moment(event?.cheque?.dueDate).format('DD MMMM YYYY') : ''}
                     </span>
             </div>
             <div>
-            <strong style={{ color: isImpaye ? 'red' : 'white' }}>Créé à:</strong>{' '}
-                <span style={{ color: isImpaye ? 'red' : 'white' }}>
+            <strong style={{ color: isImpaye ? 'white' : 'white' }}>Créé à:</strong>{' '}
+                <span style={{ color: isImpaye ? 'white' : 'white' }}>
                 {event?.cheque ? moment(event?.cheque?.created_at).format('DD MMMM YYYY') : ''}
                 </span>
             </div>

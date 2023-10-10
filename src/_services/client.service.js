@@ -1,7 +1,8 @@
 import { authHeader, ApiConfigs } from '../_helpers'
 
 export const Client = {
-  add
+  add,
+  updateClient
 }
 
 async function add(clientData) {
@@ -15,6 +16,17 @@ async function add(clientData) {
     `${ApiConfigs.base_url}${ApiConfigs.client.add}`,
     requestOptions
   ).then(handleResponse);
+}
+async function updateClient(clientId, clientData) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(clientData),
+  };
+  const updateUrl = `${ApiConfigs.base_url}${ApiConfigs.client.update.replace('{client}', clientId)}`;
+
+  return await fetch(updateUrl, requestOptions)
+    .then(handleResponse);
 }
 
 async function handleResponse(response) {

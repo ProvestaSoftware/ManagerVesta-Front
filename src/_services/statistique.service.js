@@ -2,6 +2,7 @@ import { authHeader, ApiConfigs } from '../_helpers'
 
 export const StatistiqueService = {
   index,
+  filterByDate
 }
 
 async function index() {
@@ -12,6 +13,17 @@ async function index() {
 
   return await fetch(
     `${ApiConfigs.base_url}${ApiConfigs.statistics.totalImpressions}`,
+    requestOptions
+  ).then(handleResponse);
+}
+async function filterByDate(from, to) {
+  const requestOptions = {
+    method: 'GET',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+  };
+
+  return await fetch(
+    `${ApiConfigs.base_url}${ApiConfigs.statistics.filterByDate}?from=${from}&to=${to}`,
     requestOptions
   ).then(handleResponse);
 }

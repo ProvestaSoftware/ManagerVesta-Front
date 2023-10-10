@@ -20,12 +20,16 @@ const Calendrier = () => {
     const [loader, setLoader] = useState(true);
     const [checkclient, setCheckClient] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+
     const handleEventClick = event => {
         setSelectedEvent(event);
+        setIsPopupOpen(true);
       };
     
       const handleClosePopup = () => {
         setSelectedEvent(null);
+        setIsPopupOpen(false);
       };
     const getData = () => {
         setLoader(true)
@@ -121,6 +125,7 @@ const Calendrier = () => {
                     <PageTitle>Calendrier</PageTitle>
                 </div>
                 <RegularDivider />
+                <div className={isPopupOpen ? 'calendar-overlay active' : 'calendar-overlay'}></div>
                 {loader ? (
                    <Skeleton count={5} />
                     ) : (
@@ -133,6 +138,7 @@ const Calendrier = () => {
                             eventPropGetter={eventStyleGetter}
                             style={{ height: '500px', marginTop: '20px', border: '1px solid #ddd', borderRadius: '5px' }}
                             onSelectEvent={handleEventClick}
+                            className={isPopupOpen ? 'calendar-with-overlay' : ''}
                             />
                 )}
                     {selectedEvent && (

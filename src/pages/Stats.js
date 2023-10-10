@@ -5,7 +5,10 @@ import PageTitle from '../components/PageTitle'
 import '../assets/css/Stats.css'
 import StatCard from '../components/Cards/StatCard'
 import { StatistiqueService } from '../_services/statistique.service'
+import Input from '../components/Inputs/Input';
+import RegularButton from '../components/Buttons/RegularButton';
 
+import { AiFillFilter } from 'react-icons/ai';
 
 import { BsCoin, BsFillLightningChargeFill } from "react-icons/bs";
 import { FaArrowsAltV } from "react-icons/fa";
@@ -203,8 +206,31 @@ const[loader ,setLoader ] = useState (false)
             divider: <RegularDivider color="#000000" size="0.5px" width="50%" />,
         },
     ]   
-      
 
+    const [Filters, setFilters] = useState({
+        from: '',
+        to: '',
+      });
+
+    const handleFiltersChange = (prop, value) => {
+        setFilters({ ...Filters, [prop]: value });
+      };
+      const handleFilterSubmit = (e) => {
+        e.preventDefault();
+        setLoader(true);
+    
+        StatistiqueService.filterByDate(Filters.from, Filters.to)
+          .then((filteredStats) => {
+            setStats(filteredStats.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          })
+          .finally(() => {
+            setLoader(false);
+          });
+      };
+      console.log('stats',stats)
     return (
         <ContentWrapper>
             <div className='stat-wrapper'>
@@ -212,6 +238,28 @@ const[loader ,setLoader ] = useState (false)
                     <PageTitle>Statistiques</PageTitle>
                 </div>
                 <RegularDivider />
+                <form onSubmit={handleFilterSubmit}>
+                    <div className='check-form-container'>
+                            <Input
+                            label="Filtrer de:"
+                            placeholder="..."
+                            type="date"
+                            value={Filters?.from}
+                            onChange={(e) => handleFiltersChange('from', e.target.value)}
+                            />
+                            <Input
+                            label="Jusqu'à:"
+                            placeholder="..."
+                            type="date"
+                            value={Filters.to}
+                            onChange={(e) => handleFiltersChange('to', e.target.value)}
+                            />
+                            <RegularButton styleType="filter-btn" type="submit">
+                            <AiFillFilter className='btn-icon-left' />
+                            Filtrer
+                            </RegularButton>
+                    </div>
+                    </form>
                 {loader ? (
                     <div className="fixed-loader-container">
                         <div className="fixed-loader"></div>

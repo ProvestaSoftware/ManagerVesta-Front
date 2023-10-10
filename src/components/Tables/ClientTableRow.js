@@ -9,6 +9,7 @@ const ClientTableRow = ({ item, index, color }) => {
 
     const [modal, setModal] = useState(false);
     const [confirm, setConfirm] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleModal = () => {
         setModal(!modal);
@@ -20,12 +21,20 @@ const ClientTableRow = ({ item, index, color }) => {
 
     const dispatch = useDispatch();
 
-    const handleDelete = (e) => {
+    const handleDelete = async (e) => {
         e.preventDefault();
-        dispatch(deleteClient(item.id));
-        dispatch(getClients());
-        handleConfirm();
-    }
+        setLoading(true);
+    
+        try {
+          await dispatch(deleteClient(item.id));
+          await dispatch(getClients());
+          handleConfirm();
+        } catch (error) {
+          console.error('Error deleting client:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
 
     const options = {
       year: "numeric",
@@ -40,6 +49,7 @@ const ClientTableRow = ({ item, index, color }) => {
 
     return (
         <>
+
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <td class="px-6 py-4">
                     {index + 1}.
@@ -86,10 +96,12 @@ const ClientTableRow = ({ item, index, color }) => {
                 <td class="flex items-center space-x-4 px-6 py-4">
                     <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={handleModal}>Editer</button>
                     <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={handleConfirm}>Supprimer</button>
+                    
                 </td>
             </tr>
+            
             {modal && <ClientModal item={item} handleModal={handleModal} />}
-            {confirm && <ConfirmModal name={`Client ${item.nom} | ${item.email}`} handleModal={handleConfirm} handleDelete={handleDelete} />}
+            {confirm && <ConfirmModal name={`Client ${item.nom} | ${item.email}`} handleModal={handleConfirm} handleDelete={handleDelete} loading={loading} />}
         </>
     )
 }

@@ -13,6 +13,7 @@ export const ApiConfigs = {
   },
   check: {
     checkDueDateExists: 'check/check-due-date-exists',
+    update: 'check/{check}/update',
   },
   setting: {
     index: 'setting/',
@@ -20,8 +21,12 @@ export const ApiConfigs = {
   },
   statistics: {
     totalImpressions: 'statistique/',
+    filterByDate: 'statistique/filter-by-date',
+
   },
   client: {
     add: 'client/',
+    add: 'client/',
+    update:'client/{client}/update'
   },
 }

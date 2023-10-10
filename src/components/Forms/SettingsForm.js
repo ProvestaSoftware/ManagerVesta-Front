@@ -54,6 +54,7 @@ const SettingsForm = ({ user }) => {
 
 
           setSetting(convertedData)
+          console.log('cinnnn',convertedData)
       })
       .catch(err => {
         console.log(err)
@@ -93,16 +94,23 @@ const SettingsForm = ({ user }) => {
     const [formSubmissionData, setFormSubmissionData] = useState({});
 
   
-      const handleInputChange = (field, value) => {
+    const handleInputChange = (field, value) => {
         let convertedValue = value;
+        
+        const fieldsToUpdate = [
+          'cheque_margin_left',
+          'cheque_margin_right',
+          'cheque_margin_left_trades',
+          'cheque_margin_right_trades'
+        ];
       
-        if (field === 'cheque_margin_left' || field === 'cheque_margin_right' || field === 'cheque_margin_left_trades' || field === 'cheque_margin_right_trades') {
+        if (fieldsToUpdate.includes(field)) {
           const cmValue = parseFloat(value);
           if (!isNaN(cmValue)) {
             const pixelsValue = cmToPixels(cmValue);
             convertedValue = pixelsValue.toFixed(2);
           }
-
+      
           setFormSubmissionData((prevData) => ({
             ...prevData,
             [field]: convertedValue,
@@ -113,16 +121,28 @@ const SettingsForm = ({ user }) => {
           ...setting,
           [field]: value,
         });
-      
-        
       };
       
       
-    const handleSubmit = (e) => {
+      
+      const handleSubmit = (e) => {
         e.preventDefault();
         setLoaderSumbit(true);
-    
-        SettingService.store(formSubmissionData)
+        
+        const updatedFields = {
+          cheque_margin_left: formSubmissionData.cheque_margin_left,
+          cheque_margin_right: formSubmissionData.cheque_margin_right,
+          cheque_margin_left_trades: formSubmissionData.cheque_margin_left_trades,
+          cheque_margin_right_trades: formSubmissionData.cheque_margin_right_trades,
+          paye_de_signature: setting.paye_de_signature,
+          current_cheque_number: setting.current_cheque_number,
+          paye_de_signature_ar: setting.paye_de_signature_ar,
+          business_name: setting.business_name,
+          bank_name: setting.bank_name,
+          rib_bank: setting.rib_bank,
+        };
+      
+        SettingService.store(updatedFields)
           .then(() => {
             setLoaderSumbit(false);
           })
