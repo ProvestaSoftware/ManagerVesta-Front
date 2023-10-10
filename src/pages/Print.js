@@ -17,10 +17,7 @@ import { getFournisseurs } from '../actions/fournisseurs'
 import FournisseurModal from '../components/Modals/FournisseurModal'
 import { createPayment, getPayments } from '../actions/payments'
 import { createCheck, getChecks } from '../actions/checks'
-import PaymentChecksTable from '../components/Tables/PaymentChecksTable'
-import { paymentChecksData } from '../data/TableColumnsData'
 import { Checks } from '../_services/checks.service';
-import { CircularProgressbar } from 'react-circular-progressbar';
 import { useNavigate } from 'react-router-dom'
 import PrintModal from '../components/Modals/PrintModal'
 import PrintModalTraite from '../components/Modals/PrintModalTraite'
@@ -188,7 +185,7 @@ const Print = () => {
       }
       const updatedCheckGroupData = checkAmounts.map((amount, index) => ({
         id: index + 1,
-        num: currentCheckNumber + index,
+        num: checkType === 'Chéque' ? currentCheckNumber + index : '' ,
         montant: checkAmounts[index],
         dueDate: '',
         type: checkType === 'Chéque' ? 'Chéque' : 'Traite',
@@ -391,7 +388,7 @@ const Print = () => {
                           name="num"
                           value={
                             checkType === 'Chéque' ? checkGroupData[index].num : 
-                            checkType === 'Traite' ? checkGroupData.num : '' 
+                            checkType === 'Traite' ? 'num traite' : '' 
                           }
                           onChange={(e) => handleInputChange(item.id, 'num', e.target.value)}
                         />

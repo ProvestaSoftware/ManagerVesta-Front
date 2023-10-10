@@ -1,5 +1,5 @@
 function server() {
-  return process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8020/api'
+  return process.env.NEXT_PUBLIC_API_URL || 'http://crm-api.ccachaar.tn/api'
 }
 
 export const ApiConfigs = {
