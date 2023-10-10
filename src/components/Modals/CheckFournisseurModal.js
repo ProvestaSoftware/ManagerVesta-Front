@@ -66,7 +66,7 @@ const CheckFournisseurModal = ({ item, handleModal,clients,getData }) => {
     const handleAjout = async (e) => {
         e.preventDefault();
         // console.log(clientData);
-      
+
         let createdClientData = await Client.add(clientData);
         setNewClient(createdClientData?.client)
         dispatch(getClients());

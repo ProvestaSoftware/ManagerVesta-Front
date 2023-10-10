@@ -26,12 +26,11 @@ function App() {
 
     const checks = allChecks?.filter(item => item?.type === "Chèque");
     const traites = allChecks?.filter(item => item?.type === "Traite");
-    
     const allChecksSumAmount = allChecks.reduce((sum, item) => sum + item.montant, 0);
-    
+
     const checksSumAmount = checks.reduce((sum, item) => sum + item.montant, 0);
     const traitesSumAmount = traites.reduce((sum, item) => sum + item.montant, 0);
-    
+
     const [overallAverageMontant, setOverallAverageMontant] = useState(null);
     const [checksOverallAverageMontant, setChecksOverallAverageMontant] = useState(null);
     const [traitesOverallAverageMontant, setTraitesOverallAverageMontant] = useState(null);

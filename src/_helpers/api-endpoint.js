@@ -8,8 +8,8 @@ export const ApiConfigs = {
   /* -------------------------------- */
 
   checkclient: {
-    getAll: 'check-client/',   
-    filter: 'check-client/client_checks/filter',                 
+    getAll: 'check-client/',
+    filter: 'check-client/client_checks/filter',
   },
   check: {
     checkDueDateExists: 'check/check-due-date-exists',
@@ -22,8 +22,6 @@ export const ApiConfigs = {
     totalImpressions: 'statistique/',
   },
   client: {
-    add: 'client/',  
+    add: 'client/',
   },
- 
- 
 }
