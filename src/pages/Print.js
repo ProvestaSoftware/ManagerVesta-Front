@@ -120,7 +120,7 @@ const Print = () => {
       const totalMontant = checkGroupData.reduce((sum, item) => sum + (item.montant || 0), 0);
   
       if (totalMontant != parseInt(paymentData.montantTotal, 10)) {
-        alert("Total montant does not match montantTotal. Please check the values.");
+        alert("Total montant does not match montant Total. Please check the values.");
         return;
       }
   
@@ -166,6 +166,7 @@ const Print = () => {
   const handleModalPrint = () => {
     handleSubmit();
     setShowPrintModal(!showPrintModal);
+
   }
   
   
@@ -185,7 +186,7 @@ const Print = () => {
       }
       const updatedCheckGroupData = checkAmounts.map((amount, index) => ({
         id: index + 1,
-        num: checkType === 'Chéque' ? currentCheckNumber + index : '' ,
+        num: currentCheckNumber + index ,
         montant: checkAmounts[index],
         dueDate: '',
         type: checkType === 'Chéque' ? 'Chéque' : 'Traite',
@@ -208,10 +209,22 @@ const Print = () => {
 
   const handleCheckType = () => {
     setCheckType("Chéque")
+    calculateCheckAmounts()
   }
 
   const handleTraiteType = () => {
     setCheckType("Traite")
+    setCheckGroupData( 
+      checkGroupData.map((item, index) => ({
+        id: index + 1,
+        num: '',
+        montant: item.montant,
+        dueDate: '',
+        type: checkType === 'Chéque' ? 'Chéque' : 'Traite',
+        fournisseur_id: paymentData.fournisseur_id,
+        payment_id: '',
+      }))
+    )
   }
 
   const checkIfDateExists = async (dueDate) => {
@@ -257,24 +270,22 @@ const Print = () => {
     }
   };
   
-  const [ montanterror, setMontantError] = useState('');
+  const [montanterror, setMontantError] = useState('');
 
-  const handleMontanteBlur = (value) => {
-    const totalMontant = checkGroupData.reduce(
-      (sum, item) => sum + (item.montant || 0),
-      0
-    );
+  const handleMontanteBlur = (newValue) => {
   
-    if (totalMontant !== parseInt(paymentData.montantTotal, 10)) {
-      setMontantError(
-        "Le total ne correspond pas à montantTotal. Vérifiez les valeurs"
-      );
+    const montantValues = newValue.map(item => parseFloat(item.montant || 0 || 10));
+  
+    const totalMontant = montantValues.reduce((sum, montant) => sum + montant, 0);
+    if (totalMontant !== parseFloat(paymentData.montantTotal)) {
+      setMontantError("Le total ne correspond pas à montant Total. Vérifiez les valeurs");
     } else {
-      setMontantError('');
+      setMontantError("");
     }
   };
 
   const handleInputChange = (id, field, value) => {
+
     if (field === 'dueDate') {
       const formattedDate = value;
       setCheckGroupData((prevData) =>
@@ -284,13 +295,12 @@ const Print = () => {
       );
       handleDateBlur(formattedDate, id);
     } else if (field === 'montant') {
-      const formattedMontant = value;
-      setCheckGroupData((prevData) =>
-        prevData.map((item) =>
-          item.id === id ? { ...item, [field]: formattedMontant } : item
-        )
-      );
-      handleMontanteBlur(formattedMontant);
+      const formattedMontant = parseFloat(value || 0, 10);
+      let newValue = checkGroupData.map((item) =>
+        item.id === id ? { ...item, [field]: formattedMontant } : item
+      )
+      setCheckGroupData(newValue);
+      handleMontanteBlur(newValue);
     } else {
       setCheckGroupData((prevData) =>
         prevData.map((item) =>
@@ -303,6 +313,10 @@ const Print = () => {
   };
   
   const [ newfornisseur, setNewFornisseur] = useState(' ');
+
+  const isSaveDisabled = checkGroupData.some(item => !item.dueDate || !item.montant || !item.num);
+  const isPrintSaveDisabled = checkGroupData.some(item => !item.dueDate || !item.montant || !item.num);
+
   return (
     <ContentWrapper>
       <div className='non-printable'>
@@ -376,31 +390,32 @@ const Print = () => {
           <RegularDivider size="0.5px" />
           <div className='check-form'>
             {checkGroupData.map((item, index) => (
-              <div key={item.id}>
+              <div key={item.id} style={{marginBottom: '20px'}}>
                   <form key={index}>
                     <div className='check-print-form-container'>
                       <p>{index + 1}.</p>
                       <Input
-                          label="Numéro de chèque:"
-                          placeholder="Num"
-                          type="text"
-                          defaultValue={item.num}
-                          name="num"
-                          value={
-                            checkType === 'Chéque' ? checkGroupData[index].num : 
-                            checkType === 'Traite' ? 'num traite' : '' 
-                          }
-                          onChange={(e) => handleInputChange(item.id, 'num', e.target.value)}
-                        />
+                      label="Numéro de chèque:"
+                      placeholder={checkType === 'Chéque' ? checkGroupData[index].num : 'Num traite'}
+                      type="text"
+                      defaultValue={item.num}
+                      name="num"
+                      value={checkGroupData[index].num}
+                      onChange={(e) => {
+                        // if (checkType === 'Traite') return; 
+                        handleInputChange(item.id, 'num', e.target.value);
+                      }}
+                      readOnly={checkType === 'Traite'} 
+                      />
                      <Input
                         label="Montant:"
                         placeholder="Montant en dinars"
                         type="text"
-                        value={checkGroupData[index].montant} 
+                        value={checkGroupData[index].montant}
                         name="montant"
                         onChange={(e) => handleInputChange(item.id, 'montant', e.target.value)}
-                        onBlur={(e) => handleMontanteBlur(e.target.value)}
-                        error={montanterror} 
+                        onBlur={() => handleMontanteBlur()}
+                        error={montanterror ? { message: montanterror, type: 'error' } : null}
                       />
                       <Input
                         label="Date:"
@@ -420,21 +435,29 @@ const Print = () => {
 
           {(checkGroupData.length > 0) && (
             <div className='save-print-container'>
-              <RegularButton
-                styleType="save-btn"
-                onClick={handleSubmit}
-              >
-                <FaSave className='btn-icon-left' />
-                Sauvegarder
-              </RegularButton>
-              <RegularButton
-                styleType="print-save-btn"
-                onClick={handleModalPrint}
-              >
-                <BsWindowDock className='btn-icon-left' />
-                Sauvegarder et Imprimer
-              </RegularButton>
-            </div>
+            <RegularButton
+              styleType="save-btn"
+              onClick={handleSubmit}
+              disabled={isSaveDisabled}
+              style={{
+                opacity: isSaveDisabled ? '0.5' : '1',
+              }}
+            >
+              <FaSave className='btn-icon-left' />
+              Sauvegarder
+            </RegularButton>
+
+            <RegularButton
+              styleType="print-save-btn"
+              onClick={handleModalPrint}
+              disabled={isPrintSaveDisabled}
+              style={{
+                opacity: isPrintSaveDisabled ? '0.5' : '1',              }}
+            >
+              <BsWindowDock className='btn-icon-left' />
+              Sauvegarder et Imprimer
+            </RegularButton>
+          </div>
           )
           }
         </div>

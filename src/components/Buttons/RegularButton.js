@@ -36,11 +36,14 @@ const RegularButton = ({ styleType, onClick, children, type, position, disabled 
             buttonClass = 'primary';
     }
 
+    const buttonStyle = {
+        marginRight: position === 'right' ? '0!important' : 'auto!important',
+        marginLeft: position === 'right' ? 'auto!important' : '0!important',
+        opacity: disabled ? '0.5' : '1',  // Set opacity based on the disabled prop
+    };
+
     return (
-        <button style={{
-            marginRight: position === 'right' ? '0!important' : 'auto!important',
-            marginLeft: position === 'right' ? 'auto!important' : '0!important',
-        }} disabled={disabled} type={type} className={`multi-design-button ${buttonClass}`} onClick={onClick}>
+        <button style={buttonStyle} disabled={disabled} type={type} className={`multi-design-button ${buttonClass}`} onClick={onClick}>
             {children}
         </button>
     );
