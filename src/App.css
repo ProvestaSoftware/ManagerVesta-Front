@@ -231,7 +231,80 @@ body {
 }
 
 
+.fixed-bottom-left {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  font-size: 12px;
+}
 
+@media (min-width: 768px) {
+  .fixed-bottom-left {
+      left: 290px;
+  }
+}
+.logo-bottom-right {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 100px;
+  height: 100px;
+}
+
+@media (min-width: 768px) {
+  .logo-bottom-right {
+    position: fixed;
+    top: 700px;
+  }
+}
+@media (max-width: 1078px) {
+  .logo-bottom-right {
+    position: fixed;
+    top: 456px;
+  }
+}
+@media (max-width: 886px) {
+  .logo-bottom-right {
+    position: fixed;
+    top: 440px;
+  }
+}
+@media (max-width: 500px) {
+  .logo-bottom-right {
+    position: fixed;
+    top: 420px;
+  }
+}
+@media (max-width: 270px) {
+  .logo-bottom-right {
+    position: fixed;
+    top: 400px;
+  }
+}
+@media (max-width: 192px) {
+  .logo-bottom-right {
+    position: fixed;
+    top: 380px;
+  }
+}
+@media (max-width: 144px) {
+  .logo-bottom-right {
+    position: fixed;
+    top: 360px;
+  }
+}
+/* @media (min-width: 1066px) {
+  .logo-bottom-right {
+    position: fixed;
+    top: 454px;
+  }
+} */
+/* @media (min-width: 1066px) {
+  .logo-bottom-right {
+    position: fixed;
+    top: 454px;
+  }
+} */
 .custom-button {
   padding: 15px 40px;
   font-size: 16px;

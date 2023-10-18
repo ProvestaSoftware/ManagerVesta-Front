@@ -152,10 +152,13 @@ const Print = () => {
         navigate('/cheques-fournisseurs');
       }
   
-      const newCurrentCheckNumber = checkGroupData[checkGroupData.length - 1].num + 1;
-  
-      await SettingService.store({ current_cheque_number: newCurrentCheckNumber });
-  
+      let newCurrentCheckNumber = currentCheckNumber;
+      if (checkType === 'Chéque') {
+        newCurrentCheckNumber = parseInt(checkGroupData[checkGroupData.length - 1].num, 10) + 1;
+      }
+      if (checkType === 'Chéque') {
+        await SettingService.store({ current_cheque_number: newCurrentCheckNumber });
+      }  
     } catch (error) {
       console.log('Error:', error);
     } finally {
@@ -164,10 +167,10 @@ const Print = () => {
   };
   
   const handleModalPrint = () => {
-    handleSubmit();
+    
+    handleSubmit();  
     setShowPrintModal(!showPrintModal);
-
-  }
+  };
   
   
   const calculateCheckAmounts = () => {
@@ -176,41 +179,49 @@ const Print = () => {
       const numChecks = parseInt(numberOfChecks, 10);
   
       const baseAmount = Math.floor(totalAmount / numChecks);
-  
       const remainingAmount = totalAmount - baseAmount * numChecks;
   
-      const checkAmounts = Array(numChecks).fill(baseAmount);
+      const updatedCheckGroupData = Array(numChecks).fill({}).map((_, index) => {
+        let num = '';
+        if (checkType === 'Chéque') {
+          num = currentCheckNumber + index + 1;
+        }
   
-      for (let i = 0; i < remainingAmount; i++) {
-        checkAmounts[i] += 1;
-      }
-      const updatedCheckGroupData = checkAmounts.map((amount, index) => ({
-        id: index + 1,
-        num: currentCheckNumber + index ,
-        montant: checkAmounts[index],
-        dueDate: '',
-        type: checkType === 'Chéque' ? 'Chéque' : 'Traite',
-        fournisseur_id: paymentData.fournisseur_id,
-        payment_id: '',
-      }));
-      
+        return {
+          id: index + 1,
+          num: num,
+          montant: baseAmount + (index < remainingAmount ? 1 : 0),
+          dueDate: '',
+          type: checkType === 'Chéque' ? 'Chéque' : 'Traite',
+          fournisseur_id: paymentData.fournisseur_id,
+          payment_id: '',
+        };
+      });
+  
       setCheckGroupData(updatedCheckGroupData);
-
     }
   };
-
+  
+  
   const addCheck = (e) => {
     e.preventDefault();
     setFilteredData([]);
-    calculateCheckAmounts(); 
+    calculateCheckAmounts();
+  
+    setCheckGroupData((prevData) =>
+      prevData.map((item, index) => ({
+        ...item,
+        num: checkType === 'Chéque' ? parseInt(currentCheckNumber, 10) + index + 1 : item.num,
+      }))
+    );
   };
 
   const [checkType, setCheckType] = useState("Chéque");
 
   const handleCheckType = () => {
-    setCheckType("Chéque")
-    calculateCheckAmounts()
-  }
+    calculateCheckAmounts();
+    setCheckType("Chéque"); 
+  };
 
   const handleTraiteType = () => {
     setCheckType("Traite")
@@ -220,7 +231,7 @@ const Print = () => {
         num: '',
         montant: item.montant,
         dueDate: '',
-        type: checkType === 'Chéque' ? 'Chéque' : 'Traite',
+        type: item.type,
         fournisseur_id: paymentData.fournisseur_id,
         payment_id: '',
       }))
@@ -396,11 +407,11 @@ const Print = () => {
                       <p>{index + 1}.</p>
                       <Input
                       label="Numéro de chèque:"
-                      placeholder={checkType === 'Chéque' ? checkGroupData[index].num : 'Num traite'}
+                      placeholder={checkType === 'Chéque' ? (parseInt(checkGroupData[index].num, 10) + 1).toString() : 'Num traite'}
                       type="text"
                       defaultValue={item.num}
                       name="num"
-                      value={checkGroupData[index].num}
+                      value={checkType ==='Chéque' ? checkGroupData[index].num : item.num}
                       onChange={(e) => {
                         // if (checkType === 'Traite') return; 
                         handleInputChange(item.id, 'num', e.target.value);

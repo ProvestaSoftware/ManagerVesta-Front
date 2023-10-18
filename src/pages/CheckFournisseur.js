@@ -53,13 +53,19 @@ const CheckFournisseur = () => {
     }
   };
 
-
-
+  const refreshFournisseursList = async () => {
+    try {
+      await dispatch(getFournisseurs());
+    } catch (error) {
+      console.log('Error refreshing fournisseurs list:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoader(true);
+           refreshFournisseursList();
         await dispatch(getChecks());
         await dispatch(getFournisseurs());
         setLoader(false);
