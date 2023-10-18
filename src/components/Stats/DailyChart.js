@@ -139,14 +139,12 @@ const DailyChart = () => {
             traitesLine
         ];
 
-        // Step 1: Extract all unique dates
         let allDates = [];
         formattedData.forEach(item => {
             allDates = allDates.concat(item.data.map(d => d.x));
         });
         allDates = [...new Set(allDates)].sort();
 
-        // Step 2: Ensure each dataset has all dates
         formattedData.forEach(item => {
             allDates.forEach(date => {
                 if (!item.data.some(d => d.x === date)) {
@@ -154,6 +152,12 @@ const DailyChart = () => {
                 }
             });
             item.data.sort((a, b) => a.x.localeCompare(b.x));
+            item.data = item.data.map(item => {
+                return {
+                    ...item,
+                    x: item.x != '0' ? moment(item.x).format('DD MMM YYYY') : '0',
+                }
+            })
         });
 
         console.log('formattedData', formattedData)
@@ -166,7 +170,7 @@ const DailyChart = () => {
         <div style={{
             height: '360px',
         }}>
-            <Header title="DAILY Chèques" subtitle="Nombre de Chèques par Date" />
+            <Header title="DAILY Chèques" subtitle="Nombre de Chèques/Traites par Date" />
             <div style={{
                 display: 'flex',
                 justifyContent: 'flex-end',
@@ -247,7 +251,7 @@ const DailyChart = () => {
                         tickSize: 5,
                         tickPadding: 5,
                         tickRotation: 90,
-                        legend: "Mois",
+                        legend: "",
                         legendOffset: 60,
                         legendPosition: "middle",
                     }}
@@ -256,7 +260,7 @@ const DailyChart = () => {
                         tickSize: 5,
                         tickPadding: 5,
                         tickRotation: 0,
-                        legend: "Nombre de chèques",
+                        legend: "Nombre de Chèques/Traites",
                         legendOffset: -50,
                         legendPosition: "middle",
                         tickValues: yTickValues,
