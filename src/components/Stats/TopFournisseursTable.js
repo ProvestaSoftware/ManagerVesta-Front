@@ -7,7 +7,7 @@ const TopFournisseursTable = ({ fournisseurs, checks }) => {
 
     useEffect(() => {
         const fournisseurCheckCounts = {};
-
+    
         checks?.forEach(check => {
             const fournisseurId = check?.fournisseur_id;
             if (fournisseurCheckCounts[fournisseurId]) {
@@ -16,16 +16,18 @@ const TopFournisseursTable = ({ fournisseurs, checks }) => {
                 fournisseurCheckCounts[fournisseurId] = 1;
             }
         });
-
+    
         const tableData = fournisseurs.map(fournisseur => ({
             id: fournisseur?.id.toString(),
             nom: fournisseur?.nom,
             email: fournisseur?.email,
             numberOfChecks: fournisseurCheckCounts[fournisseur?.id] || 0,
         }));
-
-        const top5 = tableData.slice(0, 5);
-
+    
+        const sortedTableData = tableData.sort((a, b) => b.numberOfChecks - a.numberOfChecks);
+    
+        const top5 = sortedTableData.slice(0, 5);
+    
         setData(top5);
     }, []);
 
