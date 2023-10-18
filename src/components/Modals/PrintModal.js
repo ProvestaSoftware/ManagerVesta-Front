@@ -431,7 +431,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings }) => {
                 type="submit"
                 onClick={printSection}
               >
-                Imprimer chéque
+                Imprimer {item.length > 1 ? 'les chéques' : 'le chéque'}
               </RegularButton>
             </div>
           </div>

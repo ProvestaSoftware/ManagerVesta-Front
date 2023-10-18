@@ -38,7 +38,6 @@ const Print = () => {
     }
   };
 
-
   const [currentCheckNumber, setCurrentCheckNumber] = useState(null);
   const [settings, setSettings] = useState(null);
 
@@ -86,7 +85,7 @@ const Print = () => {
   }, []);
 
   const [checkGroupData, setCheckGroupData] = useState([]);
-
+  
   const [paymentData, setPaymentData] = useState({
     montantTotal: '',
     dueDatesNumber: '',
@@ -140,7 +139,7 @@ const Print = () => {
         montant: check.montant,
         dueDate: check.dueDate,
         type: check.type,
-        fournisseur_id: check.fournisseur_id,
+        fournisseur_id: paymentData.fournisseur_id,
         payment_id: paymentId,
       }));
   
@@ -227,7 +226,7 @@ const Print = () => {
         num: (Number(currentCheckNumber) + index + 1),
         montant: item.montant,
         dueDate: '',
-        type: item.type,
+        type: 'Chéque',
         fournisseur_id: paymentData.fournisseur_id,
         payment_id: '',
       }))
@@ -242,7 +241,7 @@ const Print = () => {
         num: '',
         montant: item.montant,
         dueDate: '',
-        type: item.type,
+        type: 'Traite',
         fournisseur_id: paymentData.fournisseur_id,
         payment_id: '',
       }))
@@ -444,10 +443,11 @@ const Print = () => {
                         type="date"
                         inputId={item.id}
                         defaultValue={item.dueDate}
+                        value={item.dueDate}
                         name="dueDate"
                         onChange={(e) => handleInputChange(item.id, 'dueDate', e.target.value)}
                         onBlur={() => handleDateBlur(item.dueDate, item.id)} 
-                        error={inputErrors[item.id]}
+                        error={item?.dueDate != "" && inputErrors[item.id]}
                       />
                     </div>
                   </form>
