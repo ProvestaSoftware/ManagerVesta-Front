@@ -106,10 +106,12 @@ const Print = () => {
 
 
   const [isLoading, setIsLoading] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [actionType, setActionType] = useState(''); 
 
 
   const handleSubmit = async (event) => {
-    if (event) {
+    if (event && event != 'reload_page') {
       event.preventDefault();
     }
   
@@ -165,10 +167,22 @@ const Print = () => {
     }
   };
   
+
+  const handleModalConfirme = () => {
+    setShowConfirmationModal(!showConfirmationModal);
+  };
+  
+
   const handleModalPrint = () => {
-    
-    handleSubmit();  
-    setShowPrintModal(!showPrintModal);
+    if (actionType === 'imprimer'){
+      setShowConfirmationModal(false);
+      handleSubmit();  
+      setShowPrintModal(true);
+    }else if (actionType === 'sauvegarder') {
+      setShowConfirmationModal(false);
+      handleSubmit('reload_page');
+      // navigate('/cheques-fournisseurs');
+    }
   };
   
   
@@ -335,9 +349,86 @@ const Print = () => {
   
   const [ newfornisseur, setNewFornisseur] = useState(' ');
 
-  const isSaveDisabled = checkGroupData.some(item => !item.dueDate || !item.montant || !item.num);
-  const isPrintSaveDisabled = checkGroupData.some(item => !item.dueDate || !item.montant || !item.num);
+  const isSaveDisabled = checkGroupData.some(item => !item.dueDate || !item.montant || !item.num )|| montanterror != '';
+  const isPrintSaveDisabled = checkGroupData.some(item => !item.dueDate || !item.montant || !item.num )|| montanterror != '';
 
+
+  const ConfermationPrint = ({ item, handleModal, fournisseurs,handleModalPrint,checkGroupData,paymentData }) => {
+
+      const getFournisseurName = (fournisseurId) => {
+        const fournisseur = fournisseurs.find((f) => f.id === parseInt(fournisseurId, 10));
+        return fournisseur ? fournisseur.nom : 'Unknown Fournisseur';
+      };
+
+    return (
+      <div style={{ position: 'fixed', top: 10, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 9999 }}>
+        <div style={{ position: 'fixed', top: '10%', left: '50%', transform: 'translate(-50%, 0%)', padding: '20px', borderRadius: '8px', width: '800px', height: '90vh' }}>
+          <div className="relative w-full max-h-full">
+            <div className="relative bg-white rounded-lg dark:bg-gray-700">
+              <div className="check-num-print flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  {item[0].type === 'Chéque' ? 'Chèque(s)' : 'Traite(s)'}
+                  {
+                    item?.map((check, index) => (
+                      <span key={'ChecksPrintModal'+index}>
+                        {index > 0 && ', '}
+                        #{check?.num} 
+                      </span>
+                    ))
+                  }
+                </h3>
+                <button onClick={handleModal} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="editUserModal">
+                  <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                  </svg>
+                  <span className="sr-only">Close modal</span>
+                </button>
+              </div>
+              <div className="p-6 space-y-6" style={{ maxHeight: '70vh', overflowY: 'scroll' }}>
+
+                 <div >
+                    <p className="text-lg font-bold">Confirmation</p>
+                    <p>Veuillez confirmer votre action pour ces informations</p>
+                  </div>
+                
+               <p>Fournisseur: {getFournisseurName(paymentData.fournisseur_id)}</p>
+                <p>
+                  Total montant: {paymentData.montantTotal} DT
+                </p>
+                <p>
+                   Nombre d'écheances: {item.length} 
+                </p>
+                <ul>
+                  {item.map((check, index) => (
+                    <li key={'CheckPrintModal' + index}>
+                    #{check?.num} - Date: {check.dueDate}, montant: {check.montant} DT
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="check-inputs-print flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                <RegularButton
+                  styleType="primary"
+                  type="submit"
+                  onClick={handleModalPrint}
+                >
+                  Confirmer
+                </RegularButton>
+                <RegularButton
+                  styleType="secondary"  
+                  onClick={handleModal}   
+                >
+                  Annuler
+                </RegularButton>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  
   return (
     <ContentWrapper>
       <div className='non-printable'>
@@ -459,8 +550,11 @@ const Print = () => {
             <div className='save-print-container'>
             <RegularButton
               styleType="save-btn"
-              onClick={handleSubmit}
-              disabled={isSaveDisabled}
+              onClick={() => {
+                setActionType('sauvegarder'); 
+                handleModalConfirme(true);
+              }}         
+               disabled={isSaveDisabled}
               style={{
                 opacity: isSaveDisabled ? '0.5' : '1',
               }}
@@ -471,7 +565,10 @@ const Print = () => {
 
             <RegularButton
               styleType="print-save-btn"
-              onClick={handleModalPrint}
+              onClick={() => {
+                setActionType('imprimer'); 
+                handleModalConfirme(true);
+              }}  
               disabled={isPrintSaveDisabled}
               style={{
                 opacity: isPrintSaveDisabled ? '0.5' : '1',              }}
@@ -500,6 +597,16 @@ const Print = () => {
             item={checkGroupData}
             settings={settings}
           />
+      )}
+      {showConfirmationModal && (
+        <ConfermationPrint
+          handleModal={() => setShowConfirmationModal(false)}
+          fournisseurs={fournisseurs}
+          item={checkGroupData}
+          checkGroupData={checkGroupData}
+          handleModalPrint={handleModalPrint}
+          paymentData={paymentData}
+        />
       )}
       {modal && <FournisseurModal handleModal={handleModal} refreshFournisseursList={refreshFournisseursList} setNewFornisseur={setNewFornisseur} />}
     </ContentWrapper>
