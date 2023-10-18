@@ -338,7 +338,7 @@ const Print = () => {
       ) : (
         <div className='print-wrapper'>
           <div>
-            <PageTitle>Imprimer - Chéque</PageTitle>
+            <PageTitle>Imprimer - {checkType === 'Chéque' ? 'Chéque' : 'Traite'}</PageTitle>
           </div>
           <RegularDivider />
           <div className='print-btn-wrapper'>
