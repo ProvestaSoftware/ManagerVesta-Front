@@ -211,7 +211,7 @@ const Print = () => {
     setCheckGroupData((prevData) =>
       prevData.map((item, index) => ({
         ...item,
-        num: checkType === 'Chéque' ? parseInt(currentCheckNumber, 10) + index + 1 : item.num,
+        num: checkType === 'Chéque' ? Number(currentCheckNumber) + index + 1 : item.num,
       }))
     );
   };
@@ -221,6 +221,17 @@ const Print = () => {
   const handleCheckType = () => {
     calculateCheckAmounts();
     setCheckType("Chéque"); 
+    setCheckGroupData( 
+      checkGroupData.map((item, index) => ({
+        id: index + 1,
+        num: (Number(currentCheckNumber) + index + 1),
+        montant: item.montant,
+        dueDate: '',
+        type: item.type,
+        fournisseur_id: paymentData.fournisseur_id,
+        payment_id: '',
+      }))
+    )
   };
 
   const handleTraiteType = () => {
