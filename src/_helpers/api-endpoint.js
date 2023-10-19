@@ -29,4 +29,8 @@ export const ApiConfigs = {
     add: 'client/',
     update:'client/{client}/update'
   },
+  payment : {
+    getPaymentWithChecks: 'payment/payments/withChecks', 
+    viewChecks: 'payment/{payment}/view-checks',
+  }
 }

@@ -19,6 +19,7 @@ import { FaArrowsAltV } from 'react-icons/fa';
 import { ImDroplet } from 'react-icons/im';
 import { useDispatch, useSelector } from 'react-redux';
 import Charts from './pages/Charts';
+import Payment from './pages/Payment';
 
 function App() {
 
@@ -271,6 +272,7 @@ function App() {
                         <Route path="accueil" element={user ? <Accueil /> : <Navigate to="/login" replace />} />
                         <Route path="/imprimer" element={user ? <Print /> : <Navigate to="/login" replace />} />
                         <Route path="/cheques-fournisseurs" element={user ? <CheckFournisseur /> : <Navigate to="/login" replace />} />
+                        <Route path="/payment" element={user ? <Payment /> : <Navigate to="/login" replace />} />
                         <Route path="/calendrier" element={user ? <Calendrier /> : <Navigate to="/login" replace />} />
                         <Route path="/fournisseurs" element={user ? <Fournisseurs /> : <Navigate to="/login" replace />} />
                         <Route path="/cheques-clients" element={user ? <CheckClient /> : <Navigate to="/login" replace />} />

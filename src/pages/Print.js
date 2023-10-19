@@ -29,7 +29,8 @@ const Print = () => {
   const checks = useSelector((state) => state.checks);
   const [numberOfChecks, setNumberOfChecks] = useState(); 
   const navigate = useNavigate();
-  
+  const [showBottom, setShowBottom] = useState(false);
+
   const refreshFournisseursList = async () => {
     try {
       await dispatch(getFournisseurs());
@@ -428,7 +429,8 @@ const Print = () => {
     );
   }
 
-  
+
+
   return (
     <ContentWrapper>
       <div className='non-printable'>
@@ -589,6 +591,7 @@ const Print = () => {
             fournisseurs={fournisseurs}
             item={checkGroupData}
             settings={settings}
+            showBottom={showBottom}
           />
         :
           <PrintModalTraite
@@ -596,6 +599,7 @@ const Print = () => {
             fournisseurs={fournisseurs}
             item={checkGroupData}
             settings={settings}
+            showBottom={showBottom}
           />
       )}
       {showConfirmationModal && (

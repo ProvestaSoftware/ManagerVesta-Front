@@ -4,7 +4,8 @@ import { useDispatch } from 'react-redux';
 import { deleteClient, getClients } from '../../actions/clients';
 import ClientModal from '../Modals/ClientModal';
 import ConfirmModal from '../Modals/ConfirmModal';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 const ClientTableRow = ({ item, index, color }) => {
 
     const [modal, setModal] = useState(false);
@@ -94,8 +95,8 @@ const ClientTableRow = ({ item, index, color }) => {
                     {item.status}
                 </td>
                 <td class="flex items-center space-x-4 px-6 py-4">
-                    <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={handleModal}>Editer</button>
-                    <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={handleConfirm}>Supprimer</button>
+                    <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline btn_edit" onClick={handleModal}><FontAwesomeIcon icon={faEdit} /></button>
+                    <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline btn_delete" onClick={handleConfirm}><FontAwesomeIcon icon={faTrash} /></button>
                     
                 </td>
             </tr>

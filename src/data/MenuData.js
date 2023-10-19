@@ -1,7 +1,7 @@
 import { AiFillCalendar } from 'react-icons/ai'
 import { ImStatsDots } from 'react-icons/im'
 import { IoGrid, IoPrint, IoSettingsSharp } from 'react-icons/io5'
-import { HiNewspaper } from 'react-icons/hi'
+import { HiNewspaper, HiOutlineCreditCard } from 'react-icons/hi'
 import { LuNewspaper } from 'react-icons/lu'
 import { FaUserTie, FaUser } from 'react-icons/fa'
 import { BiLogOut } from 'react-icons/bi'
@@ -22,6 +22,11 @@ export const sidebarMenuData = [
         title: 'Ch / Tr fournisseurs ',
         link: 'cheques-fournisseurs',
         icon: <HiNewspaper />
+    },
+    {
+        title: 'Paiement',
+        link: 'payment',
+        icon: <HiOutlineCreditCard />
     },
     {
         title: 'Calendrier',
