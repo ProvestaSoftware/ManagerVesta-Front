@@ -187,7 +187,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings }) => {
     document.body.innerHTML = printContents;
     window.print();
     document.body.innerHTML = originalContents;
-    window.location.href = 'http://localhost:3000/cheques-fournisseurs';
+    window.location.href = '/cheques-fournisseurs';
 
     // const items = item
     // const screenWidth = window.screen.width;
