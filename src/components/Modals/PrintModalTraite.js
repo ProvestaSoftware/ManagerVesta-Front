@@ -188,9 +188,9 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom }) =>
     window.print();
     document.body.innerHTML = originalContents;
     if (showBottom) {
-      window.location.href = '/payment';
+      window.location.reload();
     } else {
-      window.location.href = '/cheques-fournisseurs';
+      window.location.href = '/payment';
     }
   };
 
@@ -202,8 +202,8 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom }) =>
     const printingStyles = `
       @media print {
         .check {
-          margin-left: -${76 - Number(settings.cheque_margin_right_trades)}px !important;
-          margin-top: ${113 + Number(settings.cheque_margin_left_trades)}px !important;
+          margin-left: -${76 - Number(settings?.cheque_margin_right_trades)}px !important;
+          margin-top: ${113 + Number(settings?.cheque_margin_left_trades)}px !important;
         }
       }
     `;
@@ -222,11 +222,11 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom }) =>
   }, [settings]);
 
 
-  const rib = settings.rib_bank.replace(/\s+/g, "");
-  const segments1 = rib.slice(0, 2);
-  const segments2 = rib.slice(2, 5);
-  const segments3 = rib.slice(5, rib.length - 2);
-  const segments4 = rib.slice(-2);
+  const rib = settings?.rib_bank.replace(/\s+/g, "");
+  const segments1 = rib?.slice(0, 2);
+  const segments2 = rib?.slice(2, 5);
+  const segments3 = rib?.slice(5, rib?.length - 2);
+  const segments4 = rib?.slice(-2);
   
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 9999 }}>
@@ -281,7 +281,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom }) =>
                         }}
                       >
                         <img src={TraiteImage} alt="Check" />
-                        <div className='extra_margin_parameters' style={{marginLeft: `${settings.cheque_margin_left_trades}px`, marginTop: `${settings.cheque_margin_right_trades}px`}}>
+                        <div className='extra_margin_parameters' style={{marginLeft: `${settings?.cheque_margin_left_trades}px`, marginTop: `${settings?.cheque_margin_right_trades}px`}}>
                           {/* <span className="check_data num_check" id={`montant-${index}`} style={{left: '80px', top: '28px'}}>
                             <b>{check?.num ?? '------'}</b>
                           </span> */}
@@ -292,7 +292,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom }) =>
                             {moment(check.created_at).format('DD/MM/YYYY') || '--/--/----'}
                           </span>
                           <span className="check_data date montant_a_top" style={{left: '350px',top:'46px'}}>
-                                {settings.paye_de_signature}
+                                {settings?.paye_de_signature}
                           </span>
 
                           <span className="check_data montant checkmontanttop" id={`montant-${index}`} style={{left: '540px', top: '97px'}}>
@@ -331,15 +331,15 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom }) =>
                             {moment(check.dueDate).format('DD/MM/YYYY') || '--/--/----'}
                           </span>
                           <span className="check_data date paye montant_a_bottom" style={{left: '10px',top:'229px', width: '100px', lineHeight: '12px'}}>
-                            {settings.paye_de_signature}
+                            {settings?.paye_de_signature}
                           </span>
 
 
                           <span className="check_data date business_name" style={{left: '330px',top:'300px',maxWidth: '100px',maxHeight:'100px',textAlign: 'center'}}>
-                            {settings.business_name}
+                            {settings?.business_name}
                           </span>
                           <span className="check_data date bankname" style={{ left: '570px', top: '280px',width: '200px', textAlign: 'center', transform: 'translate(-50%, 0%)' }}>
-                            {settings.bank_name}
+                            {settings?.bank_name}
                           </span>
 
                           <span className="check_data date segments_bottom segments11" id={`montant_le-${index}`} style={{left: '22px',top:'265px'}}>

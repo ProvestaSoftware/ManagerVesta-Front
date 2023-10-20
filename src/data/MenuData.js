@@ -19,14 +19,14 @@ export const sidebarMenuData = [
         icon: <IoPrint />
     },
     {
-        title: 'Ch / Tr fournisseurs ',
-        link: 'cheques-fournisseurs',
-        icon: <HiNewspaper />
-    },
-    {
         title: 'Paiement',
         link: 'payment',
         icon: <HiOutlineCreditCard />
+    },
+    {
+        title: 'Ch / Tr fournisseurs ',
+        link: 'cheques-fournisseurs',
+        icon: <HiNewspaper />
     },
     {
         title: 'Calendrier',

@@ -6,9 +6,13 @@ import { deleteCheck, getChecks } from '../../actions/checks';
 import ConfirmModal from '../Modals/ConfirmModal';
 import moment from 'moment'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash,faPrint } from '@fortawesome/free-solid-svg-icons';
+import PrintModal from '../Modals/PrintModal';
+import PrintModalTraite from '../Modals/PrintModalTraite';
+import { SettingService } from '../../_services/setting.service';
+import { useEffect } from 'react';
 
-const CheckTableRow = ({ item, fournisseurs }) => {
+const CheckTableRow = ({ item, fournisseurs ,settings}) => {
 
     const [modal, setModal] = useState(false);
     const [confirm, setConfirm] = useState(false);
@@ -37,6 +41,12 @@ const CheckTableRow = ({ item, fournisseurs }) => {
         'Impayé' : '#D30606',
         'Payé' : '#13AB50'
     }
+    const [showPrintModal, setShowPrintModal] = useState(false);
+
+        const handlePrintModal = () => {
+        setShowPrintModal(!showPrintModal);
+        };
+
 
     return (
         <>
@@ -94,7 +104,13 @@ const CheckTableRow = ({ item, fournisseurs }) => {
                         {item?.status}
                     </b>
                 </td>
-                <td class="flex items-center space-x-4 px-6 py-4">
+                <td className="flex items-center space-x-4 px-6 py-4">
+                    <button
+                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline btn_imprime"
+                        onClick={handlePrintModal}
+                        >
+                        <FontAwesomeIcon icon={faPrint} />
+                    </button>
                     <button
                         className="font-medium text-blue-600 dark:text-blue-500 hover:underline btn_edit"
                         onClick={handleModal}
@@ -111,6 +127,26 @@ const CheckTableRow = ({ item, fournisseurs }) => {
             </tr>
             {modal && <CheckModal item={item} handleModal={handleModal} />}
             {confirm && <ConfirmModal name={`Chèque #${item.num}`} handleModal={handleConfirm} handleDelete={handleDelete} />}
+
+            {showPrintModal && (
+            item.type === 'Chèque' ? (
+                <PrintModal
+                handleModal={() => setShowPrintModal(false)}
+                fournisseurs={fournisseurs}
+                item={ [item] }
+                settings={settings}
+                showBottom={true}
+                />
+            ) : (
+                <PrintModalTraite
+                    handleModal={() => setShowPrintModal(false)}
+                    fournisseurs={fournisseurs}
+                    item={ [item] }
+                    settings={settings}
+                    showBottom={true}
+                />
+            )
+            )}
         </>
     )
 }
