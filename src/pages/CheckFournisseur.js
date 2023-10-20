@@ -15,6 +15,7 @@ import { getChecks, filterFournisseurChecks} from '../actions/checks';
 import { getFournisseurs } from '../actions/fournisseurs';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { SettingService } from '../_services/setting.service';
 
 const CheckFournisseur = () => {
   const checks = useSelector((state) => state.checks);
@@ -77,6 +78,23 @@ const CheckFournisseur = () => {
     fetchData();
   }, [dispatch]);
 
+  const [settings, setSettings] = useState(null);
+  
+  const getCurrentCheckNumber = async () => {
+      try {
+          const settingData = await SettingService.index();
+          if (settingData && settingData.data.current_cheque_number) {
+          setSettings(settingData.data);
+          }
+      } catch (error) {
+          console.error('Error fetching current check number:', error);
+      }
+  };
+
+    useEffect(() => {
+      getCurrentCheckNumber();
+    }, []);
+
   return (
     <ContentWrapper>
       <div className='check-wrapper'>
@@ -129,6 +147,7 @@ const CheckFournisseur = () => {
             fournisseurs={fournisseurs}
             onSerach={(e) => handleFiltersChange('keyword', e.target.value)}
             Filters={Filters}
+            settings={settings}
             />
         )}
       </div>

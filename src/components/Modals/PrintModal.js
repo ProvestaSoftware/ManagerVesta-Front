@@ -334,8 +334,8 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom }) =>
     const printingStyles = `
         @media print {
           .check {
-            margin-left: -${189-Number(settings.cheque_margin_right)}px !important;
-            margin-top: ${189+Number(settings.cheque_margin_left)}px;
+            margin-left: -${189-Number(settings?.cheque_margin_right)}px !important;
+            margin-top: ${189+Number(settings?.cheque_margin_left)}px;
           }
         }
     `;
