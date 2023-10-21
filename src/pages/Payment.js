@@ -24,8 +24,33 @@ import { SettingService } from '../_services/setting.service';
 const Payment = () => {
   
   const fournisseurs = useSelector((state) => state.fournisseurs);
-
   const [loading, setLoading] = useState(true);
+
+  const dispatch = useDispatch();
+
+  const refreshFournisseursList = async () => {
+    try {
+      await dispatch(getFournisseurs());
+    } catch (error) {
+      console.log('Error refreshing fournisseurs list:', error);
+    }
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+           refreshFournisseursList();
+        await dispatch(getChecks());
+        await dispatch(getFournisseurs());
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [dispatch]);
+
   const [paymentData, setPaymentData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showBottom, setShowBottom] = useState(true);
@@ -60,12 +85,28 @@ const Payment = () => {
     to: '',
     fournisseur: '',
     type: '',
-    keyword: '', 
+    keyword: '',
+    Nom_de: '',
+    Nom_a: '',
   });
-
   const handleFiltersChange = (prop, value) => {
     setFilters({ ...Filters, [prop]: value });
   };
+  const [filtrage, setFiltrage] = useState(null);
+  
+  const handleFilterSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const filteredData = await payment.filterPayments(Filters);
+        setFiltrage(filteredData.payment);
+    } catch (error) {
+      console.error('Error filtering payments:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+console.log('setFiltrage',filtrage)
 
   const [settings, setSettings] = useState(null);
   const getCurrentCheckNumber = async () => {
@@ -89,13 +130,13 @@ const Payment = () => {
           <PageTitle>Payments</PageTitle>
         </div>
         <RegularDivider />
-        <form >
+        <form onSubmit={(e) => handleFilterSubmit(e)}>
           <div className='check-form-container'>
             <Input
               label="Filtrer de:"
               placeholder="..."
               type="date"
-              value={Filters?.from}
+              value={Filters.from}
               onChange={(e) => handleFiltersChange('from', e.target.value)}
             />
             <Input
@@ -108,16 +149,28 @@ const Payment = () => {
             <Select
               label="Fournisseur:"
               title="Tous (Fournisseur)"
-              options={checkTypeData || []}
-              value={Filters?.fournisseur}
+              options={fournisseurs || []}
+              value={Filters.fournisseur}
               onChange={(e) => handleFiltersChange('fournisseur', e.target.value)}
             />
             <Select
               label="Type d'impression:"
               title="Tous (Chéques et Traites)"
               options={checkTypeData || []}
-              value={Filters?.type}
+              value={Filters.type}
               onChange={(e) => handleFiltersChange('type', e.target.value)}
+            />
+            <Input
+              label="Nom d'échéance, de:"
+              placeholder="..."
+              value={Filters.Nom_de}
+              onChange={(e) => handleFiltersChange('Nom_de', e.target.value)}
+            />
+            <Input
+              label="Nom d'échéance, a:"
+              placeholder="..."
+              value={Filters.Nom_a}
+              onChange={(e) => handleFiltersChange('Nom_a', e.target.value)}
             />
             <RegularButton styleType="filter-btn" type="submit">
               <AiFillFilter className='btn-icon-left' />
@@ -125,10 +178,17 @@ const Payment = () => {
             </RegularButton>
           </div>
         </form>
+
+
         {loading ? (
           <Skeleton count={5} />
         ) : (
-          <PaymentTable paymentData={paymentData} onViewChecks={onViewChecks} />
+          <PaymentTable
+             paymentData={filtrage || paymentData} 
+             onViewChecks={onViewChecks}
+             onSerach={(e) => handleFiltersChange('keyword', e.target.value)}
+             Filters={Filters}
+           />
         )}
       </div>
       {isModalOpen && (

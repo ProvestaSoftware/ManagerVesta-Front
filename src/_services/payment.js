@@ -3,6 +3,7 @@ import { authHeader, ApiConfigs } from '../_helpers'
 export const payment = {
   getPaymentWithChecks,
   viewChecks,
+  filterPayments
 }
 
 async function getPaymentWithChecks() {
@@ -22,6 +23,19 @@ async function viewChecks(paymentId) {
   const getUrl = `${ApiConfigs.base_url}${ApiConfigs.payment.viewChecks.replace('{payment}', paymentId)}`;
 
   return await fetch(getUrl, requestOptions).then(handleResponse);
+}
+async function filterPayments(Filters) {
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      ...authHeader(),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(Filters),
+  };
+  const postUrl = `${ApiConfigs.base_url}${ApiConfigs.payment.filterPayments}`;
+
+  return await fetch(postUrl, requestOptions).then(handleResponse);
 }
 
 async function handleResponse(response) {

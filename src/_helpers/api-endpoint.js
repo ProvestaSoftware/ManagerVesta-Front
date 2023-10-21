@@ -32,5 +32,6 @@ export const ApiConfigs = {
   payment : {
     getPaymentWithChecks: 'payment/payments/withChecks', 
     viewChecks: 'payment/{payment}/view-checks',
+    filterPayments: 'payment/payments/filter/filter_data' 
   }
 }

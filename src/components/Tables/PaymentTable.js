@@ -3,7 +3,7 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons'
 
-const PaymentTable = ({ paymentData, onViewChecks }) => {
+const PaymentTable = ({ paymentData, onViewChecks,onSerach ,Filters }) => {
   return (
     <div
       style={{
@@ -44,6 +44,8 @@ const PaymentTable = ({ paymentData, onViewChecks }) => {
             id="table-search-users"
             className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Recherche..."
+            onChange={onSerach}
+            value={Filters?.keyword}
           />
         </div>
       </div>
@@ -59,8 +61,8 @@ const PaymentTable = ({ paymentData, onViewChecks }) => {
           </tr>
         </thead>
         <tbody>
-          {paymentData?.length !== 0 ? (
-            paymentData.map((item, index) => (
+        {paymentData?.length !== 0 ? (
+           paymentData?.map((item, index) => (
               <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <td className="px-2 py-4">#{item?.num}</td>
                 <td>{item?.checks[0]?.fournisseur?.nom}</td>
