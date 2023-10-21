@@ -444,3 +444,37 @@ body {
 .modal-close-button:hover {
   background: #555;
 }
+/* Default styles for the fixed element */
+.log_responsive {
+  position: fixed;
+  bottom: 20px;
+  right: 16px;
+}
+
+@media screen and (max-width: 885px) {
+  .log_responsive {
+      position: fixed;
+      bottom: 50px; 
+  }
+}
+@media screen and (max-width: 614px) {
+  .log_responsive {
+      position: fixed;
+      bottom: 60px; 
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .log_responsive {
+      position: fixed; 
+      display: block; 
+      margin: 20px auto; 
+  }
+}
+@media screen and (max-width: 200px) {
+  .log_responsive {
+      position: fixed; 
+      display: block; 
+      margin: 50px auto; 
+  }
+}

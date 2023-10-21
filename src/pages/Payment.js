@@ -83,31 +83,30 @@ const Payment = () => {
   const [Filters, setFilters] = useState({
     from: '',
     to: '',
-    fournisseur: 'Tous (Fournisseur)',
+    fournisseur: '',
     type: '',
     keyword: '',
-    Nom_de : '',
-    Nom_a : ''
+    Nom_de: '',
+    Nom_a: '',
   });
-
   const handleFiltersChange = (prop, value) => {
     setFilters({ ...Filters, [prop]: value });
   };
+  const [filtrage, setFiltrage] = useState(null);
   
   const handleFilterSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); 
+    setLoading(true);
     try {
       const filteredData = await payment.filterPayments(Filters);
-      if (filteredData.data && filteredData.data.payment) {
-        setPaymentData(filteredData.data.payment);
-      }
+        setFiltrage(filteredData.payment);
     } catch (error) {
       console.error('Error filtering payments:', error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
+console.log('setFiltrage',filtrage)
 
   const [settings, setSettings] = useState(null);
   const getCurrentCheckNumber = async () => {
@@ -185,7 +184,8 @@ const Payment = () => {
           <Skeleton count={5} />
         ) : (
           <PaymentTable
-             paymentData={paymentData} onViewChecks={onViewChecks}
+             paymentData={filtrage || paymentData} 
+             onViewChecks={onViewChecks}
              onSerach={(e) => handleFiltersChange('keyword', e.target.value)}
              Filters={Filters}
            />
