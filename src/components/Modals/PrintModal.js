@@ -189,9 +189,9 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom }) =>
     window.print();
     document.body.innerHTML = originalContents;
     if (showBottom) {
-      window.location.href = '/payment';
+      window.location.reload();
     } else {
-      window.location.href = '/cheques-fournisseurs';
+      window.location.href = '/payment';
     }
 
     // const items = item
