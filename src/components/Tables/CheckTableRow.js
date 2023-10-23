@@ -47,7 +47,9 @@ const CheckTableRow = ({ item, fournisseurs ,settings}) => {
         setShowPrintModal(!showPrintModal);
         };
 
-
+        const formatNumberWithSpaces = (number) => {
+            return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+          };
     return (
         <>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -55,7 +57,7 @@ const CheckTableRow = ({ item, fournisseurs ,settings}) => {
                     #{item?.num}
                 </td>
                 <td class="px-6 py-4">
-                    {item?.montant} dt
+                    {formatNumberWithSpaces(item?.montant)} dt
                 </td>
                 <td class="px-6 py-4">
                     {item?.fournisseur?.nom}

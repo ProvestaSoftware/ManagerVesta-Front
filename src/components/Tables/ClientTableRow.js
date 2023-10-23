@@ -48,6 +48,9 @@ const ClientTableRow = ({ item, index, color }) => {
 
     const created_at = new Date(item.created_at);
 
+    const formatPhoneNumber = (phoneNumber) => {
+        return phoneNumber.replace(/(\d{2})(\d{3})(\d{3})/, '$1 $2 $3');
+      };
     return (
         <>
 
@@ -62,7 +65,7 @@ const ClientTableRow = ({ item, index, color }) => {
                     {item.email}
                 </td>
                 <td class="px-6 py-4" style={{whiteSpace: 'nowrap'}}>
-                    {item.numTel}
+                    {formatPhoneNumber(item.numTel)}
                 </td>
                 <td style={{
                     margin: 'auto'

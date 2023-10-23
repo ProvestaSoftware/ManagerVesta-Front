@@ -4,6 +4,11 @@ import { StatistiqueService } from '../../_services/statistique.service';
 import { useState } from 'react';
 
 const StatCard = ({ item }) => {
+
+    const formatNumberWithSpaces = (number) => {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+      };
+
     return (
         <div style={{
             color: item?.color,
@@ -20,7 +25,7 @@ const StatCard = ({ item }) => {
             <p style={{
                 color: item.color,
                 fontSize: '28px'
-            }} class="mb-3 font-normal">{item?.amount} {item?.unity}</p>
+            }} class="mb-3 font-normal"> {formatNumberWithSpaces(item?.amount)} {item?.unity}</p>
         </div>
     )
 }
