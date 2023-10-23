@@ -62,9 +62,13 @@ const Calendrier = () => {
     }, [dispatch]);
     const today = new Date(); 
 
+    const formatNumberWithSpaces = (number) => {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+      };
+
     const events = [...checks, ...checkclient].map((eventItem) => ({
         id: eventItem.id,
-        montant: `${eventItem.montant} DT`,
+        montant: `${formatNumberWithSpaces(eventItem.montant)} DT`,
         start: new Date(eventItem.dueDate),
         end: new Date(eventItem.dueDate),
         type: eventItem?.type,

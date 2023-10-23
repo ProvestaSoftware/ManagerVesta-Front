@@ -160,6 +160,7 @@ console.log('setFiltrage',filtrage)
               value={Filters.type}
               onChange={(e) => handleFiltersChange('type', e.target.value)}
             />
+            <br />
             <Input
               label="Nom d'échéance, de:"
               placeholder="..."

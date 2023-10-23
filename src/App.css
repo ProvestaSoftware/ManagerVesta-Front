@@ -478,3 +478,49 @@ body {
       margin: 50px auto; 
   }
 }
+
+.btn_view, .btn_edit, .btn_delete, .btn_imprime{
+  padding: 10px 12px;
+  border-radius: 5px;
+  transition: .5s;
+}
+
+.btn_view{
+  border: 1px solid #888;
+  color: #888;
+}
+
+.btn_view:hover{
+  background-color: #888;
+  color: #fff;
+}
+
+.btn_edit{
+  border: 1px solid #254c75;
+  color: #254c75;
+}
+
+.btn_edit:hover{
+  background-color: #254c75;
+  color: #fff;
+}
+
+.btn_delete{
+  border: 1px solid red;
+  color: red;
+}
+
+.btn_delete:hover{
+  background-color: red;
+  color: #fff;
+}
+
+.btn_imprime{
+  border: 1px solid green;
+  color: green;
+}
+
+.btn_imprime:hover{
+  background-color: green;
+  color: #fff;
+}
