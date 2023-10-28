@@ -212,10 +212,11 @@ const Print = () => {
         };
       });
   
-      setCheckGroupData(updatedCheckGroupData);
+      setCheckGroupData((prevData) => updatedCheckGroupData);
     }
   };
   
+  const [montanterror, setMontantError] = useState('');
   
   const addCheck = (e) => {
     e.preventDefault();
@@ -228,6 +229,7 @@ const Print = () => {
         num: checkType === 'Chéque' ? Number(currentCheckNumber) + index + 1 : item.num,
       }))
     );
+    setMontantError("")
   };
 
   const [checkType, setCheckType] = useState("Chéque");
@@ -306,19 +308,38 @@ const Print = () => {
     }
   };
   
-  const [montanterror, setMontantError] = useState('');
 
-  const handleMontanteBlur = (newValue) => {
-  
-    const montantValues = newValue.map(item => parseFloat(item.montant || 0 || 10));
-  
-    const totalMontant = montantValues.reduce((sum, montant) => sum + montant, 0);
-    if (totalMontant !== parseFloat(paymentData.montantTotal)) {
-      setMontantError("Le total ne correspond pas à montant Total. Vérifiez les valeurs");
+const handleMontanteBlur = (newValue) => {
+  const montantValues = newValue.map(item => parseFloat(item.montant || 0 || 10));
+  const totalMontant = montantValues.reduce((sum, montant) => sum + montant, 0);
+
+  if (paymentData?.montantTotal != totalMontant) {
+    const difference = parseFloat(paymentData?.montantTotal) - totalMontant;
+    if (checkGroupData.length >= 2) {
+      const newMontant = parseFloat(checkGroupData[1].montant) + difference;
+      if (newMontant >= 0) {
+        const updatedCheckGroupData = checkGroupData.map((item, index) => {
+          if (index === 1) {
+            return {
+              ...item,
+              montant: newMontant,
+            };
+          }
+          return item;
+        });
+        console.log(checkGroupData,"checkGroupData")
+        setCheckGroupData(updatedCheckGroupData);
+        setMontantError("");
+      } else {
+        setMontantError("Le total ne correspond pas à montant Total. Vérifiez les valeurs");
+      }
     } else {
-      setMontantError("");
+      setMontantError("You need at least two 'Montant' inputs to adjust.");
     }
-  };
+  } else {
+    setMontantError("");
+  }
+};
 
   const handleInputChange = (id, field, value) => {
 
@@ -355,7 +376,9 @@ const Print = () => {
 
 
   const ConfermationPrint = ({ item, handleModal, fournisseurs,handleModalPrint,checkGroupData,paymentData }) => {
-
+    const formatNumberWithSpaces = (number) => {
+      return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    };
       const getFournisseurName = (fournisseurId) => {
         const fournisseur = fournisseurs.find((f) => f.id === parseInt(fournisseurId, 10));
         return fournisseur ? fournisseur.nom : 'Unknown Fournisseur';
@@ -394,7 +417,7 @@ const Print = () => {
                 
                <p>Fournisseur: {getFournisseurName(paymentData.fournisseur_id)}</p>
                 <p>
-                  Total montant: {paymentData.montantTotal} DT
+                  Total montant: {formatNumberWithSpaces(paymentData.montantTotal)} DT
                 </p>
                 <p>
                    Nombre d'écheances: {item.length} 
@@ -402,7 +425,7 @@ const Print = () => {
                 <ul>
                   {item.map((check, index) => (
                     <li key={'CheckPrintModal' + index}>
-                    #{check?.num} - Date: {check.dueDate}, montant: {check.montant} DT
+                    #{check?.num} - Date: {check.dueDate}, montant: {formatNumberWithSpaces(check.montant)} DT
                     </li>
                   ))}
                 </ul>
@@ -509,7 +532,7 @@ const Print = () => {
                     <div className='check-print-form-container'>
                       <p>{index + 1}.</p>
                       <Input
-                      label="Numéro de chèque:"
+                      label={checkType === 'Chéque' ? "Numéro de chèque:" : "Numéro de traite:"}
                       placeholder={checkType === 'Chéque' ? (parseInt(checkGroupData[index].num, 10) + 1).toString() : 'Num traite'}
                       type="text"
                       defaultValue={item.num}
