@@ -39,7 +39,7 @@ const TopIcomesFournisseurs = ({ fournisseurs, checks }) => {
         return bTotal - aTotal;
     });
 
-    const top5Data = sortedData.slice(0, 5);
+    const top5Data = sortedData.slice(0, 10);
 
     // console.log("top5Data", top5Data);
 
@@ -47,7 +47,7 @@ const TopIcomesFournisseurs = ({ fournisseurs, checks }) => {
 
     return (
         <div style={{ height: '460px', width: '100%', marginBottom: '50px' }}>
-            <Header title={"TOP 5 Fournisseurs"} subtitle={"Par Montant Ch/Tr"} />
+            <Header title={"TOP 10 Fournisseurs"} subtitle={"Par Montant Ch/Tr"} />
             <ResponsiveBar
                 data={top5Data}
                 keys={['Cheques', 'Traites']}

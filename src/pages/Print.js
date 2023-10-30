@@ -212,7 +212,7 @@ const Print = () => {
         };
       });
   
-      setCheckGroupData((prevData) => updatedCheckGroupData);
+      setCheckGroupData(updatedCheckGroupData);
     }
   };
   
@@ -309,25 +309,27 @@ const Print = () => {
   };
   
 
-const handleMontanteBlur = (newValue) => {
-  const montantValues = newValue.map(item => parseFloat(item.montant || 0 || 10));
-  const totalMontant = montantValues.reduce((sum, montant) => sum + montant, 0);
+const handleMontanteBlur = (newValue, changed_input_id = null) => {
+  let totalMontantReste = 0;
+  const montantValues = newValue.map((item, index) => {
+    let montant = parseFloat(item.montant || 0 || 10);
+    totalMontantReste += index+1 <= changed_input_id ? Number(montant) : 0;
+    return montant
+  });
 
-  if (paymentData?.montantTotal != totalMontant) {
-    const difference = parseFloat(paymentData?.montantTotal) - totalMontant;
-    if (checkGroupData.length >= 2) {
-      const newMontant = parseFloat(checkGroupData[1].montant) + difference;
-      if (newMontant >= 0) {
-        const updatedCheckGroupData = checkGroupData.map((item, index) => {
-          if (index === 1) {
+  if (totalMontantReste != 0) {
+    const difference = parseFloat(paymentData?.montantTotal) - totalMontantReste;
+  if (checkGroupData.length >= 2) {
+      if (difference >= 0) {
+        const updatedCheckGroupData = newValue.map((item, index) => {
+          if (index >= changed_input_id) {
             return {
               ...item,
-              montant: newMontant,
+              montant: difference / (checkGroupData.length - changed_input_id),
             };
           }
           return item;
         });
-        console.log(checkGroupData,"checkGroupData")
         setCheckGroupData(updatedCheckGroupData);
         setMontantError("");
       } else {
@@ -339,6 +341,10 @@ const handleMontanteBlur = (newValue) => {
   } else {
     setMontantError("");
   }
+};
+
+const formatNumberWithSpaces = (number) => {
+  return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g,' ');
 };
 
   const handleInputChange = (id, field, value) => {
@@ -357,7 +363,7 @@ const handleMontanteBlur = (newValue) => {
         item.id === id ? { ...item, [field]: formattedMontant } : item
       )
       setCheckGroupData(newValue);
-      handleMontanteBlur(newValue);
+      handleMontanteBlur(newValue, id);
     } else {
       setCheckGroupData((prevData) =>
         prevData.map((item) =>
@@ -548,12 +554,13 @@ const handleMontanteBlur = (newValue) => {
                         label="Montant:"
                         placeholder="Montant en dinars"
                         type="text"
-                        value={checkGroupData[index].montant}
+                        value={formatNumberWithSpaces(checkGroupData[index].montant)}
                         name="montant"
                         onChange={(e) => handleInputChange(item.id, 'montant', e.target.value)}
                         onBlur={() => handleMontanteBlur()}
                         error={montanterror ? { message: montanterror, type: 'error' } : null}
                       />
+          {/* {JSON.stringify(checkGroupData)} */}
                       <Input
                         label="Date:"
                         type="date"

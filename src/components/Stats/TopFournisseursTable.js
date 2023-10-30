@@ -26,16 +26,17 @@ const TopFournisseursTable = ({ fournisseurs, checks }) => {
     
         const sortedTableData = tableData.sort((a, b) => b.numberOfChecks - a.numberOfChecks);
     
-        const top5 = sortedTableData.slice(0, 5);
     
-        setData(top5);
+        setData(sortedTableData);
     }, []);
 
     return (
-        <div style={{ height: 'auto' }}>
+        <div style={{ height: 'auto' ,marginTop:'80px'}}>
             <Header title="TOP 5 Fournisseurs" subtitle="Par Nombre de Ch/Tr" />
             <div style={{
-                marginTop: '20px'
+                marginTop: '20px',
+                height: '400px',
+                overflowY: 'scroll'
             }} class="relative overflow-x-auto">
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

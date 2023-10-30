@@ -54,19 +54,19 @@ const Charts = () => {
             </div>
           ) : (
             <div className='kpis-container'>
-    
-                  <BreakdownCheckTypeChart isDashboard={true} />
-                  <DailyChart />
-                  {fournisseurs && fournisseurs.length > 0 && checks && checks.length > 0 && (
-                    <>
-                      <TopFournisseursTable fournisseurs={fournisseurs} checks={checks} />
-                      {/* <TimeRangeChart checks={checks} /> */}
-                      <TopIcomesFournisseurs checks={checks} fournisseurs={fournisseurs} /> 
-                    </>
-                  )}
-                  <TopMonths />
-                  <BreakdownCheckStatusChart isDashboard={true} />
-            </div>
+            <BreakdownCheckTypeChart isDashboard={true} />  
+            <DailyChart />
+            {fournisseurs && fournisseurs.length > 0 && checks && checks.length > 0 && (
+              <>
+                <TopFournisseursTable fournisseurs={fournisseurs} checks={checks} />
+                {/* <TimeRangeChart checks={checks} /> */}
+                <TopIcomesFournisseurs checks={checks} fournisseurs={fournisseurs} />
+              </>
+            )}
+            <TopMonths />
+            <BreakdownCheckStatusChart isDashboard={true} />
+          </div>
+          
           )}
         </div>
       </ContentWrapper>

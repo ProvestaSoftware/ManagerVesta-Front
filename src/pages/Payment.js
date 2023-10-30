@@ -106,7 +106,6 @@ const Payment = () => {
       setLoading(false);
     }
   };
-console.log('setFiltrage',filtrage)
 
   const [settings, setSettings] = useState(null);
   const getCurrentCheckNumber = async () => {

@@ -43,13 +43,13 @@ function TopMonths() {
 
         const sortedTopMonths = [...processedMonthlyData]
             .sort((a, b) => b.montant - a.montant)
-            .slice(0, 5);
+            .slice(0, 12);
         setTopMonths(sortedTopMonths);
     };
 
     return (
         <div style={{ height: '460px', width: '100%', marginBottom: '50px' }}>
-            <Header title={"TOP 5 Mois"} subtitle={"Par Montant de Ch/Tr"} />
+            <Header title={"TOP  Mois"} subtitle={"Par Montant de Ch/Tr"} />
             <ResponsiveBar
                 data={topMonths}
                 keys={['montant']}

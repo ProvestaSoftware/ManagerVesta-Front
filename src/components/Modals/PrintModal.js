@@ -351,10 +351,10 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom }) =>
         document.head.removeChild(styleElement);
     };
   }, [settings]);
-
+console.log('item',item)
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 9999 }}>
-      <div style={{ position: 'fixed', top: '0%', left: '50%', transform: 'translate(-50%, 0%)', padding: '20px', borderRadius: '8px', width: '800px', height: '90vh' }}>
+      <div style={{ position: 'fixed', top: '0%', left: '50%', transform: 'translate(-50%, 0%)', padding: '20px', borderRadius: '8px', width: '100vh', height: '90vh',maxWidth:'800px' }}>
         <div className="relative w-full max-h-full">
           <div className="relative bg-white rounded-lg dark:bg-gray-700">
             <div className="check-num-print flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">

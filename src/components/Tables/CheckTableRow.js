@@ -6,7 +6,7 @@ import { deleteCheck, getChecks } from '../../actions/checks';
 import ConfirmModal from '../Modals/ConfirmModal';
 import moment from 'moment'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash,faPrint } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash,faPrint,faRecycle } from '@fortawesome/free-solid-svg-icons';
 import PrintModal from '../Modals/PrintModal';
 import PrintModalTraite from '../Modals/PrintModalTraite';
 import { SettingService } from '../../_services/setting.service';
@@ -50,9 +50,10 @@ const CheckTableRow = ({ item, fournisseurs ,settings}) => {
         const formatNumberWithSpaces = (number) => {
             return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
           };
+          console.log('item',item)
     return (
         <>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <tr className={`bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ${item.is_deleted === 1 ? 'bg-red-400 hover:bg-red-400 dark:hover:bg-red-400 text-white' : ''}`}>
                 <td class="px-6 py-4">
                     #{item?.num}
                 </td>
@@ -119,16 +120,25 @@ const CheckTableRow = ({ item, fournisseurs ,settings}) => {
                     >
                         <FontAwesomeIcon icon={faEdit} />
                     </button>
-                    <button
-                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline btn_delete"
-                        onClick={handleConfirm}
-                    >
-                        <FontAwesomeIcon icon={faTrash} />
-                    </button>
+                    {item.is_deleted === 1 ? (
+                            <button
+                                className="font-medium text-green-600 dark:text-green-500 hover:text-green-700 hover:underline btn_recover btn_record" 
+                                onClick={handleConfirm} 
+                            >
+                                <FontAwesomeIcon icon={faRecycle} style={{ color: 'green' }} />
+                            </button>
+                        ) : (
+                            <button
+                                className="font-medium text-blue-600 dark:text-blue-500 hover:underline btn_delete"
+                                onClick={handleConfirm}
+                            >
+                                <FontAwesomeIcon icon={faTrash} />
+                            </button>
+                    )}
                 </td>
             </tr>
             {modal && <CheckModal item={item} handleModal={handleModal} />}
-            {confirm && <ConfirmModal name={`Chèque #${item.num}`} handleModal={handleConfirm} handleDelete={handleDelete} />}
+            {confirm && <ConfirmModal name={`Chèque #${item.num}`} handleModal={handleConfirm} handleDelete={handleDelete} is_deleted={item.is_deleted} />}
 
             {showPrintModal && (
             item.type === 'Chèque' ? (
