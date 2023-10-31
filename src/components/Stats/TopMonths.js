@@ -19,7 +19,9 @@ function TopMonths() {
     useEffect(() => {
         processData();
     }, [checks]);
-
+    const formatNumberWithSpaces = (number) => {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+      };
     const processData = () => {
         const monthlyDataMap = {};
 
@@ -40,7 +42,7 @@ function TopMonths() {
 
         const processedMonthlyData = Object.values(monthlyDataMap);
 
-
+console.log('formatNumberWithSpaces',monthlyDataMap)
         const sortedTopMonths = [...processedMonthlyData]
             .sort((a, b) => b.montant - a.montant)
             .slice(0, 12);
@@ -110,7 +112,8 @@ function TopMonths() {
                     tickRotation: -45,
                     legend: '',
                     legendPosition: 'center',
-                    legendOffset: 40
+                    legendOffset: 40,
+                    
                 }}
                 axisLeft={{
                     tickSize: 5,
@@ -118,7 +121,8 @@ function TopMonths() {
                     tickRotation: 0,
                     legend: 'montant en DT',
                     legendPosition: 'middle',
-                    legendOffset: -80
+                    legendOffset: -80,
+                    format: value => value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') 
                 }}
                 labelSkipWidth={12}
                 labelSkipHeight={12}
@@ -129,7 +133,8 @@ function TopMonths() {
                             'darker',
                             1.6
                         ]
-                    ]
+                    ],
+
                 }}
                 legends={[
                     {
@@ -157,7 +162,9 @@ function TopMonths() {
                 ]}
                 role="application"
                 ariaLabel="Nombre des Ch/Tr par Mois (TOP 5)"
-                barAriaLabel={e => e.id + ": " + e.formattedValue + " for month: " + e.indexValue}
+                barAriaLabel={e => e.id + ": " + e.formattedValue + " DT for month: " + e.indexValue}
+                label={e => e.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}
+
             />
         </div>
     );

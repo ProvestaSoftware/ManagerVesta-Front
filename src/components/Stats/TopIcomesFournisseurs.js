@@ -38,12 +38,7 @@ const TopIcomesFournisseurs = ({ fournisseurs, checks }) => {
         const bTotal = b.Cheques + b.Traites;
         return bTotal - aTotal;
     });
-
     const top5Data = sortedData.slice(0, 10);
-
-    // console.log("top5Data", top5Data);
-
-    // console.log("transformedData", transformedData);
 
     return (
         <div style={{ height: '460px', width: '100%', marginBottom: '50px' }}>
@@ -108,7 +103,7 @@ const TopIcomesFournisseurs = ({ fournisseurs, checks }) => {
                     tickRotation: 0,
                     legend: 'Fournisseur',
                     legendPosition: 'middle',
-                    legendOffset: 40
+                    legendOffset: 40,
                 }}
                 axisLeft={{
                     tickSize: 5,
@@ -116,7 +111,8 @@ const TopIcomesFournisseurs = ({ fournisseurs, checks }) => {
                     tickRotation: 0,
                     legend: 'Montant en DT',
                     legendPosition: 'middle',
-                    legendOffset: -80
+                    legendOffset: -80,
+                    format: value => value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '), 
                 }}
                 labelSkipWidth={12}
                 labelSkipHeight={12}
@@ -127,7 +123,8 @@ const TopIcomesFournisseurs = ({ fournisseurs, checks }) => {
                             'darker',
                             1.6
                         ]
-                    ]
+                    ],
+
                 }}
                 legends={[
                     {
@@ -151,11 +148,15 @@ const TopIcomesFournisseurs = ({ fournisseurs, checks }) => {
                                 }
                             }
                         ]
+                        ,
+
                     }
                 ]}
                 role="application"
-                ariaLabel="Ch/Tr par fournisseur (TOP 5)"
-                barAriaLabel={e => e.id + ": " + e.formattedValue + " for fournisseur: " + e.indexValue}
+                ariaLabel="Ch/Tr par fournisseur (TOP 10)"
+                barAriaLabel={e => e.id + ":" + e.formattedValue + " for fournisseur: " + e.indexValue}
+                label={e => `${e.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}`}
+                
             />
         </div>
     )

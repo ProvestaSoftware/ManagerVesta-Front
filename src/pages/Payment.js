@@ -54,17 +54,20 @@ const Payment = () => {
   const [paymentData, setPaymentData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showBottom, setShowBottom] = useState(true);
+const getData = () => {
+  payment.getPaymentWithChecks()
+  .then((data) => {
+    setPaymentData(data.data);
+    setLoading(false);
+  })
+  .catch((error) => {
+    console.error('Error fetching payment data:', error);
+    setLoading(false);
+  });
 
+}
   useEffect(() => {
-    payment.getPaymentWithChecks()
-      .then((data) => {
-        setPaymentData(data.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching payment data:', error);
-        setLoading(false);
-      });
+    getData()
   }, []);
 
   const [onview, setOnView] = useState(null);
@@ -188,6 +191,7 @@ const Payment = () => {
              onViewChecks={onViewChecks}
              onSerach={(e) => handleFiltersChange('keyword', e.target.value)}
              Filters={Filters}
+             getData={getData}
            />
         )}
       </div>

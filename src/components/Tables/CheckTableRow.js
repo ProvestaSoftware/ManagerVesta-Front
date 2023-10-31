@@ -12,7 +12,7 @@ import PrintModalTraite from '../Modals/PrintModalTraite';
 import { SettingService } from '../../_services/setting.service';
 import { useEffect } from 'react';
 
-const CheckTableRow = ({ item, fournisseurs ,settings}) => {
+const CheckTableRow = ({ item, fournisseurs ,settings,key}) => {
 
     const [modal, setModal] = useState(false);
     const [confirm, setConfirm] = useState(false);
@@ -50,12 +50,12 @@ const CheckTableRow = ({ item, fournisseurs ,settings}) => {
         const formatNumberWithSpaces = (number) => {
             return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
           };
-          console.log('item',item)
+         
     return (
         <>
-            <tr className={`bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ${item.is_deleted === 1 ? 'bg-red-400 hover:bg-red-400 dark:hover:bg-red-400 text-white' : ''}`}>
+            <tr className={`bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600`} style={{ backgroundColor: item.is_deleted === 1 ? 'rgb(252, 102, 129)' : '',color: item.is_deleted === 1 ? 'white' : '' }}> 
                 <td class="px-6 py-4">
-                    #{item?.num}
+                  #{item?.num} aa {key}
                 </td>
                 <td class="px-6 py-4">
                     {formatNumberWithSpaces(item?.montant)} dt
@@ -80,28 +80,27 @@ const CheckTableRow = ({ item, fournisseurs ,settings}) => {
                     {moment(created_at).locale('fr').format("DD MMMM YYYY, HH:mm")}
                 </td>
                 <td class="px-6 py-4">
-                    {
-                        moment(item.dueDate).diff( moment(), 'days' ) <= 0 ?
-                            <span style={{color: '#D30606'}}>
-                                {
-                                    moment(item?.dueDate).locale('fr').format("DD MMMM YYYY")
-                                }
-                            </span>
-                        :
-                            moment(item.dueDate).diff( moment(), 'days' ) <= 14 ?
+                        {
+                            item.is_deleted === 1 ? (
+                                <span style={{color: 'white'}}>
+                                    {moment(item?.dueDate).locale('fr').format("DD MMMM YYYY")}
+                                </span>
+                            ) : moment(item.dueDate).diff(moment(), 'days') <= 0 ? (
+                                <span style={{color: '#D30606'}}>
+                                    {moment(item?.dueDate).locale('fr').format("DD MMMM YYYY")}
+                                </span>
+                            ) : moment(item.dueDate).diff(moment(), 'days') <= 14 ? (
                                 <span style={{color: 'orange'}}>
-                                    {
-                                        moment(item?.dueDate).locale('fr').format("DD MMMM YYYY")
-                                    }
+                                    {moment(item?.dueDate).locale('fr').format("DD MMMM YYYY")}
                                 </span>
-                            :
+                            ) : (
                                 <span>
-                                    {
-                                        moment(item?.dueDate).locale('fr').format("DD MMMM YYYY")
-                                    }
+                                    {moment(item?.dueDate).locale('fr').format("DD MMMM YYYY")}
                                 </span>
-                    }
-                </td>
+                            )
+                        }
+                    </td>
+
                 <td class="px-6 py-4">
                     <b style={{color: state_colors[item?.status]}}>
                         {item?.status}
@@ -138,7 +137,7 @@ const CheckTableRow = ({ item, fournisseurs ,settings}) => {
                 </td>
             </tr>
             {modal && <CheckModal item={item} handleModal={handleModal} />}
-            {confirm && <ConfirmModal name={`Chèque #${item.num}`} handleModal={handleConfirm} handleDelete={handleDelete} is_deleted={item.is_deleted} />}
+            {confirm && <ConfirmModal name={`${item.type} #${item.num}`} handleModal={handleConfirm} handleDelete={handleDelete} is_deleted={item.is_deleted} />}
 
             {showPrintModal && (
             item.type === 'Chèque' ? (
