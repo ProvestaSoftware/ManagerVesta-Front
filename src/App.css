@@ -537,3 +537,40 @@ body {
   background-color: green;
   color: #fff;
 }
+
+.selected_fixed {
+  display: flex;
+  justify-content: end;
+  margin-top: -3%;
+}
+@media (max-width: 768px) {
+  .settings-form-container {
+      flex-direction: column; 
+  }
+
+  .selected_fixed {
+      flex-direction: column; 
+      margin-top: 5%; 
+  }
+
+  .custom-button.primary {
+      width: 100%; 
+      margin-top: 10px; 
+  }
+}
+
+@media (max-width: 802px) {
+  .settings-form-container {
+      flex-direction: column; 
+  }
+
+  .selected_fixed {
+      flex-direction: column; 
+      margin-top: 5%;
+  }
+
+  .custom-button.primary {
+      width: 100%; 
+      margin-top: 10px; 
+  }
+}

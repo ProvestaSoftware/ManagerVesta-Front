@@ -11,6 +11,7 @@ import { getChecks } from '../actions/checks';
 import { ChecksClients } from '../_services/checksclients.service';
 import Skeleton from 'react-loading-skeleton'
 import EventPopup from '../components/Modals/EventPopup';
+import { ImprimanteService } from '../_services/imprimante.service';
 
 const localizer = momentLocalizer(moment);
 
@@ -121,7 +122,22 @@ const Calendrier = () => {
             },
         };
     };
-
+    const [settingimprimante,setSettingImprimante] =useState(null)
+    const getImprimanteId = () => {
+      const selectedPrinterId = localStorage.getItem('selectedPrinterId');
+      if (selectedPrinterId) {
+        ImprimanteService.getById(selectedPrinterId) 
+          .then((imprimante) => {
+            setSettingImprimante(imprimante.data);
+          })
+          .catch((error) => {
+            console.error('Error retrieving selected Imprimante:', error);
+          });
+      }
+    }
+    useEffect(() => {
+      getImprimanteId()
+    }, []);
     return (
         <ContentWrapper>
             <div className='calendar-wrapper'>
@@ -147,7 +163,7 @@ const Calendrier = () => {
                 )}
                     {selectedEvent && (
                         <div className="popup-container">
-                            <EventPopup event={selectedEvent} onClose={handleClosePopup} />
+                            <EventPopup event={selectedEvent} onClose={handleClosePopup} settingimprimante={settingimprimante} />
                         </div>
                         )}
           <div className="legend">

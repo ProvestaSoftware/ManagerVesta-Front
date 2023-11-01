@@ -20,6 +20,7 @@ import { payment } from '../_services/payment';
 import PrintModal from '../components/Modals/PrintModal';
 import PrintModalTraite from '../components/Modals/PrintModalTraite'
 import { SettingService } from '../_services/setting.service';
+import { ImprimanteService } from '../_services/imprimante.service';
 
 const Payment = () => {
   
@@ -125,6 +126,24 @@ const getData = () => {
   useEffect(() => {
     getCurrentCheckNumber();
   }, []);
+
+  const [settingimprimante,setSettingImprimante] =useState(null)
+  const getImprimanteId = () => {
+    const selectedPrinterId = localStorage.getItem('selectedPrinterId');
+    if (selectedPrinterId) {
+      ImprimanteService.getById(selectedPrinterId) 
+        .then((imprimante) => {
+          setSettingImprimante(imprimante.data);
+        })
+        .catch((error) => {
+          console.error('Error retrieving selected Imprimante:', error);
+        });
+    }
+  }
+  useEffect(() => {
+    getImprimanteId()
+  }, []);
+
   return (
     <ContentWrapper>
   <div className='check-wrapper'>
@@ -192,6 +211,7 @@ const getData = () => {
              onSerach={(e) => handleFiltersChange('keyword', e.target.value)}
              Filters={Filters}
              getData={getData}
+             settingimprimante={settingimprimante}
            />
         )}
       </div>
@@ -205,6 +225,7 @@ const getData = () => {
               fournisseurs={fournisseurs}
               settings={settings}
               showBottom={showBottom}
+              settingimprimante={settingimprimante}
             />
           ) : (
             <PrintModalTraite
@@ -213,6 +234,7 @@ const getData = () => {
               fournisseurs={fournisseurs}
               settings={settings}
               showBottom={showBottom}
+              settingimprimante={settingimprimante}
 
             />
           )}

@@ -3,9 +3,12 @@ import atbImage from '../../assets/images/ATBcheck2.jpg';
 import '../../assets/css/PrintModal.css';
 import RegularButton from '../Buttons/RegularButton';
 import moment from 'moment'
+import { ImprimanteService } from '../../_services/imprimante.service';
 
-const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom }) => {
+const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,settingimprimante }) => {
 
+  console.log('settingimprimante',settingimprimante)
+   
   function numberToWordsFR(num) {
     if (isNaN(num) || num < 1 || num > 999999999) {
         return "------------";
@@ -193,137 +196,6 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom }) =>
     } else {
       window.location.href = '/payment';
     }
-
-    // const items = item
-    // const screenWidth = window.screen.width;
-    // const screenHeight = window.screen.height;
-    // const printWindow = window.open('', '', `width=${screenWidth},height=${screenHeight}`);
-        
-    // if (!printWindow) {
-    //     alert("Pop-up blocked. Please allow pop-ups for this site and try again.");
-    //     return;
-    // }
-
-    // printWindow.document.open();
-    // printWindow.document.write('<html><head><title>Print</title>');
-    // printWindow.document.write('<style>');
-    // printWindow.document.write(`
-    //   body {
-    //     margin: 0 !important;
-    //   }
-    //   .imprimer-container {
-    //     margin: 0 !important;
-    //   }
-    //   .num_check, .num_check_header{
-    //     display: none;
-    //   }
-    //   .check {
-    //     position: relative;
-    //     margin: 0;
-    //     border: none !important;
-    //     /* margin-left: -189px !important;
-    //     margin-top: 189px;
-    //     transform: rotate(270deg); */
-    //   }
-    //   .check_data {
-    //     position: absolute;
-    //     font-family: "DM Mono";
-    //   }
-    //   .montant {
-    //     left: 540px;
-    //     top: 20px;
-    //   }
-    //   .num_check{
-    //     left: 80px;
-    //     top: 28px;
-    //     font-weight: 700;
-    //   }
-    //   .montant_ecrit_line1 {
-    //     left: calc(50% + 30px);
-    //     transform: translate(-50%);
-    //     top: 65px;
-    //   }
-    //   .montant_ecrit_line2 {
-    //     left: calc(50% + 30px);
-    //     top: 90px;
-    //     transform: translate(-50%);
-    //     width: 100%;
-    //     text-align: center;
-    //   }
-    //   .montant_to {
-    //     left: 110px;
-    //     top: 120px;
-    //   }
-    //   .date {
-    //     top: 219px;
-    //     font-size: 14px;
-    //   }
-    //   .montant_a_fr {
-    //     left: 230px;
-    //     font-size: 13px;
-    //   }
-    //   .montant_le {
-    //     left: 315px;
-    //     font-size: 12px;
-    //   }
-    //   .montant_a_ar {
-    //     left: 420px;
-    //     font-size: 14px;
-    //   }
-      
-    //   .check {
-    //       width: 687.87401575px !important;
-    //       height: 309.92125984px !important;
-    //       margin-left: -189px !important;
-    //       margin-top: 189px !important;
-    //       transform: rotate(270deg) !important;
-    //       margin-bottom: 500px !important;
-    //   }
-    //   .__check_data {
-    //       display: none !important;
-    //   }
-    //   .check-inputs-print {
-    //       display: none !important;
-    //   }
-    //   .check-num-print {
-    //       display: none !important;
-    //   }
-    //   .check-border {
-    //       display: none !important;
-    //   }
-    //   .check img {
-    //     display: block;
-    //     width: 800px !important;
-    //   }
-    //   @media print {
-    //     .check img {
-    //       display: none !important;
-    //     }
-    //   }
-    // `);
-    // printWindow.document.write('</style>');
-    // printWindow.document.write('</head><body>');
-
-    // items.forEach((item, index) => {
-    //     const divToPrint = document.getElementById(`print-${index}`);
-        
-    //     if (divToPrint) {
-    //         printWindow.document.write('<div style="page-break-before: always">');
-    //         printWindow.document.write(divToPrint.innerHTML);
-    //         printWindow.document.write('</div>');
-    //     }
-    // });
-
-    // printWindow.document.write('</body></html>');
-    // printWindow.document.close();
-
-    // // Add an event listener for the 'onafterprint' event
-    // printWindow.onafterprint = function() {
-    //     // This function will be called when the print dialog is closed.
-    //     // You can perform actions here after the user has printed or canceled the print.
-    //     printWindow.close();
-    //     // alert("Le processus d'impression a été commencé");
-    // };
   };
 
   useEffect(() => {
@@ -334,9 +206,11 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom }) =>
     const printingStyles = `
         @media print {
           .check {
-            margin-left: -${189-Number(settings?.cheque_margin_right)}px !important;
-            margin-top: ${189+Number(settings?.cheque_margin_left)}px;
+            margin-left: -${189 - (Number(settingimprimante?.cheque_margin_top) || 0)}px !important;
+            margin-top: ${189 + (Number(settingimprimante?.cheque_margin_left) || 0)}px;
+            transform: rotate(${Number(settingimprimante?.cheque_rotation_degree) || 0}deg);
           }
+           ${settingimprimante?.cheque_extra_css ?? ''}
         }
     `;
 
@@ -351,7 +225,6 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom }) =>
         document.head.removeChild(styleElement);
     };
   }, [settings]);
-console.log('item',item)
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 9999 }}>
       <div style={{ position: 'fixed', top: '0%', left: '50%', transform: 'translate(-50%, 0%)', padding: '20px', borderRadius: '8px', width: '100vh', height: '90vh',maxWidth:'800px' }}>

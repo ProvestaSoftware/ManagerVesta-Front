@@ -3,8 +3,11 @@ import TraiteImage from '../../assets/images/traite_vierge_2.jpg';
 import '../../assets/css/PrintModal.css';
 import RegularButton from '../Buttons/RegularButton';
 import moment from 'moment'
+import { ImprimanteService } from '../../_services/imprimante.service';
 
-const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom }) => {
+const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,settingimprimante }) => {
+
+  console.log('settingimprimante',settingimprimante)
   function numberToWordsFR(num) {
     if (isNaN(num) || num < 1 || num > 999999999) {
         return "------------";
@@ -202,9 +205,11 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom }) =>
     const printingStyles = `
       @media print {
         .check {
-          margin-left: -${76 - Number(settings?.cheque_margin_right_trades)}px !important;
-          margin-top: ${113 + Number(settings?.cheque_margin_left_trades)}px !important;
+          margin-left: -${76 - Number(settingimprimante?.traite_margin_top || 0)}px !important;
+          margin-top: ${113 + Number(settingimprimante?.traite_margin_left || 0)}px !important;
+          transform: rotate(${Number(settingimprimante?.traite_rotation_degree) || 0}deg);
         }
+        ${settingimprimante?.traite_extra_css ?? ''}
       }
     `;
 

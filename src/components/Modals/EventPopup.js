@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { SettingService } from '../../_services/setting.service';
 import { getFournisseurs } from '../../actions/fournisseurs';
 
-const EventPopup = ({ event, onClose }) => {
+const EventPopup = ({ event, onClose,settingimprimante }) => {
   const { montant, type, status } = event;
 console.log('event',event)
   const popupStyle = {
@@ -62,6 +62,8 @@ console.log('event',event)
   const handleModalPrint = () => {
       setShowPrintModal(true);
   };
+
+
   return (
     <>
     <div className="event-popup" style={popupStyle}>
@@ -143,6 +145,7 @@ console.log('event',event)
             item={[event?.cheque]}
             settings={settings}
             showBottom={showBottom}
+            settingimprimante={settingimprimante}
           />
         ) : (
           <PrintModalTraite
@@ -151,6 +154,7 @@ console.log('event',event)
             item={[event?.cheque]}
             settings={settings}
             showBottom={showBottom}
+            settingimprimante={settingimprimante}
           />
         )
       )}

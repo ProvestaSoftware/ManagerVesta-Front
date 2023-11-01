@@ -6,7 +6,7 @@ import { useState } from 'react';
 import ConfirmModal from '../Modals/ConfirmModal';
 import { payment } from '../../_services/payment';
 
-const PaymentTable = ({ paymentData, onViewChecks, onSearch, Filters,getData }) => {
+const PaymentTable = ({ paymentData, onViewChecks, onSearch, Filters,getData,settingimprimante }) => {
   const [confirm, setConfirm] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
 

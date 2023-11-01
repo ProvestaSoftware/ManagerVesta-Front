@@ -12,7 +12,7 @@ import PrintModalTraite from '../Modals/PrintModalTraite';
 import { SettingService } from '../../_services/setting.service';
 import { useEffect } from 'react';
 
-const CheckTableRow = ({ item, fournisseurs ,settings,key}) => {
+const CheckTableRow = ({ item, fournisseurs ,settings,key,settingimprimante}) => {
 
     const [modal, setModal] = useState(false);
     const [confirm, setConfirm] = useState(false);
@@ -147,6 +147,7 @@ const CheckTableRow = ({ item, fournisseurs ,settings,key}) => {
                 item={ [item] }
                 settings={settings}
                 showBottom={true}
+                settingimprimante={settingimprimante}
                 />
             ) : (
                 <PrintModalTraite
@@ -155,6 +156,7 @@ const CheckTableRow = ({ item, fournisseurs ,settings,key}) => {
                     item={ [item] }
                     settings={settings}
                     showBottom={true}
+                    settingimprimante={settingimprimante}
                 />
             )
             )}

@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router-dom'
 import PrintModal from '../components/Modals/PrintModal'
 import PrintModalTraite from '../components/Modals/PrintModalTraite'
 import { SettingService } from '../_services/setting.service'
+import { ImprimanteService } from '../_services/imprimante.service'
 
 const Print = () => {
 
@@ -385,7 +386,22 @@ const formatNumberWithSpaces = (number) => {
 
     setInputErrors((prevErrors) => ({ ...prevErrors, [id]: '' })); 
   };
-  
+  const [settingimprimante,setSettingImprimante] =useState(null)
+  const getImprimanteId = () => {
+    const selectedPrinterId = localStorage.getItem('selectedPrinterId');
+    if (selectedPrinterId) {
+      ImprimanteService.getById(selectedPrinterId) 
+        .then((imprimante) => {
+          setSettingImprimante(imprimante.data);
+        })
+        .catch((error) => {
+          console.error('Error retrieving selected Imprimante:', error);
+        });
+    }
+  }
+  useEffect(() => {
+    getImprimanteId()
+  }, []);
   const [ newfornisseur, setNewFornisseur] = useState(' ');
 
   const isSaveDisabled = checkGroupData.some(item => !item.dueDate || !item.montant || !item.num )|| montanterror != '';
@@ -633,6 +649,7 @@ const formatNumberWithSpaces = (number) => {
             item={checkGroupData}
             settings={settings}
             showBottom={showBottom}
+            settingimprimante={settingimprimante}
           />
         :
           <PrintModalTraite
@@ -641,6 +658,7 @@ const formatNumberWithSpaces = (number) => {
             item={checkGroupData}
             settings={settings}
             showBottom={showBottom}
+            settingimprimante={settingimprimante}
           />
       )}
       {showConfirmationModal && (
