@@ -52,7 +52,6 @@
   .check {
     /* margin-left: -189px !important;
     margin-top: 189px; */
-    transform: rotate(270deg);
     border: none !important;
     page-break-before: always;
   }

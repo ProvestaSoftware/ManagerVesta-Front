@@ -20,6 +20,7 @@ import { payment } from '../_services/payment';
 import PrintModal from '../components/Modals/PrintModal';
 import PrintModalTraite from '../components/Modals/PrintModalTraite'
 import { SettingService } from '../_services/setting.service';
+import { ImprimanteService } from '../_services/imprimante.service';
 
 const Payment = () => {
   
@@ -54,17 +55,20 @@ const Payment = () => {
   const [paymentData, setPaymentData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showBottom, setShowBottom] = useState(true);
+const getData = () => {
+  payment.getPaymentWithChecks()
+  .then((data) => {
+    setPaymentData(data.data);
+    setLoading(false);
+  })
+  .catch((error) => {
+    console.error('Error fetching payment data:', error);
+    setLoading(false);
+  });
 
+}
   useEffect(() => {
-    payment.getPaymentWithChecks()
-      .then((data) => {
-        setPaymentData(data.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching payment data:', error);
-        setLoading(false);
-      });
+    getData()
   }, []);
 
   const [onview, setOnView] = useState(null);
@@ -106,7 +110,6 @@ const Payment = () => {
       setLoading(false);
     }
   };
-console.log('setFiltrage',filtrage)
 
   const [settings, setSettings] = useState(null);
   const getCurrentCheckNumber = async () => {
@@ -123,6 +126,24 @@ console.log('setFiltrage',filtrage)
   useEffect(() => {
     getCurrentCheckNumber();
   }, []);
+
+  const [settingimprimante,setSettingImprimante] =useState(null)
+  const getImprimanteId = () => {
+    const selectedPrinterId = localStorage.getItem('selectedPrinterId');
+    if (selectedPrinterId) {
+      ImprimanteService.getById(selectedPrinterId) 
+        .then((imprimante) => {
+          setSettingImprimante(imprimante.data);
+        })
+        .catch((error) => {
+          console.error('Error retrieving selected Imprimante:', error);
+        });
+    }
+  }
+  useEffect(() => {
+    getImprimanteId()
+  }, []);
+
   return (
     <ContentWrapper>
   <div className='check-wrapper'>
@@ -189,6 +210,8 @@ console.log('setFiltrage',filtrage)
              onViewChecks={onViewChecks}
              onSerach={(e) => handleFiltersChange('keyword', e.target.value)}
              Filters={Filters}
+             getData={getData}
+             settingimprimante={settingimprimante}
            />
         )}
       </div>
@@ -202,6 +225,7 @@ console.log('setFiltrage',filtrage)
               fournisseurs={fournisseurs}
               settings={settings}
               showBottom={showBottom}
+              settingimprimante={settingimprimante}
             />
           ) : (
             <PrintModalTraite
@@ -210,6 +234,7 @@ console.log('setFiltrage',filtrage)
               fournisseurs={fournisseurs}
               settings={settings}
               showBottom={showBottom}
+              settingimprimante={settingimprimante}
 
             />
           )}

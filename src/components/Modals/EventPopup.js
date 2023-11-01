@@ -1,9 +1,16 @@
 import React from 'react';
 import moment from 'moment';
+import PrintModal from './PrintModal';
+import PrintModalTraite from './PrintModalTraite'
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { SettingService } from '../../_services/setting.service';
+import { getFournisseurs } from '../../actions/fournisseurs';
 
-const EventPopup = ({ event, onClose }) => {
+const EventPopup = ({ event, onClose,settingimprimante }) => {
   const { montant, type, status } = event;
-
+console.log('event',event)
   const popupStyle = {
     backgroundColor: event.backgroundColor,
     color: 'white',
@@ -26,7 +33,39 @@ const EventPopup = ({ event, onClose }) => {
   }
 
   const isImpaye = status === 'Impayé';
+
+  const [showPrintModal, setShowPrintModal] = useState(false);
+  const [showBottom, setShowBottom] = useState(true);
+
+  const dispatch = useDispatch();
+  const [settings, setSettings] = useState(null);
+
+  const getCurrentCheckNumber = async () => {
+    try {
+      const settingData = await SettingService.index();
+      if (settingData && settingData.data.current_cheque_number) {
+        setSettings(settingData.data);
+      }
+    } catch (error) {
+      console.error('Error fetching current check number:', error);
+    }
+  };
+
+  useEffect(() => {
+    getCurrentCheckNumber();
+  }, []);
+
+  const fournisseurs = useSelector((state) => state.fournisseurs);
+  useEffect(() => {
+    dispatch(getFournisseurs());
+  }, []);
+  const handleModalPrint = () => {
+      setShowPrintModal(true);
+  };
+
+
   return (
+    <>
     <div className="event-popup" style={popupStyle}>
         <div className="event-popup-title" style={{ color: isImpaye ? 'white' : 'white' }}>
             {eventTypeTitle} Details
@@ -81,8 +120,45 @@ const EventPopup = ({ event, onClose }) => {
                 </span>
             </div>
     </div>
+
+ 
       <button onClick={onClose}>Close</button>
+
+        {type === 'Chèque' && (
+            <button   onClick={handleModalPrint}>
+              Imprimer Chéque
+            </button>
+          )}
+          {type === 'Traite' && (
+            <button  onClick={handleModalPrint}>
+              Imprimer Traite
+            </button>
+          )}
+      
     </div>
+
+      {showPrintModal && (
+        type === 'Chèque' ? (
+          <PrintModal
+            handleModal={() => setShowPrintModal(false)}
+            fournisseurs={fournisseurs}
+            item={[event?.cheque]}
+            settings={settings}
+            showBottom={showBottom}
+            settingimprimante={settingimprimante}
+          />
+        ) : (
+          <PrintModalTraite
+            handleModal={() => setShowPrintModal(false)}
+            fournisseurs={fournisseurs}
+            item={[event?.cheque]}
+            settings={settings}
+            showBottom={showBottom}
+            settingimprimante={settingimprimante}
+          />
+        )
+      )}
+      </>
   );
 };
 

@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router-dom'
 import PrintModal from '../components/Modals/PrintModal'
 import PrintModalTraite from '../components/Modals/PrintModalTraite'
 import { SettingService } from '../_services/setting.service'
+import { ImprimanteService } from '../_services/imprimante.service'
 
 const Print = () => {
 
@@ -187,7 +188,7 @@ const Print = () => {
   };
   
   
-  const calculateCheckAmounts = () => {
+  const calculateCheckAmounts = (index_to_start_with = 0) => {
     if (paymentData.montantTotal && numberOfChecks) {
       const totalAmount = parseFloat(paymentData.montantTotal);
       const numChecks = parseInt(numberOfChecks, 10);
@@ -196,26 +197,29 @@ const Print = () => {
       const remainingAmount = totalAmount - baseAmount * numChecks;
   
       const updatedCheckGroupData = Array(numChecks).fill({}).map((_, index) => {
-        let num = '';
-        if (checkType === 'Chéque') {
-          num = currentCheckNumber + index + 1;
+        if( index >= index_to_start_with){
+          let num = '';
+          if (checkType === 'Chéque') {
+            num = currentCheckNumber + index + 1;
+          }
+    
+          return {
+            id: index + 1,
+            num: num,
+            montant: baseAmount + (index < remainingAmount ? 1 : 0),
+            dueDate: '',
+            type: checkType === 'Chéque' ? 'Chéque' : 'Traite',
+            fournisseur_id: paymentData.fournisseur_id,
+            payment_id: '',
+          };
         }
-  
-        return {
-          id: index + 1,
-          num: num,
-          montant: baseAmount + (index < remainingAmount ? 1 : 0),
-          dueDate: '',
-          type: checkType === 'Chéque' ? 'Chéque' : 'Traite',
-          fournisseur_id: paymentData.fournisseur_id,
-          payment_id: '',
-        };
       });
   
       setCheckGroupData(updatedCheckGroupData);
     }
   };
   
+  const [montanterror, setMontantError] = useState('');
   
   const addCheck = (e) => {
     e.preventDefault();
@@ -228,6 +232,7 @@ const Print = () => {
         num: checkType === 'Chéque' ? Number(currentCheckNumber) + index + 1 : item.num,
       }))
     );
+    setMontantError("")
   };
 
   const [checkType, setCheckType] = useState("Chéque");
@@ -306,22 +311,53 @@ const Print = () => {
     }
   };
   
-  const [montanterror, setMontantError] = useState('');
 
-  const handleMontanteBlur = (newValue) => {
-  
-    const montantValues = newValue.map(item => parseFloat(item.montant || 0 || 10));
-  
-    const totalMontant = montantValues.reduce((sum, montant) => sum + montant, 0);
-    if (totalMontant !== parseFloat(paymentData.montantTotal)) {
-      setMontantError("Le total ne correspond pas à montant Total. Vérifiez les valeurs");
-    } else {
-      setMontantError("");
+const handleMontanteBlur = (newValue, changed_input_id = null) => {
+  let total_amount = 0;
+  let totalMontantReste = 0;
+  const montantValues = newValue.map((item, index) => {
+    let montant = parseFloat(item.montant || 0 || 10);
+    totalMontantReste += index+1 <= changed_input_id ? Number(montant) : 0;
+    return montant
+  });
+
+  if (totalMontantReste != 0) {
+    const difference = parseFloat(paymentData?.montantTotal) - totalMontantReste;
+    if (checkGroupData.length >= 2) {
+      if (difference >= 0) {
+        const numChecks = checkGroupData.length - changed_input_id;
+        const baseAmount = Math.floor(difference / numChecks);
+        const remainingAmount = difference - baseAmount * numChecks;
+        
+        const updatedCheckGroupData = newValue.map((item, index) => {
+          if (index >= changed_input_id) {
+            item = {
+              ...item,
+              montant: Math.floor(difference / numChecks ) + ((index - changed_input_id) < remainingAmount ? 1 : 0),
+            };
+          }
+
+          total_amount += item.montant
+          return item;
+        });
+
+        setCheckGroupData(updatedCheckGroupData);
+      }
     }
-  };
+  }
+
+  if( total_amount != paymentData.montantTotal){
+    setMontantError("Le total ne correspond pas à montant Total. Vérifiez les valeurs");
+  }else{
+    setMontantError("");
+  }
+};
+
+const formatNumberWithSpaces = (number) => {
+  return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g,' ');
+};
 
   const handleInputChange = (id, field, value) => {
-
     if (field === 'dueDate') {
       const formattedDate = value;
       setCheckGroupData((prevData) =>
@@ -331,12 +367,15 @@ const Print = () => {
       );
       handleDateBlur(formattedDate, id);
     } else if (field === 'montant') {
+      value = value.replace(/\s/g, "")
+      console.log('value', value)
       const formattedMontant = parseFloat(value || 0, 10);
+      console.log('formattedMontant', formattedMontant)
       let newValue = checkGroupData.map((item) =>
         item.id === id ? { ...item, [field]: formattedMontant } : item
       )
       setCheckGroupData(newValue);
-      handleMontanteBlur(newValue);
+      handleMontanteBlur(newValue, id);
     } else {
       setCheckGroupData((prevData) =>
         prevData.map((item) =>
@@ -347,7 +386,22 @@ const Print = () => {
 
     setInputErrors((prevErrors) => ({ ...prevErrors, [id]: '' })); 
   };
-  
+  const [settingimprimante,setSettingImprimante] =useState(null)
+  const getImprimanteId = () => {
+    const selectedPrinterId = localStorage.getItem('selectedPrinterId');
+    if (selectedPrinterId) {
+      ImprimanteService.getById(selectedPrinterId) 
+        .then((imprimante) => {
+          setSettingImprimante(imprimante.data);
+        })
+        .catch((error) => {
+          console.error('Error retrieving selected Imprimante:', error);
+        });
+    }
+  }
+  useEffect(() => {
+    getImprimanteId()
+  }, []);
   const [ newfornisseur, setNewFornisseur] = useState(' ');
 
   const isSaveDisabled = checkGroupData.some(item => !item.dueDate || !item.montant || !item.num )|| montanterror != '';
@@ -355,7 +409,9 @@ const Print = () => {
 
 
   const ConfermationPrint = ({ item, handleModal, fournisseurs,handleModalPrint,checkGroupData,paymentData }) => {
-
+    const formatNumberWithSpaces = (number) => {
+      return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    };
       const getFournisseurName = (fournisseurId) => {
         const fournisseur = fournisseurs.find((f) => f.id === parseInt(fournisseurId, 10));
         return fournisseur ? fournisseur.nom : 'Unknown Fournisseur';
@@ -394,7 +450,7 @@ const Print = () => {
                 
                <p>Fournisseur: {getFournisseurName(paymentData.fournisseur_id)}</p>
                 <p>
-                  Total montant: {paymentData.montantTotal} DT
+                  Total montant: {formatNumberWithSpaces(paymentData.montantTotal)} DT
                 </p>
                 <p>
                    Nombre d'écheances: {item.length} 
@@ -402,7 +458,7 @@ const Print = () => {
                 <ul>
                   {item.map((check, index) => (
                     <li key={'CheckPrintModal' + index}>
-                    #{check?.num} - Date: {check.dueDate}, montant: {check.montant} DT
+                    #{check?.num} - Date: {check.dueDate}, montant: {formatNumberWithSpaces(check.montant)} DT
                     </li>
                   ))}
                 </ul>
@@ -509,7 +565,7 @@ const Print = () => {
                     <div className='check-print-form-container'>
                       <p>{index + 1}.</p>
                       <Input
-                      label="Numéro de chèque:"
+                      label={checkType === 'Chéque' ? "Numéro de chèque:" : "Numéro de traite:"}
                       placeholder={checkType === 'Chéque' ? (parseInt(checkGroupData[index].num, 10) + 1).toString() : 'Num traite'}
                       type="text"
                       defaultValue={item.num}
@@ -525,12 +581,13 @@ const Print = () => {
                         label="Montant:"
                         placeholder="Montant en dinars"
                         type="text"
-                        value={checkGroupData[index].montant}
+                        value={(checkGroupData[index].montant)?.toString().replace(/\B(?=(\d{3})+(?!\d))/g,' ')}
                         name="montant"
                         onChange={(e) => handleInputChange(item.id, 'montant', e.target.value)}
                         onBlur={() => handleMontanteBlur()}
                         error={montanterror ? { message: montanterror, type: 'error' } : null}
                       />
+          {/* {JSON.stringify(checkGroupData)} */}
                       <Input
                         label="Date:"
                         type="date"
@@ -592,6 +649,7 @@ const Print = () => {
             item={checkGroupData}
             settings={settings}
             showBottom={showBottom}
+            settingimprimante={settingimprimante}
           />
         :
           <PrintModalTraite
@@ -600,6 +658,7 @@ const Print = () => {
             item={checkGroupData}
             settings={settings}
             showBottom={showBottom}
+            settingimprimante={settingimprimante}
           />
       )}
       {showConfirmationModal && (
