@@ -14,7 +14,8 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom }) =>
     let result = "";
 
     // handle millions
-    if (num >= 1000000) {
+    if (num >= 1
+000000) {
         result += numberToWordsFR(Math.floor(num / 1000000)) + " million ";
         num %= 1000000;
     }
@@ -335,7 +336,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom }) =>
         @media print {
           .check {
             margin-left: -${189-Number(settings?.cheque_margin_right)}px !important;
-            margin-top: ${0+Number(settings?.cheque_margin_left)}px;
+            margin-top: ${189+Number(settings?.cheque_margin_left)}px;
           }
         }
     `;
