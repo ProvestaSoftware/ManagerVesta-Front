@@ -235,7 +235,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
   
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 9999 }}>
-      <div style={{ position: 'fixed', top: '0%', left: '50%', transform: 'translate(-50%, 0%)', padding: '20px', borderRadius: '8px', width: '90vh', height: '90vh' }}>
+      <div style={{ position: 'fixed', top: '0%', left: '50%', transform: 'translate(-50%, 0%)', padding: '20px', borderRadius: '8px', width: '100vh', height: '90vh', minWidth: '800px' }}>
         <div className="relative w-full max-h-full">
           <div className="relative bg-white rounded-lg dark:bg-gray-700">
             <div className="check-num-print flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
@@ -278,7 +278,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                         id={`check-${index}`} 
                         style={{ 
                           width: '687.87401575px', 
-                          height: '509.92125984px', 
+                          // height: '509.92125984px', 
                           display: 'block', 
                           border: '1px solid #ddd', 
                           borderRadius: '3px', 

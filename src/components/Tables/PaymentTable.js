@@ -89,7 +89,7 @@ const PaymentTable = ({ paymentData, onViewChecks, onSearch, Filters,getData,set
         <tbody>
           {paymentData?.length !== 0 ? (
             paymentData?.map((item, index) => (
-              <tr className={`bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600`} style={{ backgroundColor: item.is_payment === 1 ? 'rgb(252, 102, 129)' : '',color: item.is_payment === 1 ? 'white' : '' }}>
+              <tr className={`bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600`} style={{ backgroundColor: item.is_payment === 1 ? 'rgb(252, 102, 129, 0.4)' : '',color: item.is_payment === 1 ? 'black' : '' }}>
                 <td className="px-2 py-4">#{item?.num}</td>
                 <td>{item?.checks[0]?.fournisseur?.nom}</td>
                 <td className="px-6 py-4">{formatNumberWithSpaces(item?.montantTotal)} dt</td>
@@ -138,7 +138,7 @@ const PaymentTable = ({ paymentData, onViewChecks, onSearch, Filters,getData,set
               </tr>
             ))
           ) : (
-            <p className="no-data-msg">Il n'y a pas de chèques...</p>
+            <p className="no-data-msg">Il n'y a pas des paiements...</p>
           )}
         </tbody>
       </table>

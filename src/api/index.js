@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: 'http://localhost:8000/api' ?? process.env.REACT_PUBLIC_API_URL ?? "https://crm-api.ccachaar.tn/api" });
+const API = axios.create({ baseURL: process.env.REACT_PUBLIC_API_URL ?? "https://crm-api.ccachaar.tn/api" });
 API.interceptors.request.use((req) => {
     if (localStorage.getItem("profile")) {
         req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem("profile")).token}`;
