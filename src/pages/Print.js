@@ -98,7 +98,8 @@ const Print = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setPaymentData({ ...paymentData, [name]: value });
+    let val = value.replace(/\s/g, "")
+    setPaymentData({ ...paymentData, [name]: val });
   
     const requiredFieldsFilled =
       paymentData.montantTotal && paymentData.fournisseur_id;
@@ -368,7 +369,6 @@ const formatNumberWithSpaces = (number) => {
       handleDateBlur(formattedDate, id);
     } else if (field === 'montant') {
       value = value.replace(/\s/g, "")
-      console.log('value', value)
       const formattedMontant = parseFloat(value || 0, 10);
       console.log('formattedMontant', formattedMontant)
       let newValue = checkGroupData.map((item) =>
@@ -531,7 +531,8 @@ const formatNumberWithSpaces = (number) => {
                 type="text"
                 name="montantTotal"
                 onChange={handleChange}
-                value={paymentData?.montantTotal || ''}
+                // value={paymentData?.montantTotal || ''}
+                value={paymentData?.montantTotal?.toString().replace(/\B(?=(\d{3})+(?!\d))/g,' ') ?? ''}
               />
               <Input
                   label="Nombre d'écheances:"
