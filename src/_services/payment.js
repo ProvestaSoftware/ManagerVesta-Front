@@ -3,7 +3,9 @@ import { authHeader, ApiConfigs } from '../_helpers'
 export const payment = {
   getPaymentWithChecks,
   viewChecks,
-  filterPayments
+  filterPayments, 
+  destroyPayment, 
+
 }
 
 async function getPaymentWithChecks() {
@@ -36,6 +38,14 @@ async function filterPayments(Filters) {
   const postUrl = `${ApiConfigs.base_url}${ApiConfigs.payment.filterPayments}`;
 
   return await fetch(postUrl, requestOptions).then(handleResponse);
+}
+async function destroyPayment(paymentId) {
+  const requestOptions = {
+      method: 'GET',
+      headers: authHeader(),
+  };
+  const deleteUrl = `${ApiConfigs.base_url}${ApiConfigs.payment.destroyPayment.replace('{payment}', paymentId)}`;
+  return await fetch(deleteUrl, requestOptions).then(handleResponse);
 }
 
 async function handleResponse(response) {

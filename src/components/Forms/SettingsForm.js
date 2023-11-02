@@ -7,6 +7,7 @@ import { updateUserPassword, updateUserProfileData } from '../../actions/userPro
 import CircularProgress from '../CircularProgress'
 import { SettingService } from '../../_services/setting.service'
 import Skeleton from 'react-loading-skeleton'
+import { ImprimanteService } from '../../_services/imprimante.service'
 
 const SettingsForm = ({ user }) => {
 
@@ -156,7 +157,35 @@ const SettingsForm = ({ user }) => {
       const handlePasswordOptionChange = (e) => {
         setChangePassword(e.target.checked);
       };
-    
+
+      const [imprimante, setImprimante] = useState([]);
+      const [loaderimprimante,setLoaderImprimante] = useState(false)
+
+      const [selectedPrinterId, setselectedPrinterId] = useState(
+        localStorage.getItem('selectedPrinterId') ?? null
+      );
+    const handleSelectChange = (e) => {
+        const selectedId = e.target.value;
+        localStorage.setItem('selectedPrinterId', selectedId);
+        setselectedPrinterId(selectedId);
+      };
+
+        const getImprimante = () => {
+            ImprimanteService.index()
+            .then(res => {
+                setImprimante(res?.data)
+                console.log('imprimante',imprimante)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+            .finally(() => {
+            })
+        }
+
+        useEffect(() => {
+            getImprimante()
+        }, [])
     return (
         <>
             {loadersumbit ? (
@@ -255,9 +284,32 @@ const SettingsForm = ({ user }) => {
                                 style={{ width: '100%', marginBottom: '10px',height: '40px' }}
                             />
                         </form>
+                        {/* <div className='selected_fixed'> */}
+                        <div className="form-group">
+                            <label
+                                className="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+                                style={{
+                                    textAlign: 'left',
+                                    color: '#fff',
+                                    fontSize: '18px',
+                                    marginTop: '10px'
+                                }}
+                            >
+                                {'Selectionner votre imprimante'}
+                            </label>
+                            <select onChange={handleSelectChange} style={{flex: 1, borderRadius: '10px'}}>
+                                <option value=''>Sélectionnez votre imprimante</option>
+                                {imprimante.map((item) => (
+                                    <option key={item.id} value={item.id} selected={item.id == selectedPrinterId ? true : false}>
+                                        {item.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        {/* </div> */}
                         <RegularDivider size="0.5px" />
                         <form onSubmit={handleSubmit} className='settings-form-container'>
-                            <Input
+                            {/* <Input
                                 label='Marge à gauche d`impression des chéques (CM)'
                                 placeholder='Marge à gauche des chèques'
                                 type='number'
@@ -290,7 +342,7 @@ const SettingsForm = ({ user }) => {
                                 onChange={(e) => handleInputChange('cheque_margin_right_trades', e.target.value)}
                                 style={{ width: '100%', marginBottom: '10px',height: '40px'}}
                             />
-                            <br />
+                            <br /> */}
                             <Input
                                 label='Paye de la signature en français'
                                 placeholder='Paye de la signature en français'

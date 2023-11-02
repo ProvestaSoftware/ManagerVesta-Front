@@ -16,6 +16,7 @@ import { getFournisseurs } from '../actions/fournisseurs';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { SettingService } from '../_services/setting.service';
+import { ImprimanteService } from '../_services/imprimante.service';
 
 const CheckFournisseur = () => {
   const checks = useSelector((state) => state.checks);
@@ -95,6 +96,23 @@ const CheckFournisseur = () => {
       getCurrentCheckNumber();
     }, []);
 
+    const [settingimprimante, setSettingImprimante] = useState(null);
+
+    const getImprimanteId = () => {
+      const selectedPrinterId = localStorage.getItem('selectedPrinterId');
+        ImprimanteService.getById(selectedPrinterId ?? 0)
+          .then((imprimante) => {
+            setSettingImprimante(imprimante.data);
+          })
+          .catch((error) => {
+            console.error('Error retrieving selected Imprimante:', error);
+          });
+    };
+    
+    useEffect(() => {
+      getImprimanteId();
+    }, []);
+
   return (
     <ContentWrapper>
       <div className='check-wrapper'>
@@ -148,6 +166,7 @@ const CheckFournisseur = () => {
             onSerach={(e) => handleFiltersChange('keyword', e.target.value)}
             Filters={Filters}
             settings={settings}
+            settingimprimante={settingimprimante}
             />
         )}
       </div>

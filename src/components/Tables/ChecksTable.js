@@ -1,7 +1,7 @@
 import React from 'react'
 import CheckTableRow from './CheckTableRow'
 
-const ChecksTable = ({ columns, rows, fournisseurs, onSerach ,Filters,settings}) => {
+const ChecksTable = ({ columns, rows, fournisseurs, onSerach ,Filters,settings,settingimprimante}) => {
 
     return (
         <div style={{
@@ -72,6 +72,7 @@ const ChecksTable = ({ columns, rows, fournisseurs, onSerach ,Filters,settings})
                             item={item}
                             fournisseurs={fournisseurs}
                             settings={settings}
+                            settingimprimante={settingimprimante}
                         />
                     )) : (
                         <p className='no-data-msg'>Il n'y a pas de chèques...</p>

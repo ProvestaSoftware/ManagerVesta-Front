@@ -46,7 +46,9 @@ const CheckClientTableRow = ({ item,getData,setLoader}) => {
         'Impayé' : '#D30606',
         'Payé' : '#13AB50'
     }
-
+    const formatNumberWithSpaces = (number) => {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+      };
     return (
         <>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -54,7 +56,7 @@ const CheckClientTableRow = ({ item,getData,setLoader}) => {
                     #{item?.num}
                 </td>
                 <td class="px-6 py-4">
-                    {item?.montant} dt
+                    {formatNumberWithSpaces(item?.montant)} dt
                 </td>
                 <td class="px-6 py-4">
                     {item?.client?.nom}

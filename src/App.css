@@ -509,6 +509,19 @@ body {
   border: 1px solid red;
   color: red;
 }
+.btn_record {
+  border: 1px solid green;
+  color: green;
+  background-color: transparent; 
+  transition: background-color 0.3s, color 0.3s; 
+  padding: 8px 12px; 
+  border-radius: 4px; 
+}
+
+.btn_record:hover {
+  background-color: lightgreen; 
+  color: white; 
+}
 
 .btn_delete:hover{
   background-color: red;
@@ -523,4 +536,41 @@ body {
 .btn_imprime:hover{
   background-color: green;
   color: #fff;
+}
+
+.selected_fixed {
+  display: flex;
+  justify-content: end;
+  margin-top: -3%;
+}
+@media (max-width: 768px) {
+  .settings-form-container {
+      flex-direction: column; 
+  }
+
+  .selected_fixed {
+      flex-direction: column; 
+      margin-top: 5%; 
+  }
+
+  .custom-button.primary {
+      width: 100%; 
+      margin-top: 10px; 
+  }
+}
+
+@media (max-width: 802px) {
+  .settings-form-container {
+      flex-direction: column; 
+  }
+
+  .selected_fixed {
+      flex-direction: column; 
+      margin-top: 5%;
+  }
+
+  .custom-button.primary {
+      width: 100%; 
+      margin-top: 10px; 
+  }
 }

@@ -40,10 +40,10 @@ const BreakdownCheckTypeChart = ({ isDashboard = false }) => {
     <div
       style={{
         height: isDashboard ? "460px" : "100%",
-        width: "400px",
+        width: "100%",
         minHeight: isDashboard ? "325px" : undefined,
         minWidth: isDashboard ? "325px" : undefined,
-        position: "relative",
+        position: "relative"
       }}
     >
       <Header title="Chèques VS Traites" subtitle="Nombre de Ch/Tr" />
