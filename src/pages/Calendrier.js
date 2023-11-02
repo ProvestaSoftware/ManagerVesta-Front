@@ -122,21 +122,21 @@ const Calendrier = () => {
             },
         };
     };
-    const [settingimprimante,setSettingImprimante] =useState(null)
+    const [settingimprimante, setSettingImprimante] = useState(null);
+
     const getImprimanteId = () => {
       const selectedPrinterId = localStorage.getItem('selectedPrinterId');
-      if (selectedPrinterId) {
-        ImprimanteService.getById(selectedPrinterId) 
+        ImprimanteService.getById(selectedPrinterId ?? 0)
           .then((imprimante) => {
             setSettingImprimante(imprimante.data);
           })
           .catch((error) => {
             console.error('Error retrieving selected Imprimante:', error);
           });
-      }
-    }
+    };
+    
     useEffect(() => {
-      getImprimanteId()
+      getImprimanteId();
     }, []);
     return (
         <ContentWrapper>

@@ -32,7 +32,7 @@ const TopFournisseursTable = ({ fournisseurs, checks }) => {
 
     return (
         <div style={{ height: 'auto' ,marginTop:'80px'}}>
-            <Header title="TOP 5 Fournisseurs" subtitle="Par Nombre de Ch/Tr" />
+            <Header title="TOP Fournisseurs" subtitle="Par Nombre de Ch/Tr" />
             <div style={{
                 marginTop: '20px',
                 height: '400px',
