@@ -69,6 +69,9 @@
   }
   .check img {
     display: none !important;
+    /* position: fixed;
+    top: 0;
+    left: 0; */
   }
   .num_check, .num_check_header{
     display: none;
@@ -123,6 +126,7 @@
   }
   .traite .montant_ecrit_line1 {
     /* left: 400px !important; */
+    top: 180px !important;
   }
   .traite .middle_dates_div{
     left: 20px !important;
@@ -136,9 +140,15 @@
     top: 270px !important;
   }
   .traite .top_pays{
-    top: 45px !important
+    top: 37px !important
   }
   .traite .date_creation_top{
-    top: 64px !important;
+    top: 55px !important;
+  }
+  .traite .montant_to{
+    top: 150px !important;
+  }
+  .traite .checkmontantbas{
+    top: 150px !important;
   }
 }

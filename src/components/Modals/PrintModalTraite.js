@@ -323,6 +323,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                           <span className="check_data montant checkmontantbas" id={`montant-${index}`} style={{ left: '540px', top: '155px' }}>
                             #{(check?.montant || 0).toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}#
                           </span>
+                          
                           <span className="check_data montant_to" id={`montant_to-${index}`} style={{left: '360px', top: '160px', transform: 'translate(-50%, 0%)'}}>
                             {fournisseurNom || '-------------------------------'}
                           </span>
