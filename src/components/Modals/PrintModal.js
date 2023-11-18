@@ -206,13 +206,15 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
     const printingStyles = `
         @media print {
           .check {
-
+            /* THIS IS THE TOP SIDE OF THE PAPER IN REAL MODE - IF YOU WANNA INCREASE THE MARGIN, REDUCE MORE PX*/
             margin-left: -${189 - (Number(settingimprimante?.cheque_margin_top) || 0)}px !important;
-            margin-top: ${189 + (Number(settingimprimante?.cheque_margin_left) || 0)}px;
-            transform: rotate(${Number(settingimprimante?.cheque_rotation_degree) || 0}deg);
 
+            /* THIS IS THE RIGHT SIDE OF THE PAPER IN REAL MODE - IF YOU WANNA INCREASE THE MARGIN, ADD MORE PX */
+            margin-top: ${189 + (Number(settingimprimante?.cheque_margin_left) || 0)}px;
+
+            transform: rotate(${Number(settingimprimante?.cheque_rotation_degree) || 0}deg);
           }
-           ${settingimprimante?.cheque_extra_css ?? ''}
+          ${settingimprimante?.cheque_extra_css ?? ''}
         }
     `;
 

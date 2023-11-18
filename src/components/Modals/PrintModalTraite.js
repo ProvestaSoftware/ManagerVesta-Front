@@ -201,12 +201,16 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
     // Dynamically create a <style> element
     const styleElement = document.createElement('style');
 
-    // Define the printing styles based on the state variable
+      // Define the printing styles based on the state variable
     const printingStyles = `
       @media print {
-        .check {
-          margin-left: -${76 - Number(settingimprimante?.traite_margin_top || 0)}px !important;
-          margin-top: ${113 + Number(settingimprimante?.traite_margin_left || 0)}px !important;
+        .traite {
+          /* THIS IS THE TOP SIDE OF THE PAPER IN REAL MODE - IF YOU WANNA INCREASE THE MARGIN, REDUCE MORE PX*/
+          margin-left: -${342 - Number(settingimprimante?.traite_margin_top || 0)}px !important; 
+          
+          /* THIS IS THE RIGHT SIDE OF THE PAPER IN REAL MODE - IF YOU WANNA INCREASE THE MARGIN, ADD MORE PX */
+          margin-top: ${340 + Number(settingimprimante?.traite_margin_left || 0)}px !important; /* THIS IS THE RIGHT SIDE OF THE PAPER IN REAL MODE */
+          
           transform: rotate(${Number(settingimprimante?.traite_rotation_degree) || 0}deg);
         }
         ${settingimprimante?.traite_extra_css ?? ''}
@@ -293,10 +297,10 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                           <span className="check_data date montant_due_top" style={{left: '220px',top:'63px'}}>
                             {moment(check.dueDate).format('DD/MM/YYYY') || '--/--/----'}
                           </span>
-                          <span className="check_data date montant_le_top" style={{left: '350px',top:'64px'}}>
+                          <span className="check_data date montant_le_top date_creation_top" style={{left: '350px',top:'64px'}}>
                             {moment(check.created_at).format('DD/MM/YYYY') || '--/--/----'}
                           </span>
-                          <span className="check_data date montant_a_top" style={{left: '350px',top:'46px'}}>
+                          <span className="check_data date montant_a_top top_pays" style={{left: '350px',top:'46px'}}>
                                 {settings?.paye_de_signature}
                           </span>
 
@@ -322,22 +326,23 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                           <span className="check_data montant_to" id={`montant_to-${index}`} style={{left: '360px', top: '160px', transform: 'translate(-50%, 0%)'}}>
                             {fournisseurNom || '-------------------------------'}
                           </span>
-                          <span className="check_data montant_ecrit montant_ecrit_line1" id={`montant_ecrit_line1-${index}`} style={{left: '360px', top: '190px', lineHeight: '15px', width: '650px'}}>
+                          <span className="check_data montant_ecrit montant_ecrit_line1" id={`montant_ecrit_line1-${index}`} style={{top: '190px', lineHeight: '15px', width: '650px', textAlign: 'center'}}>
                             {`${numberToWordsFR(check?.montant || 0)} dinars`}
                           </span>
                           {/* <span className="check_data montant_ecrit montant_ecrit_line2" id={`montant_ecrit_line2-${index}`} style={{left: 'calc(50% + 30px)', top: '90px'}}>
                             {`${numberToWordsFR(check?.montant || 0)} dinars`.split(' ').slice(4).join(' ')}
                           </span> */}
-                         
-                          <span className="check_data date created_at" id={`montant_le-${index}`} style={{left: '130px',top:'225px'}}>
-                            {moment(check.created_at).format('DD/MM/YYYY') || '--/--/----'}
-                          </span>
-                          <span className="check_data date dueDate" id={`montant_le-${index}`} style={{left: '235px',top:'225px'}}>
-                            {moment(check.dueDate).format('DD/MM/YYYY') || '--/--/----'}
-                          </span>
-                          <span className="check_data date paye montant_a_bottom" style={{left: '10px',top:'229px', width: '100px', lineHeight: '12px'}}>
-                            {settings?.paye_de_signature}
-                          </span>
+                          <div className='middle_dates_div' style={{position: 'absolute', top: '0'}}>
+                            <span className="check_data date created_at" id={`montant_le-${index}`} style={{left: '130px',top:'225px'}}>
+                              {moment(check.created_at).format('DD/MM/YYYY') || '--/--/----'}
+                            </span>
+                            <span className="check_data date dueDate" id={`montant_le-${index}`} style={{left: '235px',top:'225px'}}>
+                              {moment(check.dueDate).format('DD/MM/YYYY') || '--/--/----'}
+                            </span>
+                            <span className="check_data date paye montant_a_bottom" style={{left: '10px',top:'229px', width: '100px', lineHeight: '12px'}}>
+                              {settings?.paye_de_signature}
+                            </span>
+                          </div>
 
 
                           <span className="check_data date business_name" style={{left: '330px',top:'300px',maxWidth: '100px',maxHeight:'100px',textAlign: 'center'}}>
@@ -347,19 +352,20 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                             {settings?.bank_name}
                           </span>
 
-                          <span className="check_data date segments_bottom segments11" id={`montant_le-${index}`} style={{left: '22px',top:'265px'}}>
-                                {segments1}
-                          </span>
-                          <span className="check_data date segments_bottom segments22" id={`montant_le-${index}`} style={{left: '50px',top:'265px'}}>
-                                {segments2}
-                          </span>
-                          <span className="check_data date segments_bottom segments33" id={`montant_le-${index}`} style={{left: '95px',top:'265px'}}>
-                                {segments3}
-                          </span>
-                          <span className="check_data date segments_bottom segments44" id={`montant_le-${index}`} style={{left: '275px',top:'265px'}}>
-                                {segments4}
-                          </span>
-
+                          <div className='bottom_segments_div' style={{position: 'absolute', top: '0'}}>
+                            <span className="check_data date segments_bottom segments11" id={`montant_le-${index}`} style={{left: '22px',top:'265px'}}>
+                                  {segments1}
+                            </span>
+                            <span className="check_data date segments_bottom segments22" id={`montant_le-${index}`} style={{left: '50px',top:'265px'}}>
+                                  {segments2}
+                            </span>
+                            <span className="check_data date segments_bottom segments33" id={`montant_le-${index}`} style={{left: '95px',top:'265px'}}>
+                                  {segments3}
+                            </span>
+                            <span className="check_data date segments_bottom segments44" id={`montant_le-${index}`} style={{left: '275px',top:'265px'}}>
+                                  {segments4}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>

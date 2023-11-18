@@ -21,7 +21,7 @@
   font-weight: 700;
 }
 .montant_ecrit_line1 {
-  transform: translate(-50%);
+  /* transform: translate(-50%); */
 }
 .montant_ecrit_line2 {
   transform: translate(-50%);
@@ -91,6 +91,12 @@
   .traite .segments_top{
     top: 93px !important;
   }
+  .traite .segments_top.segments1{
+    left: 220px !important;
+  }
+  .traite .segments_top.segments2{
+    left: 260px !important;
+  }
   .traite .segments4_top{
     left: 469px !important  ;
   }
@@ -113,6 +119,26 @@
     left: 48px !important;
   }
   .traite .segments44{
-    left: 278px !important;
+    left: 260px !important;
+  }
+  .traite .montant_ecrit_line1 {
+    /* left: 400px !important; */
+  }
+  .traite .middle_dates_div{
+    left: 20px !important;
+    top: -10px !important;
+  }
+  .traite .bottom_segments_div{
+    left: 25px !important;
+    top: -12px !important;
+  }
+  .traite .bankname{
+    top: 270px !important;
+  }
+  .traite .top_pays{
+    top: 45px !important
+  }
+  .traite .date_creation_top{
+    top: 64px !important;
   }
 }
