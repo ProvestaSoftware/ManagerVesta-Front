@@ -199,18 +199,18 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
   };
 
   useEffect(() => {
-    // Dynamically create a <style> element
     const styleElement = document.createElement('style');
-
-    // Define the printing styles based on the state variable
     const printingStyles = `
         @media print {
           .check {
+            position: fixed !important;
+            left: ${Number(settingimprimante?.cheque_margin_top)}px !important;
+            
             /* THIS IS THE TOP SIDE OF THE PAPER IN REAL MODE - IF YOU WANNA INCREASE THE MARGIN, REDUCE MORE PX*/
-            margin-left: -${189 - (Number(settingimprimante?.cheque_margin_top) || 0)}px !important;
+            margin-left: -0px !important;
 
             /* THIS IS THE RIGHT SIDE OF THE PAPER IN REAL MODE - IF YOU WANNA INCREASE THE MARGIN, ADD MORE PX */
-            margin-top: ${189 + (Number(settingimprimante?.cheque_margin_left) || 0)}px;
+            margin-top: ${180 + (Number(settingimprimante?.cheque_margin_left) || 0)}px;
 
             transform: rotate(${Number(settingimprimante?.cheque_rotation_degree) || 0}deg);
           }
@@ -266,11 +266,11 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                   const fournisseurNom = selectedFournisseur ? selectedFournisseur.nom : '';
 
                   return (
-                    <div className={`print`} id={`print-${index}`} key={`print-${index}`}>  
+                    <div className={`check-only-main-div print`} id={`print-${index}`} key={`print-${index}`}>  
                       {/* <span className='num_check_header'>Chéque n°{check.num}</span> */}
                       <div 
                         key={index} 
-                        className="grid grid-cols-12 check"  
+                        className="grid grid-cols-12 check check-only"  
                         id={`check-${index}`} 
                         style={{ 
                           width: '687.87401575px', 
@@ -278,11 +278,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                           display: 'block', 
                           border: '1px solid #ddd', 
                           borderRadius: '3px', 
-                          pageBreakBefore: 'always',
-                          '@media print': {
-                            marginTop: '189px !important',
-                            marginLeft: '-189px !important',
-                          },
+                          pageBreakBefore: 'always'
                         }}
                       >
                         <img src={atbImage} alt="Check" />
@@ -290,7 +286,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                           <span className="check_data num_check" id={`montant-${index}`} style={{left: '80px', top: '28px'}}>
                             <b>{check?.num ?? '------'}</b>
                           </span>
-                          <span className="check_data montant" id={`montant-${index}`} style={{left: '540px', top: '21px'}}>
+                          <span className="check_data montant check-only-amount" id={`montant-${index}`} style={{left: '540px', top: '21px'}}>
                             {/* {check?.montant?.toLocaleString('fr-FR') || '------------'} */}
                             #{(check?.montant || 0).toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}#
                           </span>
@@ -303,11 +299,13 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                           <span className="check_data montant_to" id={`montant_to-${index}`} style={{left: '110px', top: '120px'}}>
                             {fournisseurNom || '----------------------------------------------------'}
                           </span>
-                          <span className="check_data date montant_a_fr" style={{left: '230px'}}>{settings.paye_de_signature ?? 'Kélibia'}</span>
-                          <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '315px'}}>
-                            {moment(check.dueDate).format('DD/MM/YYYY') || '--/--/----'}
-                          </span>
-                          <span className="check_data date montant_a_ar" style={{left: '430px'}}>{settings.paye_de_signature_ar ?? 'قليبية'}</span>
+                          <div className='bottom_date_div' style={{position: 'absolute', top: 0, left: '0'}}>
+                            <span className="check_data date montant_a_fr" style={{left: '230px'}}>{settings.paye_de_signature ?? 'Kélibia'}</span>
+                            <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '315px'}}>
+                              {moment(check.dueDate).format('DD/MM/YYYY') || '--/--/----'}
+                            </span>
+                            <span className="check_data date montant_a_ar" style={{left: '430px'}}>{settings.paye_de_signature_ar ?? 'قليبية'}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
