@@ -203,7 +203,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
     const printingStyles = `
         @media print {
           .check {
-            position: fixed !important;
+            position: relative !important;
             left: ${Number(settingimprimante?.cheque_margin_top)}px !important;
             
             /* THIS IS THE TOP SIDE OF THE PAPER IN REAL MODE - IF YOU WANNA INCREASE THE MARGIN, REDUCE MORE PX*/
