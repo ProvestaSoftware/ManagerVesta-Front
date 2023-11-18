@@ -206,7 +206,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
       @media print {
         .traite {
           /* THIS IS THE TOP SIDE OF THE PAPER IN REAL MODE - IF YOU WANNA INCREASE THE MARGIN, REDUCE MORE PX*/
-          margin-left: -${342 - Number(settingimprimante?.traite_margin_top || 0)}px !important; 
+          margin-left: -${355 - Number(settingimprimante?.traite_margin_top || 0)}px !important; 
           
           /* THIS IS THE RIGHT SIDE OF THE PAPER IN REAL MODE - IF YOU WANNA INCREASE THE MARGIN, ADD MORE PX */
           margin-top: ${340 + Number(settingimprimante?.traite_margin_left || 0)}px !important; /* THIS IS THE RIGHT SIDE OF THE PAPER IN REAL MODE */
