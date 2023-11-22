@@ -1,5 +1,5 @@
 function server() {
-  return process.env.REACT_PUBLIC_API_URL ?? 'https://crm-api.ccachaar.tn/api'
+  return process.env.REACT_APP_API_URL ?? 'https://crm-api.ccachaar.tn/api'
 }
 
 export const ApiConfigs = {

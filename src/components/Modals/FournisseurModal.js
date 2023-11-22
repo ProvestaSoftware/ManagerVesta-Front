@@ -16,7 +16,7 @@ const FournisseurModal = ({ item, handleModal,setNewFornisseur }) => {
         nom: item ? item.nom : '',
         email: item ? item.email : '',
         numTel: item ? item.numTel : '',
-        banque: item ? item.banque : 'ATB',
+        banque: item ? item.banque : '',
         rib: item ? item.rib : '',
     });
 
@@ -120,7 +120,7 @@ const FournisseurModal = ({ item, handleModal,setNewFornisseur }) => {
                                         defaultValue={fournisseurData.email}
                                         name="email"
                                         id="email"
-                                        type="email"
+                                        type="text"
                                         form={true}
                                         onChange={(e) =>
                                             setFournisseurData({ ...fournisseurData, email: e.target.value })

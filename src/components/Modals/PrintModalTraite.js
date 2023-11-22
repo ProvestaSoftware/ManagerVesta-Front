@@ -7,164 +7,192 @@ import { ImprimanteService } from '../../_services/imprimante.service';
 
 const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,settingimprimante }) => {
 
-  console.log('settingimprimante',settingimprimante)
   function numberToWordsFR(num) {
-    if (isNaN(num) || num < 1 || num > 999999999) {
-        return "------------";
+    // num = num.toString().replace(',', '.');
+
+    function convert(num) {
+      if (isNaN(num) || num < 0 || num > 999999999999) {
+          return "------------";
+      }
+
+      let result = "";
+
+      // handle millions
+      if (num >= 1000000000) {
+        result += convert(Math.floor(num / 1000000000)) + " milliard ";
+        num %= 1000000000;
     }
 
-    let result = "";
+      // handle millions
+      if (num >= 1000000) {
+          result += convert(Math.floor(num / 1000000)) + " million ";
+          num %= 1000000;
+      }
 
-    // handle millions
-    if (num >= 1000000) {
-        result += numberToWordsFR(Math.floor(num / 1000000)) + " million ";
-        num %= 1000000;
+      // handle thousands
+      if (num >= 1000) {
+          result += convert(Math.floor(num / 1000)) + " mille ";
+          num %= 1000;
+      }
+
+      // handle hundreds
+      if (num >= 100) {
+          result += convert(Math.floor(num / 100)) + " cent ";
+          num %= 100;
+      }
+
+      // handle tens and units
+      if (num >= 20) {
+          var is_90_or_70 = false;
+          switch (Math.floor(num / 10)) {
+              case 9:
+                  result += "quatre-vingt";
+                  is_90_or_70 = true;
+                  break;
+              case 8:
+                  result += "quatre-vingt";
+                  break;
+              case 7:
+                  result += "soixante";
+                  is_90_or_70 = true;
+                  break;
+              case 6:
+                  result += "soixante";
+                  break;
+              case 5:
+                  result += "cinquante";
+                  break;
+              case 4:
+                  result += "quarante";
+                  break;
+              case 3:
+                  result += "trente";
+                  break;
+              case 2:
+                  result += "vingt";
+                  break;
+              default:
+                  result += "";
+          }
+
+          if (num % 10 !== 0) {
+              result += "-";
+          }
+
+          switch (num % 10) {
+              case 9:
+                  result += is_90_or_70 ? "dix-neuf" : "neuf";
+                  break;
+              case 8:
+                  result += is_90_or_70 ? "dix-huit" : "huit";
+                  break;
+              case 7:
+                  result += is_90_or_70 ? "dix-sept" : "sept";
+                  break;
+              case 6:
+                  result += is_90_or_70 ? "seize" : "six";
+                  break;
+              case 5:
+                  result += is_90_or_70 ? "quinze" : "cinq";
+                  break;
+              case 4:
+                  result += is_90_or_70 ? "quatorze" : "quatre";
+                  break;
+              case 3:
+                  result += is_90_or_70 ? "treize" : "trois";
+                  break;
+              case 2:
+                  result += is_90_or_70 ? "douze" : "deux";
+                  break;
+              case 1:
+                  result += is_90_or_70 ? "onze" : "un";
+                  break;
+              default:
+                  result += "";
+          }
+      } else {
+          switch (num) {
+              case 19:
+                  result += "dix-neuf";
+                  break;
+              case 18:
+                  result += "dix-huit";
+                  break;
+              case 17:
+                  result += "dix-sept";
+                  break;
+              case 16:
+                  result += "seize";
+                  break;
+              case 15:
+                  result += "quinze";
+                  break;
+              case 14:
+                  result += "quatorze";
+                  break;
+              case 13:
+                  result += "treize";
+                  break;
+              case 12:
+                  result += "douze";
+                  break;
+              case 11:
+                  result += "onze";
+                  break;
+              case 10:
+                  result += "dix";
+                  break;
+              case 9:
+                  result += "neuf";
+                  break;
+              case 8:
+                  result += "huit";
+                  break;
+              case 7:
+                  result += "sept";
+                  break;
+              case 6:
+                  result += "six";
+                  break;
+              case 5:
+                  result += "cinq";
+                  break;
+              case 4:
+                  result += "quatre";
+                  break;
+              case 3:
+                  result += "trois";
+                  break;
+              case 2:
+                  result += "deux";
+                  break;
+              case 1:
+                  result += "un";
+                  break;
+              default:
+                  result += "";
+          }
+      }
+
+      return result;
     }
 
-    // handle thousands
-    if (num >= 1000) {
-        result += numberToWordsFR(Math.floor(num / 1000)) + " mille ";
-        num %= 1000;
-    }
+    let dinars = Math.floor(Number(num));
+    let millimes = Math.round(Number(num - dinars) * 1000);
 
-    // handle hundreds
-    if (num >= 100) {
-        result += numberToWordsFR(Math.floor(num / 100)) + " cent ";
-        num %= 100;
-    }
+    let dinarsText = convert(dinars);
+    let millimesText = convert(millimes);
 
-    // handle tens and units
-    if (num >= 20) {
-        switch (Math.floor(num / 10)) {
-            case 9:
-                result += "quatre-vingt";
-                break;
-            case 8:
-                result += "quatre-vingt";
-                break;
-            case 7:
-                result += "soixante";
-                break;
-            case 6:
-                result += "soixante";
-                break;
-            case 5:
-                result += "cinquante";
-                break;
-            case 4:
-                result += "quarante";
-                break;
-            case 3:
-                result += "trente";
-                break;
-            case 2:
-                result += "vingt";
-                break;
-            default:
-                result += "";
-        }
-
-        if (num % 10 !== 0) {
-            result += "-";
-        }
-
-        switch (num % 10) {
-            case 9:
-                result += "neuf";
-                break;
-            case 8:
-                result += "huit";
-                break;
-            case 7:
-                result += "sept";
-                break;
-            case 6:
-                result += "six";
-                break;
-            case 5:
-                result += "cinq";
-                break;
-            case 4:
-                result += "quatre";
-                break;
-            case 3:
-                result += "trois";
-                break;
-            case 2:
-                result += "deux";
-                break;
-            case 1:
-                result += "un";
-                break;
-            default:
-                result += "";
-        }
+    if (dinarsText && millimesText) {
+        return dinarsText + " dinars et " + millimesText + " millimes";
+    } else if (dinarsText) {
+        return dinarsText + " dinars";
+    } else if (millimesText) {
+        return millimesText + " millimes";
     } else {
-        switch (num) {
-            case 19:
-                result += "dix-neuf";
-                break;
-            case 18:
-                result += "dix-huit";
-                break;
-            case 17:
-                result += "dix-sept";
-                break;
-            case 16:
-                result += "seize";
-                break;
-            case 15:
-                result += "quinze";
-                break;
-            case 14:
-                result += "quatorze";
-                break;
-            case 13:
-                result += "treize";
-                break;
-            case 12:
-                result += "douze";
-                break;
-            case 11:
-                result += "onze";
-                break;
-            case 10:
-                result += "dix";
-                break;
-            case 9:
-                result += "neuf";
-                break;
-            case 8:
-                result += "huit";
-                break;
-            case 7:
-                result += "sept";
-                break;
-            case 6:
-                result += "six";
-                break;
-            case 5:
-                result += "cinq";
-                break;
-            case 4:
-                result += "quatre";
-                break;
-            case 3:
-                result += "trois";
-                break;
-            case 2:
-                result += "deux";
-                break;
-            case 1:
-                result += "un";
-                break;
-            default:
-                result += "";
-        }
+        return "zéro";
     }
-
-    return result;
-    }
+  }
 
   React.useEffect(() => {
     const date = new Date();
@@ -305,7 +333,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                           </span>
 
                           <span className="check_data montant checkmontanttop" id={`montant-${index}`} style={{left: '540px', top: '97px'}}>
-                            #{(check?.montant || 0).toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}#
+                            #{(check?.montant || 0).toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).toString().replace(',', '.').replace(/\B(?=(\d{3})+(?!\d))/g,' ')}#
                           </span>
                           <span className="check_data montant segments_top segments1" id={`montant-${index}`} style={{left: '200px', top: '97px'}}>
                               {segments1}
@@ -328,7 +356,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                             {fournisseurNom || '-------------------------------'}
                           </span>
                           <span className="check_data montant_ecrit montant_ecrit_line1" id={`montant_ecrit_line1-${index}`} style={{top: '190px', lineHeight: '15px', width: '650px', textAlign: 'center'}}>
-                            {`${numberToWordsFR(check?.montant || 0)} dinars`}
+                            {`${numberToWordsFR(check?.montant || 0)}`}
                           </span>
                           {/* <span className="check_data montant_ecrit montant_ecrit_line2" id={`montant_ecrit_line2-${index}`} style={{left: 'calc(50% + 30px)', top: '90px'}}>
                             {`${numberToWordsFR(check?.montant || 0)} dinars`.split(' ').slice(4).join(' ')}
