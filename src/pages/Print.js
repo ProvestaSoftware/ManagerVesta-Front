@@ -354,8 +354,6 @@ const handleMontanteBlur = (newValue, changed_input_id = null) => {
       }
     }
   }
-  console.log('total_amount', total_amount)
-  console.log('paymentData.montantTotal', paymentData.montantTotal)
   if( total_amount != paymentData.montantTotal){
     setMontantError("Le total ne correspond pas à montant Total. Vérifiez les valeurs");
   }else{
@@ -556,8 +554,8 @@ const formatNumberWithSpaces = (number) => {
               <RegularButton
                 styleType="print-btn"
                 onClick={addCheck}
-                disabled={!isAddCheckDisabled}
-              >
+                disabled={!paymentData.fournisseur_id || !paymentData.montantTotal || !numberOfChecks}
+                >
                 <BsCheckLg />
               </RegularButton>
             </div>
