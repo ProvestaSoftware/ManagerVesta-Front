@@ -8,9 +8,9 @@ import { useEffect } from 'react';
 import { SettingService } from '../../_services/setting.service';
 import { getFournisseurs } from '../../actions/fournisseurs';
 
-const EventPopup = ({ event, onClose,settingimprimante }) => {
+const EventPopup = ({ event, onClose, settingimprimante }) => {
   const { montant, type, status } = event;
-console.log('event',event)
+  console.log('event', event)
   const popupStyle = {
     backgroundColor: event.backgroundColor,
     color: 'white',
@@ -60,82 +60,87 @@ console.log('event',event)
     dispatch(getFournisseurs());
   }, []);
   const handleModalPrint = () => {
-      setShowPrintModal(true);
+    setShowPrintModal(true);
   };
 
 
   return (
     <>
-    <div className="event-popup" style={popupStyle}>
+      <div className="event-popup" style={popupStyle}>
         <div className="event-popup-title" style={{ color: isImpaye ? 'white' : 'white' }}>
-            {eventTypeTitle} Details
+          {eventTypeTitle} Details
         </div>
-      <div className="event-popup-text">
-            <div>
-                <strong style={{ color: isImpaye ? 'white' : 'white' }}>Banque:</strong>{' '}
-                    <span style={{ color: isImpaye ? 'white' : 'white' }}>
-                    {event?.cheque?.fournisseur ? event?.cheque?.fournisseur?.banque : event?.cheque?.client?.banque}
-                    </span>
-            </div>
-            <div>
-                <strong style={{ color: isImpaye ? 'white' : 'white' }}>Num Chéque:</strong>{' '}
-                    <span style={{ color: isImpaye ? 'white' : 'white' }}>
-                        #{event?.cheque ? event?.cheque?.num : ''}
-                    </span>
-            </div>
-            <div>
-                <strong style={{ color: isImpaye ? 'white' : 'white' }}>Nom:</strong>{' '}
-                    <span style={{ color: isImpaye ? 'white' : 'white' }}>
-                    {event?.cheque?.fournisseur ? event?.cheque?.fournisseur?.nom : event?.cheque?.client?.nom}
-                    </span>
-            </div>
-            <div>
-                <strong style={{ color: isImpaye ? 'white' : 'white' }}>Montant:</strong>{' '}
-                <span style={{ color: isImpaye ? 'white' : 'white' }}>{montant}</span>
-            </div>
-            <div>
-                <strong style={{ color:'white' }}>Type:</strong>{' '}
-                <span style={{ color: isImpaye ? 'white' : 'white' }}>{type}</span>
-            </div>
-            <div>
-                <strong style={{ color: isImpaye ? 'red' : 'white' }}>Status:</strong>{' '}
-                <span style={{ color: isImpaye ? 'red' : 'white' }}>{status}</span>
-            </div>
-            <div>
-                <strong style={{ color: isImpaye ? 'white' : 'white' }}>Num Chéque:</strong>{' '}
-                    <span style={{ color: isImpaye ? 'white' : 'white' }}>
-                        #{event?.cheque ? event?.cheque?.num : ''}
-                    </span>
-            </div>
-            <div>
-                <strong style={{ color: isImpaye ? 'white' : 'white' }}>Date d'échéance:</strong>{' '}
-                    <span style={{ color: isImpaye ? 'white' : 'white' }}>
-                    {event?.cheque ? moment(event?.cheque?.dueDate).format('DD MMMM YYYY') : ''}
-                    </span>
-            </div>
-            <div>
-            <strong style={{ color: isImpaye ? 'white' : 'white' }}>Créé à:</strong>{' '}
-                <span style={{ color: isImpaye ? 'white' : 'white' }}>
-                {event?.cheque ? moment(event?.cheque?.created_at).format('DD MMMM YYYY') : ''}
-                </span>
-            </div>
-    </div>
+        <br />
+        <hr />
+        <br />
+        <div className="event-popup-text">
+          <div>
+            <strong style={{ color: 'white' }}>Type &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</strong>{' '}
+            <span style={{ color: isImpaye ? 'white' : 'white' }}>{type}</span>
+          </div>
+          <div>
+            <strong style={{ color: isImpaye ? 'white' : 'white' }}>Num {type} &nbsp;&nbsp;&nbsp;&nbsp; :</strong>{' '}
+            <span style={{ color: isImpaye ? 'white' : 'white' }}>
+              #{event?.cheque ? event?.cheque?.num : ''}
+            </span>
+          </div>
+          <div>
+            <strong style={{ color: isImpaye ? 'white' : 'white' }}>Banque &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</strong>{' '}
+            <span style={{ color: isImpaye ? 'white' : 'white' }}>
+              {event?.cheque?.fournisseur ? event?.cheque?.fournisseur?.banque : event?.cheque?.client?.banque}
+            </span>
+          </div>
+          <div>
+            <strong style={{ color: isImpaye ? 'white' : 'white' }}>Montant &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</strong>{' '}
+            <span style={{ color: isImpaye ? 'white' : 'white' }}>{montant}</span>
+          </div>
+          <div>
+            <strong style={{ color: isImpaye ? 'white' : 'white' }}>Date d'échéance :</strong>{' '}
+            <span style={{ color: isImpaye ? 'white' : 'white' }}>
+              {event?.cheque ? moment(event?.cheque?.dueDate).format('DD MMMM YYYY') : ''}
+            </span>
+          </div>
 
- 
-      <button onClick={onClose}>Close</button>
+          <br />
+          <hr />
+          <br />
+
+          <div>
+            <strong style={{ color: isImpaye ? 'white' : 'white' }}>Nom &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</strong>{' '}
+            <span style={{ color: isImpaye ? 'white' : 'white' }}>
+              {event?.cheque?.fournisseur ? event?.cheque?.fournisseur?.nom : event?.cheque?.client?.nom}
+            </span>
+          </div>
+
+
+          <div>
+            <strong style={{ color: isImpaye ? 'red' : 'white' }}>Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</strong>{' '}
+            <span style={{ color: isImpaye ? 'red' : 'white' }}>{status}</span>
+          </div>
+
+          <div>
+            <strong style={{ color: isImpaye ? 'white' : 'white' }}>Créé à &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</strong>{' '}
+            <span style={{ color: isImpaye ? 'white' : 'white' }}>
+              {event?.cheque ? moment(event?.cheque?.created_at).format('DD MMMM YYYY') : ''}
+            </span>
+          </div>
+        </div>
+        <br />
+
+        <button onClick={onClose} className='mr-4' style={{ background: '#ddd', color: '#333' }}>Fermer</button>
 
         {type === 'Chèque' && (
-            <button   onClick={handleModalPrint}>
-              Imprimer Chéque
-            </button>
-          )}
-          {type === 'Traite' && (
-            <button  onClick={handleModalPrint}>
-              Imprimer Traite
-            </button>
-          )}
-      
-    </div>
+          <button onClick={handleModalPrint}>
+            Imprimer Chéque
+          </button>
+        )}
+        {type === 'Traite' && (
+          <button onClick={handleModalPrint}>
+            Imprimer Traite
+          </button>
+        )}
+
+      </div>
 
       {showPrintModal && (
         type === 'Chèque' ? (
@@ -158,7 +163,7 @@ console.log('event',event)
           />
         )
       )}
-      </>
+    </>
   );
 };
 

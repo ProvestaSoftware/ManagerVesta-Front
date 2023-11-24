@@ -10,162 +10,191 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
   console.log('settingimprimante',settingimprimante)
    
   function numberToWordsFR(num) {
-    if (isNaN(num) || num < 1 || num > 999999999) {
-        return "------------";
+    // num = num.toString().replace(',', '.');
+
+    function convert(num) {
+      if (isNaN(num) || num < 0 || num > 999999999999) {
+          return "------------";
+      }
+
+      let result = "";
+
+      // handle millions
+      if (num >= 1000000000) {
+        result += convert(Math.floor(num / 1000000000)) + " milliard ";
+        num %= 1000000000;
     }
 
-    let result = "";
+      // handle millions
+      if (num >= 1000000) {
+          result += convert(Math.floor(num / 1000000)) + " million ";
+          num %= 1000000;
+      }
 
-    // handle millions
-    if (num >= 1000000) {
-        result += numberToWordsFR(Math.floor(num / 1000000)) + " million ";
-        num %= 1000000;
+      // handle thousands
+      if (num >= 1000) {
+          result += convert(Math.floor(num / 1000)) + " mille ";
+          num %= 1000;
+      }
+
+      // handle hundreds
+      if (num >= 100) {
+          result += convert(Math.floor(num / 100)) + " cent ";
+          num %= 100;
+      }
+
+      // handle tens and units
+      if (num >= 20) {
+          var is_90_or_70 = false;
+          switch (Math.floor(num / 10)) {
+              case 9:
+                  result += "quatre-vingt";
+                  is_90_or_70 = true;
+                  break;
+              case 8:
+                  result += "quatre-vingt";
+                  break;
+              case 7:
+                  result += "soixante";
+                  is_90_or_70 = true;
+                  break;
+              case 6:
+                  result += "soixante";
+                  break;
+              case 5:
+                  result += "cinquante";
+                  break;
+              case 4:
+                  result += "quarante";
+                  break;
+              case 3:
+                  result += "trente";
+                  break;
+              case 2:
+                  result += "vingt";
+                  break;
+              default:
+                  result += "";
+          }
+
+          if (num % 10 !== 0) {
+              result += "-";
+          }
+
+          switch (num % 10) {
+              case 9:
+                  result += is_90_or_70 ? "dix-neuf" : "neuf";
+                  break;
+              case 8:
+                  result += is_90_or_70 ? "dix-huit" : "huit";
+                  break;
+              case 7:
+                  result += is_90_or_70 ? "dix-sept" : "sept";
+                  break;
+              case 6:
+                  result += is_90_or_70 ? "seize" : "six";
+                  break;
+              case 5:
+                  result += is_90_or_70 ? "quinze" : "cinq";
+                  break;
+              case 4:
+                  result += is_90_or_70 ? "quatorze" : "quatre";
+                  break;
+              case 3:
+                  result += is_90_or_70 ? "treize" : "trois";
+                  break;
+              case 2:
+                  result += is_90_or_70 ? "douze" : "deux";
+                  break;
+              case 1:
+                  result += is_90_or_70 ? "onze" : "un";
+                  break;
+              default:
+                  result += "";
+          }
+      } else {
+          switch (num) {
+              case 19:
+                  result += "dix-neuf";
+                  break;
+              case 18:
+                  result += "dix-huit";
+                  break;
+              case 17:
+                  result += "dix-sept";
+                  break;
+              case 16:
+                  result += "seize";
+                  break;
+              case 15:
+                  result += "quinze";
+                  break;
+              case 14:
+                  result += "quatorze";
+                  break;
+              case 13:
+                  result += "treize";
+                  break;
+              case 12:
+                  result += "douze";
+                  break;
+              case 11:
+                  result += "onze";
+                  break;
+              case 10:
+                  result += "dix";
+                  break;
+              case 9:
+                  result += "neuf";
+                  break;
+              case 8:
+                  result += "huit";
+                  break;
+              case 7:
+                  result += "sept";
+                  break;
+              case 6:
+                  result += "six";
+                  break;
+              case 5:
+                  result += "cinq";
+                  break;
+              case 4:
+                  result += "quatre";
+                  break;
+              case 3:
+                  result += "trois";
+                  break;
+              case 2:
+                  result += "deux";
+                  break;
+              case 1:
+                  result += "un";
+                  break;
+              default:
+                  result += "";
+          }
+      }
+
+      return result;
     }
 
-    // handle thousands
-    if (num >= 1000) {
-        result += numberToWordsFR(Math.floor(num / 1000)) + " mille ";
-        num %= 1000;
-    }
+    let dinars = Math.floor(Number(num));
+    let millimes = Math.round(Number(num - dinars) * 1000);
 
-    // handle hundreds
-    if (num >= 100) {
-        result += numberToWordsFR(Math.floor(num / 100)) + " cent ";
-        num %= 100;
-    }
+    let dinarsText = convert(dinars);
+    let millimesText = convert(millimes);
 
-    // handle tens and units
-    if (num >= 20) {
-        switch (Math.floor(num / 10)) {
-            case 9:
-                result += "quatre-vingt";
-                break;
-            case 8:
-                result += "quatre-vingt";
-                break;
-            case 7:
-                result += "soixante";
-                break;
-            case 6:
-                result += "soixante";
-                break;
-            case 5:
-                result += "cinquante";
-                break;
-            case 4:
-                result += "quarante";
-                break;
-            case 3:
-                result += "trente";
-                break;
-            case 2:
-                result += "vingt";
-                break;
-            default:
-                result += "";
-        }
-
-        if (num % 10 !== 0) {
-            result += "-";
-        }
-
-        switch (num % 10) {
-            case 9:
-                result += "neuf";
-                break;
-            case 8:
-                result += "huit";
-                break;
-            case 7:
-                result += "sept";
-                break;
-            case 6:
-                result += "six";
-                break;
-            case 5:
-                result += "cinq";
-                break;
-            case 4:
-                result += "quatre";
-                break;
-            case 3:
-                result += "trois";
-                break;
-            case 2:
-                result += "deux";
-                break;
-            case 1:
-                result += "un";
-                break;
-            default:
-                result += "";
-        }
+    if (dinarsText && millimesText) {
+        return dinarsText + " dinars et " + millimesText + " millimes";
+    } else if (dinarsText) {
+        return dinarsText + " dinars";
+    } else if (millimesText) {
+        return millimesText + " millimes";
     } else {
-        switch (num) {
-            case 19:
-                result += "dix-neuf";
-                break;
-            case 18:
-                result += "dix-huit";
-                break;
-            case 17:
-                result += "dix-sept";
-                break;
-            case 16:
-                result += "seize";
-                break;
-            case 15:
-                result += "quinze";
-                break;
-            case 14:
-                result += "quatorze";
-                break;
-            case 13:
-                result += "treize";
-                break;
-            case 12:
-                result += "douze";
-                break;
-            case 11:
-                result += "onze";
-                break;
-            case 10:
-                result += "dix";
-                break;
-            case 9:
-                result += "neuf";
-                break;
-            case 8:
-                result += "huit";
-                break;
-            case 7:
-                result += "sept";
-                break;
-            case 6:
-                result += "six";
-                break;
-            case 5:
-                result += "cinq";
-                break;
-            case 4:
-                result += "quatre";
-                break;
-            case 3:
-                result += "trois";
-                break;
-            case 2:
-                result += "deux";
-                break;
-            case 1:
-                result += "un";
-                break;
-            default:
-                result += "";
-        }
+        return "zéro";
     }
-
-    return result;
-    }
+  }
 
   React.useEffect(() => {
     const date = new Date();
@@ -199,20 +228,22 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
   };
 
   useEffect(() => {
-    // Dynamically create a <style> element
     const styleElement = document.createElement('style');
-
-    // Define the printing styles based on the state variable
     const printingStyles = `
         @media print {
           .check {
+            position: relative !important;
+            left: ${Number(settingimprimante?.cheque_margin_top)}px !important;
+            
+            /* THIS IS THE TOP SIDE OF THE PAPER IN REAL MODE - IF YOU WANNA INCREASE THE MARGIN, REDUCE MORE PX*/
+            margin-left: -0px !important;
 
-            margin-left: -${189 - (Number(settingimprimante?.cheque_margin_top) || 0)}px !important;
-            margin-top: ${189 + (Number(settingimprimante?.cheque_margin_left) || 0)}px;
+            /* THIS IS THE RIGHT SIDE OF THE PAPER IN REAL MODE - IF YOU WANNA INCREASE THE MARGIN, ADD MORE PX */
+            margin-top: ${180 + (Number(settingimprimante?.cheque_margin_left) || 0)}px;
+
             transform: rotate(${Number(settingimprimante?.cheque_rotation_degree) || 0}deg);
-
           }
-           ${settingimprimante?.cheque_extra_css ?? ''}
+          ${settingimprimante?.cheque_extra_css ?? ''}
         }
     `;
 
@@ -264,11 +295,11 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                   const fournisseurNom = selectedFournisseur ? selectedFournisseur.nom : '';
 
                   return (
-                    <div className={`print`} id={`print-${index}`} key={`print-${index}`}>  
+                    <div className={`check-only-main-div print`} id={`print-${index}`} key={`print-${index}`}>  
                       {/* <span className='num_check_header'>Chéque n°{check.num}</span> */}
                       <div 
                         key={index} 
-                        className="grid grid-cols-12 check"  
+                        className="grid grid-cols-12 check check-only"  
                         id={`check-${index}`} 
                         style={{ 
                           width: '687.87401575px', 
@@ -276,11 +307,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                           display: 'block', 
                           border: '1px solid #ddd', 
                           borderRadius: '3px', 
-                          pageBreakBefore: 'always',
-                          '@media print': {
-                            marginTop: '189px !important',
-                            marginLeft: '-189px !important',
-                          },
+                          pageBreakBefore: 'always'
                         }}
                       >
                         <img src={atbImage} alt="Check" />
@@ -288,24 +315,28 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                           <span className="check_data num_check" id={`montant-${index}`} style={{left: '80px', top: '28px'}}>
                             <b>{check?.num ?? '------'}</b>
                           </span>
-                          <span className="check_data montant" id={`montant-${index}`} style={{left: '540px', top: '21px'}}>
+                          <span className="check_data montant check-only-amount" id={`montant-${index}`} style={{left: '540px', top: '21px'}}>
                             {/* {check?.montant?.toLocaleString('fr-FR') || '------------'} */}
-                            #{(check?.montant || 0).toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}#
+                            #{
+                              (check?.montant || 0).toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).toString().replace(',', '.').replace(/\B(?=(\d{3})+(?!\d))/g,' ')
+                            }#
                           </span>
-                          <span className="check_data montant_ecrit montant_ecrit_line1" id={`montant_ecrit_line1-${index}`} style={{left: 'calc(50% + 30px)', top: '65px'}}>
-                            {`${numberToWordsFR(check?.montant || 0)} dinars`.split(' ', 4).join(' ')}
+                          <span className="check_data montant_ecrit montant_ecrit_line1" id={`montant_ecrit_line1-${index}`} style={{left: 'calc(50% + 30px)', top: '65px', textWrap: 'nowrap'}}>
+                            {`${numberToWordsFR(check?.montant || 0)}`.split(' ', 4).join(' ')}
                           </span>
                           <span className="check_data montant_ecrit montant_ecrit_line2" id={`montant_ecrit_line2-${index}`} style={{left: 'calc(50% + 30px)', top: '90px'}}>
-                            {`${numberToWordsFR(check?.montant || 0)} dinars`.split(' ').slice(4).join(' ')}
+                            {`${numberToWordsFR(check?.montant || 0)}`.split(' ').slice(4).join(' ')}
                           </span>
                           <span className="check_data montant_to" id={`montant_to-${index}`} style={{left: '110px', top: '120px'}}>
                             {fournisseurNom || '----------------------------------------------------'}
                           </span>
-                          <span className="check_data date montant_a_fr" style={{left: '230px'}}>{settings.paye_de_signature ?? 'Kélibia'}</span>
-                          <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '315px'}}>
-                            {moment(check.dueDate).format('DD/MM/YYYY') || '--/--/----'}
-                          </span>
-                          <span className="check_data date montant_a_ar" style={{left: '430px'}}>{settings.paye_de_signature_ar ?? 'قليبية'}</span>
+                          <div className='bottom_date_div' style={{position: 'absolute', top: 0, left: '0'}}>
+                            <span className="check_data date montant_a_fr" style={{left: '230px'}}>{settings.paye_de_signature ?? 'Kélibia'}</span>
+                            <span className="check_data date montant_le" id={`montant_le-${index}`} style={{left: '315px'}}>
+                              {moment(check.dueDate).format('DD/MM/YYYY') || '--/--/----'}
+                            </span>
+                            <span className="check_data date montant_a_ar" style={{left: '430px'}}>{settings.paye_de_signature_ar ?? 'قليبية'}</span>
+                          </div>
                         </div>
                       </div>
                     </div>

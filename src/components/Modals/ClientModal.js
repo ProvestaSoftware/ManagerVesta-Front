@@ -95,7 +95,7 @@ const ClientModal = ({ item, handleModal}) => {
                                         defaultValue={clientData.email}
                                         name="email"
                                         id="email"
-                                        type="email"
+                                        type="text"
                                         form={true}
                                         onChange={(e) =>
                                             setClientData({ ...clientData, email: e.target.value })

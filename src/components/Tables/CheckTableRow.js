@@ -53,7 +53,7 @@ const CheckTableRow = ({ item, fournisseurs ,settings,key,settingimprimante}) =>
          
     return (
         <>
-            <tr className={`bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600`} style={{ backgroundColor: item.is_deleted === 1 ? 'rgb(252, 102, 129)' : '',color: item.is_deleted === 1 ? 'white' : '' }}> 
+            <tr className={`bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600`} style={{ backgroundColor: item.is_deleted === 1 ? 'rgba(252, 102, 129, 0.4)' : '',color: item.is_deleted === 1 ? 'black' : '' }}> 
                 <td class="px-6 py-4">
                   #{item?.num} aa {key}
                 </td>
@@ -82,7 +82,7 @@ const CheckTableRow = ({ item, fournisseurs ,settings,key,settingimprimante}) =>
                 <td class="px-6 py-4">
                         {
                             item.is_deleted === 1 ? (
-                                <span style={{color: 'white'}}>
+                                <span style={{color: 'black'}}>
                                     {moment(item?.dueDate).locale('fr').format("DD MMMM YYYY")}
                                 </span>
                             ) : moment(item.dueDate).diff(moment(), 'days') <= 0 ? (

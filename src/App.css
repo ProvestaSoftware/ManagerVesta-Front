@@ -131,11 +131,19 @@
 }
 
 .popup-container {
-  position: absolute;
-  top: 50%;
-  left: 60%;
+  position: fixed;
+  top: 40%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1000;
+  min-width: 320px;
+  max-width: 600px;
+  z-index: 999999999999999999999999999999;
+}
+
+@media (min-width: 640px) {
+  .popup-container {
+    left: 60%;
+  }
 }
 
 .event-popup-text {

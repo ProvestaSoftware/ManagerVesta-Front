@@ -98,10 +98,11 @@ const Print = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setPaymentData({ ...paymentData, [name]: value });
+    let val = value.replace(/\s/g, "")
+    setPaymentData({ ...paymentData, [name]: val });
   
     const requiredFieldsFilled =
-      paymentData.montantTotal && paymentData.fournisseur_id;
+      paymentData.montantTotal && paymentData.fournisseur_id && paymentData.fournisseur_id > 0;
   
     setIsAddCheckDisabled(!requiredFieldsFilled);
   };
@@ -120,10 +121,10 @@ const Print = () => {
     setIsLoading(true);
   
     try {
-      const totalMontant = checkGroupData.reduce((sum, item) => sum + (item.montant || 0), 0);
-  
-      if (totalMontant != parseInt(paymentData.montantTotal, 10)) {
-        alert("Total montant does not match montant Total. Please check the values.");
+      const totalMontant = checkGroupData.reduce((sum, item) => sum + Number(item.montant || 0), 0);
+
+      if ( totalMontant != paymentData.montantTotal ) {
+        alert("Le montant total entre les paiements ne correspond pas au montant total globale. Veuillez vérifier les valeurs.");
         return;
       }
   
@@ -152,7 +153,7 @@ const Print = () => {
       await filterDataByFournisseurId(checks, updatedPaymentData.fournisseur_id);
   
       if (event) {
-        navigate('/cheques-fournisseurs');
+        navigate('/payment');
       }
   
       let newCurrentCheckNumber = currentCheckNumber;
@@ -193,7 +194,8 @@ const Print = () => {
       const totalAmount = parseFloat(paymentData.montantTotal);
       const numChecks = parseInt(numberOfChecks, 10);
   
-      const baseAmount = Math.floor(totalAmount / numChecks);
+      // const baseAmount = Math.floor(totalAmount / numChecks);
+      const baseAmount = totalAmount / numChecks;
       const remainingAmount = totalAmount - baseAmount * numChecks;
   
       const updatedCheckGroupData = Array(numChecks).fill({}).map((_, index) => {
@@ -223,16 +225,19 @@ const Print = () => {
   
   const addCheck = (e) => {
     e.preventDefault();
-    setFilteredData([]);
-    calculateCheckAmounts();
-  
-    setCheckGroupData((prevData) =>
-      prevData.map((item, index) => ({
-        ...item,
-        num: checkType === 'Chéque' ? Number(currentCheckNumber) + index + 1 : item.num,
-      }))
-    );
-    setMontantError("")
+    
+    if( paymentData.fournisseur_id && paymentData.fournisseur_id > 0 && paymentData.montantTotal && paymentData.montantTotal > 0 && numberOfChecks && numberOfChecks > 0){
+      setFilteredData([]);
+      calculateCheckAmounts();
+    
+      setCheckGroupData((prevData) =>
+        prevData.map((item, index) => ({
+          ...item,
+          num: checkType === 'Chéque' ? Number(currentCheckNumber) + index + 1 : item.num,
+        }))
+      );
+      setMontantError("")
+    }
   };
 
   const [checkType, setCheckType] = useState("Chéque");
@@ -316,28 +321,32 @@ const handleMontanteBlur = (newValue, changed_input_id = null) => {
   let total_amount = 0;
   let totalMontantReste = 0;
   const montantValues = newValue.map((item, index) => {
-    let montant = parseFloat(item.montant || 0 || 10);
+    // let montant = parseFloat(item.montant || 0);
+    let montant = item.montant || 0;
     totalMontantReste += index+1 <= changed_input_id ? Number(montant) : 0;
     return montant
   });
 
   if (totalMontantReste != 0) {
-    const difference = parseFloat(paymentData?.montantTotal) - totalMontantReste;
+    // const difference = parseFloat(paymentData?.montantTotal) - totalMontantReste;
+    const difference = (paymentData?.montantTotal) - totalMontantReste;
     if (checkGroupData.length >= 2) {
       if (difference >= 0) {
         const numChecks = checkGroupData.length - changed_input_id;
-        const baseAmount = Math.floor(difference / numChecks);
+        // const baseAmount = Math.floor(difference / numChecks);
+        const baseAmount = difference / numChecks
         const remainingAmount = difference - baseAmount * numChecks;
         
         const updatedCheckGroupData = newValue.map((item, index) => {
           if (index >= changed_input_id) {
             item = {
               ...item,
-              montant: Math.floor(difference / numChecks ) + ((index - changed_input_id) < remainingAmount ? 1 : 0),
+              // montant: Math.floor(difference / numChecks ) + ((index - changed_input_id) < remainingAmount ? 1 : 0),
+              montant: (difference / numChecks ),
             };
           }
 
-          total_amount += item.montant
+          total_amount += Number(item.montant)
           return item;
         });
 
@@ -345,7 +354,8 @@ const handleMontanteBlur = (newValue, changed_input_id = null) => {
       }
     }
   }
-
+  console.log('total_amount', total_amount)
+  console.log('paymentData.montantTotal', paymentData.montantTotal)
   if( total_amount != paymentData.montantTotal){
     setMontantError("Le total ne correspond pas à montant Total. Vérifiez les valeurs");
   }else{
@@ -368,9 +378,9 @@ const formatNumberWithSpaces = (number) => {
       handleDateBlur(formattedDate, id);
     } else if (field === 'montant') {
       value = value.replace(/\s/g, "")
-      console.log('value', value)
-      const formattedMontant = parseFloat(value || 0, 10);
-      console.log('formattedMontant', formattedMontant)
+      // const formattedMontant = parseFloat(value || 0);
+      const formattedMontant = value;
+
       let newValue = checkGroupData.map((item) =>
         item.id === id ? { ...item, [field]: formattedMontant } : item
       )
@@ -531,7 +541,8 @@ const formatNumberWithSpaces = (number) => {
                 type="text"
                 name="montantTotal"
                 onChange={handleChange}
-                value={paymentData?.montantTotal || ''}
+                // value={paymentData?.montantTotal || ''}
+                value={paymentData?.montantTotal?.toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).toString().replace(',', '.').replace(/\B(?=(\d{3})+(?!\d))/g,' ') ?? ''}
               />
               <Input
                   label="Nombre d'écheances:"
@@ -545,7 +556,7 @@ const formatNumberWithSpaces = (number) => {
               <RegularButton
                 styleType="print-btn"
                 onClick={addCheck}
-                // disabled={!isAddCheckDisabled}
+                disabled={!isAddCheckDisabled}
               >
                 <BsCheckLg />
               </RegularButton>
@@ -581,7 +592,7 @@ const formatNumberWithSpaces = (number) => {
                         label="Montant:"
                         placeholder="Montant en dinars"
                         type="text"
-                        value={(checkGroupData[index].montant)?.toString().replace(/\B(?=(\d{3})+(?!\d))/g,' ')}
+                        value={(checkGroupData[index].montant)?.toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).toString().replace(',', '.').replace(/\B(?=(\d{3})+(?!\d))/g,' ')}
                         name="montant"
                         onChange={(e) => handleInputChange(item.id, 'montant', e.target.value)}
                         onBlur={() => handleMontanteBlur()}

@@ -49,7 +49,7 @@ const ClientTableRow = ({ item, index, color }) => {
     const created_at = new Date(item.created_at);
 
     const formatPhoneNumber = (phoneNumber) => {
-        return phoneNumber.replace(/(\d{2})(\d{3})(\d{3})/, '$1 $2 $3');
+        return phoneNumber?.replace(/(\d{2})(\d{3})(\d{3})/, '$1 $2 $3');
       };
     return (
         <>

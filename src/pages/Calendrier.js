@@ -26,29 +26,29 @@ const Calendrier = () => {
     const handleEventClick = event => {
         setSelectedEvent(event);
         setIsPopupOpen(true);
-      };
-    
-      const handleClosePopup = () => {
+    };
+
+    const handleClosePopup = () => {
         setSelectedEvent(null);
         setIsPopupOpen(false);
-      };
+    };
     const getData = () => {
         setLoader(true)
         ChecksClients.getAll()
-          .then(res => {
-            setCheckClient(res.data)
-          })
-          .catch(err => {
-            console.log(err)
-          })
-          .finally(() => {
-            setLoader(false)
-          })
-      }
-    
-      useEffect(() => {
+            .then(res => {
+                setCheckClient(res.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+            .finally(() => {
+                setLoader(false)
+            })
+    }
+
+    useEffect(() => {
         getData()
-      }, [])
+    }, [])
 
     useEffect(() => {
         // Fetch data here
@@ -58,14 +58,14 @@ const Calendrier = () => {
             })
             .catch((err) => {
                 console.log(err);
-                setLoader(false); 
+                setLoader(false);
             });
     }, [dispatch]);
-    const today = new Date(); 
+    const today = new Date();
 
     const formatNumberWithSpaces = (number) => {
         return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-      };
+    };
 
     const events = [...checks, ...checkclient].map((eventItem) => ({
         id: eventItem.id,
@@ -73,10 +73,10 @@ const Calendrier = () => {
         start: new Date(eventItem.dueDate),
         end: new Date(eventItem.dueDate),
         type: eventItem?.type,
-        status:eventItem?.status,
+        status: eventItem?.status,
         cheque: eventItem
     }));
-        const eventStyleGetter = (event) => {
+    const eventStyleGetter = (event) => {
 
         let backgroundColor;
 
@@ -103,21 +103,21 @@ const Calendrier = () => {
                     color: '#be0c0c',
                     border: '2px solid #be0c0c',
                     opacity: 0.7,
-                    backgroundColor : backgroundColor
+                    backgroundColor: backgroundColor
                 },
             };
-            
-        }else if(event?.start < today ){
+
+        } else if (event?.start < today) {
             return {
                 style: {
                     opacity: 0.5,
-                    backgroundColor : backgroundColor
+                    backgroundColor: backgroundColor
                 },
             };
         }
 
         return {
-             style: {
+            style: {
                 backgroundColor,
             },
         };
@@ -125,29 +125,30 @@ const Calendrier = () => {
     const [settingimprimante, setSettingImprimante] = useState(null);
 
     const getImprimanteId = () => {
-      const selectedPrinterId = localStorage.getItem('selectedPrinterId');
+        const selectedPrinterId = localStorage.getItem('selectedPrinterId');
         ImprimanteService.getById(selectedPrinterId ?? 0)
-          .then((imprimante) => {
-            setSettingImprimante(imprimante.data);
-          })
-          .catch((error) => {
-            console.error('Error retrieving selected Imprimante:', error);
-          });
+            .then((imprimante) => {
+                setSettingImprimante(imprimante.data);
+            })
+            .catch((error) => {
+                console.error('Error retrieving selected Imprimante:', error);
+            });
     };
-    
+
     useEffect(() => {
-      getImprimanteId();
+        getImprimanteId();
     }, []);
     return (
-        <ContentWrapper>
-            <div className='calendar-wrapper'>
-                <div>
-                    <PageTitle>Calendrier</PageTitle>
-                </div>
-                <RegularDivider />
-                <div className={isPopupOpen ? 'calendar-overlay active' : 'calendar-overlay'}></div>
-                {loader ? (
-                   <Skeleton count={5} />
+        <>
+            <ContentWrapper>
+                <div className='calendar-wrapper'>
+                    <div>
+                        <PageTitle>Calendrier</PageTitle>
+                    </div>
+                    <RegularDivider />
+                    <div className={isPopupOpen ? 'calendar-overlay active' : 'calendar-overlay'}></div>
+                    {loader ? (
+                        <Skeleton count={5} />
                     ) : (
                         <Calendar
                             titleAccessor="montant"
@@ -159,88 +160,90 @@ const Calendrier = () => {
                             style={{ height: '500px', marginTop: '20px', border: '1px solid #ddd', borderRadius: '5px' }}
                             onSelectEvent={handleEventClick}
                             className={isPopupOpen ? 'calendar-with-overlay' : ''}
-                            />
-                )}
-                    {selectedEvent && (
-                        <div className="popup-container">
-                            <EventPopup event={selectedEvent} onClose={handleClosePopup} settingimprimante={settingimprimante} />
-                        </div>
-                        )}
-          <div className="legend">
-            <span className="legend-item" style={{ marginRight: '20px' }}>
-                <span
-                className="legend-color"
-                style={{
-                    backgroundColor: '#00a3ff',
-                    display: 'inline-block',
-                    width: '15px',
-                    height: '15px',
-                    marginRight: '5px',
-                    borderRadius: '50%',
-                }}
-                ></span>
-                Chèque Fournisseur
-            </span>
-            <span className="legend-item" style={{ marginRight: '20px' }}>
-                <span
-                className="legend-color"
-                style={{
-                    backgroundColor: '#0c498f',
-                    display: 'inline-block',
-                    width: '15px',
-                    height: '15px',
-                    marginRight: '5px',
-                    borderRadius: '50%',
-                }}
-                ></span>
-                Traire Fournisseur
-            </span>
-            <span className="legend-item" style={{ marginRight: '20px' }}>
-                <span
-                className="legend-color"
-                style={{
-                    backgroundColor: '#13ab50',
-                    display: 'inline-block',
-                    width: '15px',
-                    height: '15px',
-                    marginRight: '5px',
-                    borderRadius: '50%',
-                }}
-                ></span>
-                Chèque Client
-            </span>
-            <span className="legend-item" style={{ marginRight: '20px' }}>
-                <span
-                className="legend-color"
-                style={{
-                    backgroundColor: '#cfd323',
-                    display: 'inline-block',
-                    width: '15px',
-                    height: '15px',
-                    marginRight: '5px',
-                    borderRadius: '50%',
-                }}
-                ></span>
-                Traire Client
-            </span>
-            <span className="legend-item" style={{ marginRight: '20px' }}>
-                <span
-                className="legend-color"
-                style={{
-                    backgroundColor: 'red',
-                    display: 'inline-block',
-                    width: '15px',
-                    height: '15px',
-                    marginRight: '5px',
-                    borderRadius: '50%',
-                }}
-                ></span>
-                Date de chèque dépassée
-            </span>
-            </div>
+                        />
+                    )}
 
-            </div>
-        </ContentWrapper>
+                    <div className="legend">
+                        <span className="legend-item" style={{ marginRight: '20px' }}>
+                            <span
+                                className="legend-color"
+                                style={{
+                                    backgroundColor: '#00a3ff',
+                                    display: 'inline-block',
+                                    width: '15px',
+                                    height: '15px',
+                                    marginRight: '5px',
+                                    borderRadius: '50%',
+                                }}
+                            ></span>
+                            Chèque Fournisseur
+                        </span>
+                        <span className="legend-item" style={{ marginRight: '20px' }}>
+                            <span
+                                className="legend-color"
+                                style={{
+                                    backgroundColor: '#0c498f',
+                                    display: 'inline-block',
+                                    width: '15px',
+                                    height: '15px',
+                                    marginRight: '5px',
+                                    borderRadius: '50%',
+                                }}
+                            ></span>
+                            Traire Fournisseur
+                        </span>
+                        <span className="legend-item" style={{ marginRight: '20px' }}>
+                            <span
+                                className="legend-color"
+                                style={{
+                                    backgroundColor: '#13ab50',
+                                    display: 'inline-block',
+                                    width: '15px',
+                                    height: '15px',
+                                    marginRight: '5px',
+                                    borderRadius: '50%',
+                                }}
+                            ></span>
+                            Chèque Client
+                        </span>
+                        <span className="legend-item" style={{ marginRight: '20px' }}>
+                            <span
+                                className="legend-color"
+                                style={{
+                                    backgroundColor: '#cfd323',
+                                    display: 'inline-block',
+                                    width: '15px',
+                                    height: '15px',
+                                    marginRight: '5px',
+                                    borderRadius: '50%',
+                                }}
+                            ></span>
+                            Traire Client
+                        </span>
+                        <span className="legend-item" style={{ marginRight: '20px' }}>
+                            <span
+                                className="legend-color"
+                                style={{
+                                    backgroundColor: 'red',
+                                    display: 'inline-block',
+                                    width: '15px',
+                                    height: '15px',
+                                    marginRight: '5px',
+                                    borderRadius: '50%',
+                                }}
+                            ></span>
+                            Date de chèque dépassée
+                        </span>
+                    </div>
+
+                </div>
+            </ContentWrapper>
+            {selectedEvent && (
+                <div className="popup-container">
+                    <EventPopup event={selectedEvent} onClose={handleClosePopup} settingimprimante={settingimprimante} />
+                </div>
+            )}
+        </>
     );
 };
 

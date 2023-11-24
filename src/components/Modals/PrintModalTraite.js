@@ -7,164 +7,192 @@ import { ImprimanteService } from '../../_services/imprimante.service';
 
 const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,settingimprimante }) => {
 
-  console.log('settingimprimante',settingimprimante)
   function numberToWordsFR(num) {
-    if (isNaN(num) || num < 1 || num > 999999999) {
-        return "------------";
+    // num = num.toString().replace(',', '.');
+
+    function convert(num) {
+      if (isNaN(num) || num < 0 || num > 999999999999) {
+          return "------------";
+      }
+
+      let result = "";
+
+      // handle millions
+      if (num >= 1000000000) {
+        result += convert(Math.floor(num / 1000000000)) + " milliard ";
+        num %= 1000000000;
     }
 
-    let result = "";
+      // handle millions
+      if (num >= 1000000) {
+          result += convert(Math.floor(num / 1000000)) + " million ";
+          num %= 1000000;
+      }
 
-    // handle millions
-    if (num >= 1000000) {
-        result += numberToWordsFR(Math.floor(num / 1000000)) + " million ";
-        num %= 1000000;
+      // handle thousands
+      if (num >= 1000) {
+          result += convert(Math.floor(num / 1000)) + " mille ";
+          num %= 1000;
+      }
+
+      // handle hundreds
+      if (num >= 100) {
+          result += convert(Math.floor(num / 100)) + " cent ";
+          num %= 100;
+      }
+
+      // handle tens and units
+      if (num >= 20) {
+          var is_90_or_70 = false;
+          switch (Math.floor(num / 10)) {
+              case 9:
+                  result += "quatre-vingt";
+                  is_90_or_70 = true;
+                  break;
+              case 8:
+                  result += "quatre-vingt";
+                  break;
+              case 7:
+                  result += "soixante";
+                  is_90_or_70 = true;
+                  break;
+              case 6:
+                  result += "soixante";
+                  break;
+              case 5:
+                  result += "cinquante";
+                  break;
+              case 4:
+                  result += "quarante";
+                  break;
+              case 3:
+                  result += "trente";
+                  break;
+              case 2:
+                  result += "vingt";
+                  break;
+              default:
+                  result += "";
+          }
+
+          if (num % 10 !== 0) {
+              result += "-";
+          }
+
+          switch (num % 10) {
+              case 9:
+                  result += is_90_or_70 ? "dix-neuf" : "neuf";
+                  break;
+              case 8:
+                  result += is_90_or_70 ? "dix-huit" : "huit";
+                  break;
+              case 7:
+                  result += is_90_or_70 ? "dix-sept" : "sept";
+                  break;
+              case 6:
+                  result += is_90_or_70 ? "seize" : "six";
+                  break;
+              case 5:
+                  result += is_90_or_70 ? "quinze" : "cinq";
+                  break;
+              case 4:
+                  result += is_90_or_70 ? "quatorze" : "quatre";
+                  break;
+              case 3:
+                  result += is_90_or_70 ? "treize" : "trois";
+                  break;
+              case 2:
+                  result += is_90_or_70 ? "douze" : "deux";
+                  break;
+              case 1:
+                  result += is_90_or_70 ? "onze" : "un";
+                  break;
+              default:
+                  result += "";
+          }
+      } else {
+          switch (num) {
+              case 19:
+                  result += "dix-neuf";
+                  break;
+              case 18:
+                  result += "dix-huit";
+                  break;
+              case 17:
+                  result += "dix-sept";
+                  break;
+              case 16:
+                  result += "seize";
+                  break;
+              case 15:
+                  result += "quinze";
+                  break;
+              case 14:
+                  result += "quatorze";
+                  break;
+              case 13:
+                  result += "treize";
+                  break;
+              case 12:
+                  result += "douze";
+                  break;
+              case 11:
+                  result += "onze";
+                  break;
+              case 10:
+                  result += "dix";
+                  break;
+              case 9:
+                  result += "neuf";
+                  break;
+              case 8:
+                  result += "huit";
+                  break;
+              case 7:
+                  result += "sept";
+                  break;
+              case 6:
+                  result += "six";
+                  break;
+              case 5:
+                  result += "cinq";
+                  break;
+              case 4:
+                  result += "quatre";
+                  break;
+              case 3:
+                  result += "trois";
+                  break;
+              case 2:
+                  result += "deux";
+                  break;
+              case 1:
+                  result += "un";
+                  break;
+              default:
+                  result += "";
+          }
+      }
+
+      return result;
     }
 
-    // handle thousands
-    if (num >= 1000) {
-        result += numberToWordsFR(Math.floor(num / 1000)) + " mille ";
-        num %= 1000;
-    }
+    let dinars = Math.floor(Number(num));
+    let millimes = Math.round(Number(num - dinars) * 1000);
 
-    // handle hundreds
-    if (num >= 100) {
-        result += numberToWordsFR(Math.floor(num / 100)) + " cent ";
-        num %= 100;
-    }
+    let dinarsText = convert(dinars);
+    let millimesText = convert(millimes);
 
-    // handle tens and units
-    if (num >= 20) {
-        switch (Math.floor(num / 10)) {
-            case 9:
-                result += "quatre-vingt";
-                break;
-            case 8:
-                result += "quatre-vingt";
-                break;
-            case 7:
-                result += "soixante";
-                break;
-            case 6:
-                result += "soixante";
-                break;
-            case 5:
-                result += "cinquante";
-                break;
-            case 4:
-                result += "quarante";
-                break;
-            case 3:
-                result += "trente";
-                break;
-            case 2:
-                result += "vingt";
-                break;
-            default:
-                result += "";
-        }
-
-        if (num % 10 !== 0) {
-            result += "-";
-        }
-
-        switch (num % 10) {
-            case 9:
-                result += "neuf";
-                break;
-            case 8:
-                result += "huit";
-                break;
-            case 7:
-                result += "sept";
-                break;
-            case 6:
-                result += "six";
-                break;
-            case 5:
-                result += "cinq";
-                break;
-            case 4:
-                result += "quatre";
-                break;
-            case 3:
-                result += "trois";
-                break;
-            case 2:
-                result += "deux";
-                break;
-            case 1:
-                result += "un";
-                break;
-            default:
-                result += "";
-        }
+    if (dinarsText && millimesText) {
+        return dinarsText + " dinars et " + millimesText + " millimes";
+    } else if (dinarsText) {
+        return dinarsText + " dinars";
+    } else if (millimesText) {
+        return millimesText + " millimes";
     } else {
-        switch (num) {
-            case 19:
-                result += "dix-neuf";
-                break;
-            case 18:
-                result += "dix-huit";
-                break;
-            case 17:
-                result += "dix-sept";
-                break;
-            case 16:
-                result += "seize";
-                break;
-            case 15:
-                result += "quinze";
-                break;
-            case 14:
-                result += "quatorze";
-                break;
-            case 13:
-                result += "treize";
-                break;
-            case 12:
-                result += "douze";
-                break;
-            case 11:
-                result += "onze";
-                break;
-            case 10:
-                result += "dix";
-                break;
-            case 9:
-                result += "neuf";
-                break;
-            case 8:
-                result += "huit";
-                break;
-            case 7:
-                result += "sept";
-                break;
-            case 6:
-                result += "six";
-                break;
-            case 5:
-                result += "cinq";
-                break;
-            case 4:
-                result += "quatre";
-                break;
-            case 3:
-                result += "trois";
-                break;
-            case 2:
-                result += "deux";
-                break;
-            case 1:
-                result += "un";
-                break;
-            default:
-                result += "";
-        }
+        return "zéro";
     }
-
-    return result;
-    }
+  }
 
   React.useEffect(() => {
     const date = new Date();
@@ -201,12 +229,16 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
     // Dynamically create a <style> element
     const styleElement = document.createElement('style');
 
-    // Define the printing styles based on the state variable
+      // Define the printing styles based on the state variable
     const printingStyles = `
       @media print {
-        .check {
-          margin-left: -${76 - Number(settingimprimante?.traite_margin_top || 0)}px !important;
-          margin-top: ${113 + Number(settingimprimante?.traite_margin_left || 0)}px !important;
+        .traite {
+          /* THIS IS THE TOP SIDE OF THE PAPER IN REAL MODE - IF YOU WANNA INCREASE THE MARGIN, REDUCE MORE PX*/
+          margin-left: -${355 - Number(settingimprimante?.traite_margin_top || 0)}px !important; 
+          
+          /* THIS IS THE RIGHT SIDE OF THE PAPER IN REAL MODE - IF YOU WANNA INCREASE THE MARGIN, ADD MORE PX */
+          margin-top: ${340 + Number(settingimprimante?.traite_margin_left || 0)}px !important; /* THIS IS THE RIGHT SIDE OF THE PAPER IN REAL MODE */
+          
           transform: rotate(${Number(settingimprimante?.traite_rotation_degree) || 0}deg);
         }
         ${settingimprimante?.traite_extra_css ?? ''}
@@ -235,7 +267,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
   
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 9999 }}>
-      <div style={{ position: 'fixed', top: '0%', left: '50%', transform: 'translate(-50%, 0%)', padding: '20px', borderRadius: '8px', width: '90vh', height: '90vh' }}>
+      <div style={{ position: 'fixed', top: '0%', left: '50%', transform: 'translate(-50%, 0%)', padding: '20px', borderRadius: '8px', width: '100vh', height: '90vh', minWidth: '800px' }}>
         <div className="relative w-full max-h-full">
           <div className="relative bg-white rounded-lg dark:bg-gray-700">
             <div className="check-num-print flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
@@ -278,7 +310,7 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                         id={`check-${index}`} 
                         style={{ 
                           width: '687.87401575px', 
-                          height: '509.92125984px', 
+                          // height: '509.92125984px', 
                           display: 'block', 
                           border: '1px solid #ddd', 
                           borderRadius: '3px', 
@@ -293,15 +325,15 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                           <span className="check_data date montant_due_top" style={{left: '220px',top:'63px'}}>
                             {moment(check.dueDate).format('DD/MM/YYYY') || '--/--/----'}
                           </span>
-                          <span className="check_data date montant_le_top" style={{left: '350px',top:'64px'}}>
+                          <span className="check_data date montant_le_top date_creation_top" style={{left: '350px',top:'64px'}}>
                             {moment(check.created_at).format('DD/MM/YYYY') || '--/--/----'}
                           </span>
-                          <span className="check_data date montant_a_top" style={{left: '350px',top:'46px'}}>
+                          <span className="check_data date montant_a_top top_pays" style={{left: '350px',top:'46px'}}>
                                 {settings?.paye_de_signature}
                           </span>
 
                           <span className="check_data montant checkmontanttop" id={`montant-${index}`} style={{left: '540px', top: '97px'}}>
-                            #{(check?.montant || 0).toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}#
+                            #{(check?.montant || 0).toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).toString().replace(',', '.').replace(/\B(?=(\d{3})+(?!\d))/g,' ')}#
                           </span>
                           <span className="check_data montant segments_top segments1" id={`montant-${index}`} style={{left: '200px', top: '97px'}}>
                               {segments1}
@@ -319,25 +351,27 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                           <span className="check_data montant checkmontantbas" id={`montant-${index}`} style={{ left: '540px', top: '155px' }}>
                             #{(check?.montant || 0).toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}#
                           </span>
+                          
                           <span className="check_data montant_to" id={`montant_to-${index}`} style={{left: '360px', top: '160px', transform: 'translate(-50%, 0%)'}}>
                             {fournisseurNom || '-------------------------------'}
                           </span>
-                          <span className="check_data montant_ecrit montant_ecrit_line1" id={`montant_ecrit_line1-${index}`} style={{left: '360px', top: '190px', lineHeight: '15px', width: '650px'}}>
-                            {`${numberToWordsFR(check?.montant || 0)} dinars`}
+                          <span className="check_data montant_ecrit montant_ecrit_line1" id={`montant_ecrit_line1-${index}`} style={{top: '190px', lineHeight: '15px', width: '650px', textAlign: 'center'}}>
+                            {`${numberToWordsFR(check?.montant || 0)}`}
                           </span>
                           {/* <span className="check_data montant_ecrit montant_ecrit_line2" id={`montant_ecrit_line2-${index}`} style={{left: 'calc(50% + 30px)', top: '90px'}}>
                             {`${numberToWordsFR(check?.montant || 0)} dinars`.split(' ').slice(4).join(' ')}
                           </span> */}
-                         
-                          <span className="check_data date created_at" id={`montant_le-${index}`} style={{left: '130px',top:'225px'}}>
-                            {moment(check.created_at).format('DD/MM/YYYY') || '--/--/----'}
-                          </span>
-                          <span className="check_data date dueDate" id={`montant_le-${index}`} style={{left: '235px',top:'225px'}}>
-                            {moment(check.dueDate).format('DD/MM/YYYY') || '--/--/----'}
-                          </span>
-                          <span className="check_data date paye montant_a_bottom" style={{left: '10px',top:'229px', width: '100px', lineHeight: '12px'}}>
-                            {settings?.paye_de_signature}
-                          </span>
+                          <div className='middle_dates_div' style={{position: 'absolute', top: '0'}}>
+                            <span className="check_data date created_at" id={`montant_le-${index}`} style={{left: '130px',top:'225px'}}>
+                              {moment(check.created_at).format('DD/MM/YYYY') || '--/--/----'}
+                            </span>
+                            <span className="check_data date dueDate" id={`montant_le-${index}`} style={{left: '235px',top:'225px'}}>
+                              {moment(check.dueDate).format('DD/MM/YYYY') || '--/--/----'}
+                            </span>
+                            <span className="check_data date paye montant_a_bottom" style={{left: '10px',top:'229px', width: '100px', lineHeight: '12px'}}>
+                              {settings?.paye_de_signature}
+                            </span>
+                          </div>
 
 
                           <span className="check_data date business_name" style={{left: '330px',top:'300px',maxWidth: '100px',maxHeight:'100px',textAlign: 'center'}}>
@@ -347,19 +381,20 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                             {settings?.bank_name}
                           </span>
 
-                          <span className="check_data date segments_bottom segments11" id={`montant_le-${index}`} style={{left: '22px',top:'265px'}}>
-                                {segments1}
-                          </span>
-                          <span className="check_data date segments_bottom segments22" id={`montant_le-${index}`} style={{left: '50px',top:'265px'}}>
-                                {segments2}
-                          </span>
-                          <span className="check_data date segments_bottom segments33" id={`montant_le-${index}`} style={{left: '95px',top:'265px'}}>
-                                {segments3}
-                          </span>
-                          <span className="check_data date segments_bottom segments44" id={`montant_le-${index}`} style={{left: '275px',top:'265px'}}>
-                                {segments4}
-                          </span>
-
+                          <div className='bottom_segments_div' style={{position: 'absolute', top: '0'}}>
+                            <span className="check_data date segments_bottom segments11" id={`montant_le-${index}`} style={{left: '22px',top:'265px'}}>
+                                  {segments1}
+                            </span>
+                            <span className="check_data date segments_bottom segments22" id={`montant_le-${index}`} style={{left: '50px',top:'265px'}}>
+                                  {segments2}
+                            </span>
+                            <span className="check_data date segments_bottom segments33" id={`montant_le-${index}`} style={{left: '95px',top:'265px'}}>
+                                  {segments3}
+                            </span>
+                            <span className="check_data date segments_bottom segments44" id={`montant_le-${index}`} style={{left: '275px',top:'265px'}}>
+                                  {segments4}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
