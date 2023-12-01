@@ -581,7 +581,7 @@ const formatNumberWithSpaces = (number) => {
           {checkGroupData.map((item, index) => (
             <div key={item.id} style={{marginBottom: '20px'}}>
               <form key={index}>
-                <div className='check-print-form-container'>
+                <div className='check-print-form'>
                   <p>{index + 1}.</p>
                   <Input
                     label={checkType === 'Chéque' ? "Numéro de chèque:" : "Numéro de traite:"}

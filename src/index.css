@@ -82,25 +82,32 @@ code {
   display: flex;
   flex-wrap: wrap;
 }
-.check-print-form-container {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 15px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+.check-print-form {
+  display: grid;
+  grid-template-columns: auto repeat(3, 1fr) auto;
+  max-width: 100%;
+  margin: 0 auto;
+  grid-gap: 10px;
 }
 
-.check-print-form-container p {
+.check-print-form p {
   width: 100%;
 }
 
-.check-print-form-container input {
+.check-print-form input {
   width: calc(100% - 10px); 
   margin-bottom: 10px;
 }
 
-@media (max-width: 768px) {
-  .check-print-form-container input {
+@media screen and (max-width: 870px) {
+  .check-print-form {
+    display: block; 
+  }
+
+  .check-print-form p,
+  .check-print-form input {
     width: 100%;
   }
 }
+
+
