@@ -33,3 +33,74 @@ code {
 .calendar-overlay.active {
   display: block;
 }
+
+.non-printable {
+  /* Styles non imprimables */
+}
+
+.print-wrapper {
+  /* Styles pour la section d'impression */
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.fixed-loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.fixed-loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+.button-input-container {
+  display: flex;
+  justify-content: end;
+  align-items: flex-end;
+  margin-top: 15px; 
+  width: 100%; 
+  margin-left: auto; 
+} 
+
+.button-input-container .print-btn {
+  margin-left: 10px; /* Ajustez selon vos besoins */
+}
+@keyframes spin {
+   0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.print-form-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.check-print-form-container {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.check-print-form-container p {
+  width: 100%;
+}
+
+.check-print-form-container input {
+  width: calc(100% - 10px); 
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .check-print-form-container input {
+    width: 100%;
+  }
+}

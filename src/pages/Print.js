@@ -92,6 +92,7 @@ const Print = () => {
     montantTotal: '',
     dueDatesNumber: '',
     fournisseur_id: '',
+    numero_de_facture:'',
     checks: checkGroupData,
   });
   const [isAddCheckDisabled, setIsAddCheckDisabled] = useState(false);
@@ -504,118 +505,124 @@ const formatNumberWithSpaces = (number) => {
         </div>
       ) : (
         <div className='print-wrapper'>
-          <div>
-            <PageTitle>Imprimer - {checkType === 'Chéque' ? 'Chéque' : 'Traite'}</PageTitle>
-          </div>
-          <RegularDivider />
-          <div className='print-btn-wrapper'>
-            <RegularButton
-              styleType={checkType === "Traite" ? "secondary" : "primary"}
-              onClick={handleCheckType}
-            >
-              Chéque
-            </RegularButton>
-            <RegularButton
-              styleType={checkType === "Chéque" ? "secondary" : "primary"}
-              onClick={handleTraiteType}
-            >
-              Traite
-            </RegularButton>
-          </div>
-          <form>
-            <div className='print-form-container'>
-              <Select
-                label="Fournisseur:"
-                title="Recherche fournisseurs"
-                options={fournisseurs || ''}
-                name="fournisseur_id"
-                onChange={handleChange}
-                object={false}
-                defaultValue={newfornisseur?.id}
-              />
-              <Input
-                label="Montant total:"
-                placeholder="Montant en dinars"
-                type="text"
-                name="montantTotal"
-                onChange={handleChange}
-                // value={paymentData?.montantTotal || ''}
-                value={paymentData?.montantTotal?.toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).toString().replace(',', '.').replace(/\B(?=(\d{3})+(?!\d))/g,' ') ?? ''}
-              />
-              <Input
-                  label="Nombre d'écheances:"
-                  placeholder="0"
-                  type="number"
-                  name="dueDatesNumber"
-                  onChange={handleChangeNumberOfChecks}
-                  value={numberOfChecks || ''}
-                />
-              {/* )} */}
-              <RegularButton
-                styleType="print-btn"
-                onClick={addCheck}
-                disabled={!paymentData.fournisseur_id || !paymentData.montantTotal || !numberOfChecks}
-                >
-                <BsCheckLg />
-              </RegularButton>
-            </div>
-          </form>
-          <div className='link-wrapper'>
-            <RegularLink
-              content="Ajouter un nouveau fournisseur"
-              onClick={handleModal}
-            />
-          </div>
-          <RegularDivider size="0.5px" />
-          <div className='check-form'>
-            {checkGroupData.map((item, index) => (
-              <div key={item.id} style={{marginBottom: '20px'}}>
-                  <form key={index}>
-                    <div className='check-print-form-container'>
-                      <p>{index + 1}.</p>
-                      <Input
-                      label={checkType === 'Chéque' ? "Numéro de chèque:" : "Numéro de traite:"}
-                      placeholder={checkType === 'Chéque' ? (parseInt(checkGroupData[index].num, 10) + 1).toString() : 'Num traite'}
-                      type="text"
-                      defaultValue={item.num}
-                      name="num"
-                      value={checkType ==='Chéque' ? checkGroupData[index].num : item.num}
-                      onChange={(e) => {
-                        // if (checkType === 'Traite') return; 
-                        handleInputChange(item.id, 'num', e.target.value);
-                      }}
-                      readOnly={checkType === 'Traite'} 
-                      />
-                     <Input
-                        label="Montant:"
-                        placeholder="Montant en dinars"
-                        type="text"
-                        value={(checkGroupData[index].montant)?.toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).toString().replace(',', '.').replace(/\B(?=(\d{3})+(?!\d))/g,' ')}
-                        name="montant"
-                        onChange={(e) => handleInputChange(item.id, 'montant', e.target.value)}
-                        onBlur={() => handleMontanteBlur()}
-                        error={montanterror ? { message: montanterror, type: 'error' } : null}
-                      />
-          {/* {JSON.stringify(checkGroupData)} */}
-                      <Input
-                        label="Date:"
-                        type="date"
-                        inputId={item.id}
-                        defaultValue={item.dueDate}
-                        value={item.dueDate}
-                        name="dueDate"
-                        onChange={(e) => handleInputChange(item.id, 'dueDate', e.target.value)}
-                        onBlur={() => handleDateBlur(item.dueDate, item.id)} 
-                        error={item?.dueDate != "" && inputErrors[item.id]}
-                      />
-                    </div>
-                  </form>
-              </div>
-            ))}
-          </div>
+        <div>
+          <PageTitle>Imprimer - {checkType === 'Chéque' ? 'Chèque' : 'Traite'}</PageTitle>
+        </div>
+        <RegularDivider />
+        <div className='print-btn-wrapper'>
+          <RegularButton
+            styleType={checkType === "Traite" ? "secondary" : "primary"}
+            onClick={handleCheckType}
+          >
+            Chèque
+          </RegularButton>
+          <RegularButton
+            styleType={checkType === "Chéque" ? "secondary" : "primary"}
+            onClick={handleTraiteType}
+          >
+            Traite
+          </RegularButton>
+        </div>
+        <form>
+        <div className='print-form-container'>
+        <Select
+          label="Fournisseur:"
+          title="Recherche fournisseurs"
+          options={fournisseurs || ''}
+          name="fournisseur_id"
+          onChange={handleChange}
+          object={false}
+          defaultValue={newfornisseur?.id}
+        />
+        <Input
+          label="Numéro de facture:"
+          placeholder="Numéro de facture"
+          type="text"
+          name="numero_de_facture"
+          onChange={(e) => handleChange(e, 'numero_de_facture')}
+          value={paymentData.numero_de_facture}
+        />
+        <Input
+          label="Montant total:"
+          placeholder="Montant en dinars"
+          type="text"
+          name="montantTotal"
+          onChange={handleChange}
+          value={paymentData?.montantTotal?.toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).toString().replace(',', '.').replace(/\B(?=(\d{3})+(?!\d))/g,' ') ?? ''}
+        />
+        <Input
+          label="Nombre d'échéances:"
+          placeholder="0"
+          type="number"
+          name="dueDatesNumber"
+          onChange={handleChangeNumberOfChecks}
+          value={numberOfChecks || ''}
+        />
 
-          {(checkGroupData.length > 0) && (
-            <div className='save-print-container'>
+      </div>
+        </form>
+        <div className='link-wrapper'>
+          <RegularLink
+            content="Ajouter un nouveau fournisseur"
+            onClick={handleModal}
+          />
+        </div>
+        <div className="button-input-container">
+          <RegularButton
+            styleType="print-btn"
+            onClick={addCheck}
+            disabled={!paymentData.fournisseur_id || !paymentData.montantTotal || !numberOfChecks}
+          >
+            <BsCheckLg />
+          </RegularButton>
+        </div>
+        <RegularDivider size="0.5px" />
+        <div className='check-form'>
+          {checkGroupData.map((item, index) => (
+            <div key={item.id} style={{marginBottom: '20px'}}>
+              <form key={index}>
+                <div className='check-print-form-container'>
+                  <p>{index + 1}.</p>
+                  <Input
+                    label={checkType === 'Chéque' ? "Numéro de chèque:" : "Numéro de traite:"}
+                    placeholder={checkType === 'Chéque' ? (parseInt(checkGroupData[index].num, 10) + 1).toString() : 'Num traite'}
+                    type="text"
+                    defaultValue={item.num}
+                    name="num"
+                    value={checkType ==='Chéque' ? checkGroupData[index].num : item.num}
+                    onChange={(e) => {
+                      handleInputChange(item.id, 'num', e.target.value);
+                    }}
+                    readOnly={checkType === 'Traite'} 
+                    />
+                   <Input
+                      label="Montant:"
+                      placeholder="Montant en dinars"
+                      type="text"
+                      value={(checkGroupData[index].montant)?.toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).toString().replace(',', '.').replace(/\B(?=(\d{3})+(?!\d))/g,' ')}
+                      name="montant"
+                      onChange={(e) => handleInputChange(item.id, 'montant', e.target.value)}
+                      onBlur={() => handleMontanteBlur()}
+                      error={montanterror ? { message: montanterror, type: 'error' } : null}
+                    />
+                  <Input
+                    label="Date:"
+                    type="date"
+                    inputId={item.id}
+                    defaultValue={item.dueDate}
+                    value={item.dueDate}
+                    name="dueDate"
+                    onChange={(e) => handleInputChange(item.id, 'dueDate', e.target.value)}
+                    onBlur={() => handleDateBlur(item.dueDate, item.id)} 
+                    error={item?.dueDate != "" && inputErrors[item.id]}
+                  />
+                </div>
+              </form>
+            </div>
+          ))}
+        </div>
+        {checkGroupData.length > 0 && (
+          <div className='save-print-container'>
             <RegularButton
               styleType="save-btn"
               onClick={() => {
@@ -630,7 +637,6 @@ const formatNumberWithSpaces = (number) => {
               <FaSave className='btn-icon-left' />
               Sauvegarder
             </RegularButton>
-
             <RegularButton
               styleType="print-save-btn"
               onClick={() => {
@@ -639,15 +645,15 @@ const formatNumberWithSpaces = (number) => {
               }}  
               disabled={isPrintSaveDisabled}
               style={{
-                opacity: isPrintSaveDisabled ? '0.5' : '1',              }}
+                opacity: isPrintSaveDisabled ? '0.5' : '1',
+              }}
             >
               <BsWindowDock className='btn-icon-left' />
               Sauvegarder et Imprimer
             </RegularButton>
           </div>
-          )
-          }
-        </div>
+        )}
+      </div>
       )}
       </div>
       {showPrintModal && (

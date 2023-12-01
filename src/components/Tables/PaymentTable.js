@@ -80,6 +80,7 @@ const PaymentTable = ({ paymentData, onViewChecks, onSearch, Filters,getData,set
           <tr>
             <th className="px-2 py-2">Identifiant</th>
             <th className="py-2">Nom de Fournisseur</th>
+            <th className="py-2">Numero de facture</th>
             <th className="py-2">Montant Total</th>
             <th className="py-2">Nombre d'échéances</th>
             <th className="py-2">Créé le</th>
@@ -92,6 +93,7 @@ const PaymentTable = ({ paymentData, onViewChecks, onSearch, Filters,getData,set
               <tr className={`bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600`} style={{ backgroundColor: item.is_payment === 1 ? 'rgb(252, 102, 129, 0.4)' : '',color: item.is_payment === 1 ? 'black' : '' }}>
                 <td className="px-2 py-4">#{item?.num}</td>
                 <td>{item?.checks[0]?.fournisseur?.nom}</td>
+                <td>{item?.numero_de_facture || '--'}</td>
                 <td className="px-6 py-4">{formatNumberWithSpaces(item?.montantTotal)} dt</td>
                 <td className="px-6 py-4">
                   <div
