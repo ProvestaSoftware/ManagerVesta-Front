@@ -5,6 +5,7 @@ export const payment = {
   viewChecks,
   filterPayments, 
   destroyPayment, 
+  updateNumFac
 
 }
 
@@ -47,7 +48,19 @@ async function destroyPayment(paymentId) {
   const deleteUrl = `${ApiConfigs.base_url}${ApiConfigs.payment.destroyPayment.replace('{payment}', paymentId)}`;
   return await fetch(deleteUrl, requestOptions).then(handleResponse);
 }
+async function updateNumFac(paymentId, newNumeroDeFacture) {
+  const requestOptions = {
+    method: 'PUT',
+    headers: {
+      ...authHeader(),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ numero_de_facture: newNumeroDeFacture }),
+  };
+  const putUrl = `${ApiConfigs.base_url}${ApiConfigs.payment.updateNumFac.replace('{id}', paymentId)}`;
 
+  return await fetch(putUrl, requestOptions).then(handleResponse);
+}
 async function handleResponse(response) {
   return response.text().then(text => {
     text = text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1);
