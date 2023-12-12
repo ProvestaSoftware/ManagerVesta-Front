@@ -10,7 +10,11 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
   console.log('settingimprimante',settingimprimante)
    
   function numberToWordsFR(num) {
-    // num = num.toString().replace(',', '.');
+    num = num.toString().replace(/\s/g, '');
+    num = num.toString().replace(' ', '');
+    num = num.toString().replace(',', '.');
+
+    num = Number(num);
 
     function convert(num) {
       if (isNaN(num) || num < 0 || num > 999999999999) {
@@ -322,10 +326,10 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
                             }#
                           </span>
                           <span className="check_data montant_ecrit montant_ecrit_line1" id={`montant_ecrit_line1-${index}`} style={{left: 'calc(50% + 30px)', top: '65px', textWrap: 'nowrap'}}>
-                            {`${numberToWordsFR(check?.montant || 0)}`.split(' ', 4).join(' ')}
+                            {`${numberToWordsFR((check?.montant || 0).toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).toString().replace(',', '.').replace(/\B(?=(\d{3})+(?!\d))/g,' '))}`.split(' ', 4).join(' ')}
                           </span>
                           <span className="check_data montant_ecrit montant_ecrit_line2" id={`montant_ecrit_line2-${index}`} style={{left: 'calc(50% + 30px)', top: '90px'}}>
-                            {`${numberToWordsFR(check?.montant || 0)}`.split(' ').slice(4).join(' ')}
+                            {`${numberToWordsFR((check?.montant || 0).toLocaleString('fr-FR', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).toString().replace(',', '.').replace(/\B(?=(\d{3})+(?!\d))/g,' '))}`.split(' ').slice(4).join(' ')}
                           </span>
                           <span className="check_data montant_to" id={`montant_to-${index}`} style={{left: '110px', top: '120px'}}>
                             {fournisseurNom || '----------------------------------------------------'}
