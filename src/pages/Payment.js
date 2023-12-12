@@ -93,24 +93,24 @@ const getData = () => {
     Nom_de: '',
     Nom_a: '',
   });
+  const [filtrage, setFiltrage] = useState(null);
+
   const handleFiltersChange = (prop, value) => {
     setFilters({ ...Filters, [prop]: value });
   };
-  const [filtrage, setFiltrage] = useState(null);
-  
+
   const handleFilterSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
       const filteredData = await payment.filterPayments(Filters);
-        setFiltrage(filteredData.payment);
+      setFiltrage(filteredData.payment);
     } catch (error) {
       console.error('Error filtering payments:', error);
     } finally {
       setLoading(false);
     }
   };
-
   const [settings, setSettings] = useState(null);
   const getCurrentCheckNumber = async () => {
     try {

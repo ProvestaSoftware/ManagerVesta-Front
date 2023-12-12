@@ -34,6 +34,7 @@ export const ApiConfigs = {
     viewChecks: 'payment/{payment}/view-checks',
     filterPayments: 'payment/payments/filter/filter_data',
     destroyPayment: 'payment/payment/{payment}',
+    updateNumFac : 'payment/paiement/{id}/update-numero-de-facture'
   },
   imprimante: {
     index: 'imprimante/',

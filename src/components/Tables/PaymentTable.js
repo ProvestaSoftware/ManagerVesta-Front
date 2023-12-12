@@ -1,12 +1,14 @@
 import React from 'react';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faRecycle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faRecycle, faTrash,faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import ConfirmModal from '../Modals/ConfirmModal';
 import { payment } from '../../_services/payment';
+import ClientModal from '../Modals/ClientModal';
+import NumFactModal from '../Modals/NumFactModal';
 
-const PaymentTable = ({ paymentData, onViewChecks, onSearch, Filters,getData,settingimprimante }) => {
+const PaymentTable = ({ paymentData, onViewChecks, onSerach, Filters,getData }) => {
   const [confirm, setConfirm] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
 
@@ -29,7 +31,19 @@ const PaymentTable = ({ paymentData, onViewChecks, onSearch, Filters,getData,set
   const formatNumberWithSpaces = (number) => {
     return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   };
-
+  const [modal, setModal] = useState(false);
+  const [numFactModalData, setNumFactModalData] = useState({
+    paymentId: null,
+    numFacture: null
+  });
+  const handleModal = (paymentId, numFacture) => {
+    setModal(!modal);
+    setNumFactModalData({
+      paymentId: paymentId,
+      numFacture: numFacture
+    });
+  };
+  
   return (
     <div
       style={{
@@ -70,7 +84,7 @@ const PaymentTable = ({ paymentData, onViewChecks, onSearch, Filters,getData,set
             id="table-search-users"
             className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Recherche..."
-            onChange={onSearch}
+            onChange={onSerach}
             value={Filters?.keyword}
           />
         </div>
@@ -120,6 +134,7 @@ const PaymentTable = ({ paymentData, onViewChecks, onSearch, Filters,getData,set
                   >
                     <FontAwesomeIcon icon={faEye} />
                   </button>
+                  <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline btn_edit" onClick={() => handleModal(item.id, item.numero_de_facture)}><FontAwesomeIcon icon={faEdit} /></button>
                   {item?.is_payment === 1 ? (
                     <button
                       className="font-medium text-green-600 dark:text-green-500 hover:text-green-700 hover:underline btn_recover btn_record"
@@ -136,7 +151,6 @@ const PaymentTable = ({ paymentData, onViewChecks, onSearch, Filters,getData,set
                     </button>
                   )}
                 </td>
-       
               </tr>
             ))
           ) : (
@@ -151,7 +165,10 @@ const PaymentTable = ({ paymentData, onViewChecks, onSearch, Filters,getData,set
                       handleDelete={handleDeletePayment}
                       is_deleted={selectedPayment?.is_payment}
                     />
-                  )}  
+                  )} 
+
+        {modal && <NumFactModal item={paymentData} handleModal={handleModal} getData={getData} paymentId={numFactModalData.paymentId} numFacture={numFactModalData.numFacture} />}
+
     </div>
   );
 };
