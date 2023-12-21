@@ -21,6 +21,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import Charts from './pages/Charts';
 import Payment from './pages/Payment';
 
+import './moment.config';
+
 function App() {
 
     const allChecks = useSelector((state) => state.checks);

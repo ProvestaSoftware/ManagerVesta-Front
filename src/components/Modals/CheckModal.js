@@ -13,12 +13,8 @@ const CheckModal = ({ item, handleModal }) => {
         num: item ? item.num : '',
         status: item ? item.status : '',
     });
-
-console.log('itemitemitemitem',item)
     
     const dispatch = useDispatch();
-
-
 
     useEffect(() => {
         if (item) setCheckData(item);
@@ -52,7 +48,7 @@ console.log('itemitemitemitem',item)
                     <form onSubmit={handleSubmit} class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                         <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
                             <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                Cheque #{item.num}
+                                Modifier #{item.num}
                             </h3>
                             <button onClick={handleModal} type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="editUserModal">
                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -65,8 +61,8 @@ console.log('itemitemitemitem',item)
                             <div class="grid grid-cols-6 gap-6">
                                 <div class="col-span-6 sm:col-span-3">
                                     <Input
-                                        label="Numéro de chéque"
-                                        placeholder="Numéro de chéque"
+                                        label="Numéro"
+                                        placeholder="Numéro"
                                         defaultValue={item.num}
                                         type="text"
                                         form={true}
@@ -77,14 +73,41 @@ console.log('itemitemitemitem',item)
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <Select
-                                        label="Etat du chéque"
-                                        title="Etat du chéque"
+                                        label="Etat "
+                                        title="Etat "
                                         defaultValue={item.status}
                                         defaultChecked={item.status}
                                         options={dropdownCheckStatusData}
                                         form={true}
                                         onChange={(e) =>
                                             setCheckData({ ...checkData, status: e.target.value })
+                                        }
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-6 gap-6">
+                                <div class="col-span-6 sm:col-span-3">
+                                    <Input
+                                        label="Montant"
+                                        placeholder="Montant"
+                                        defaultValue={item.montant}
+                                        type="text"
+                                        form={true}
+                                        onChange={(e) =>
+                                            setCheckData({ ...checkData, montant: e.target.value })
+                                        }
+                                    />
+                                </div>
+                                <div class="col-span-6 sm:col-span-3">
+                                <Input
+                                        label="Date d'écheance"
+                                        placeholder="Date d'écheance"
+                                        defaultValue={item.dueDate}
+                                        type="date"
+                                        form={true}
+                                        onChange={(e) =>
+                                            setCheckData({ ...checkData, dueDate: e.target.value })
                                         }
                                     />
                                 </div>
