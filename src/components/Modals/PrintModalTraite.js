@@ -262,10 +262,9 @@ const PrintModal = ({
       const divToPrint = document.getElementById(`print-${index}`);
 
       if (divToPrint) {
-        printContents += divToPrint.innerHTML;
-        printContents += "</div>";
-        printContents="<div class='h-[50vh]'>"+printContents+"</div>"
+        printContents += "<div class='h-[50vh]'>" + divToPrint.innerHTML + "</div>";
       }
+      
     });
 
     const originalContents = document.body.innerHTML;
