@@ -13,192 +13,187 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
     num = num.toString().replace(/\s/g, '');
     num = num.toString().replace(' ', '');
     num = num.toString().replace(',', '.');
-
+  
     num = Number(num);
-
+  
     function convert(num) {
       if (isNaN(num) || num < 0 || num > 999999999999) {
           return "------------";
       }
-
+  
       let result = "";
-
-      // handle millions
+  
+      // Handle millions
       if (num >= 1000000000) {
         result += convert(Math.floor(num / 1000000000)) + " milliard ";
         num %= 1000000000;
-    }
-
-      // handle millions
+      }
+  
+      // Handle millions
       if (num >= 1000000) {
-          result += convert(Math.floor(num / 1000000)) + " million ";
-          num %= 1000000;
+        result += convert(Math.floor(num / 1000000)) + " million ";
+        num %= 1000000;
       }
-
-      // handle thousands
+  
+      // Handle thousands
       if (num >= 1000) {
-          result += convert(Math.floor(num / 1000)) + " mille ";
-          num %= 1000;
+        result += convert(Math.floor(num / 1000)) + " mille ";
+        num %= 1000;
       }
-
-      // handle hundreds
+  
+      // Handle hundreds
       if (num >= 100) {
-          result += convert(Math.floor(num / 100)) + " cent ";
-          num %= 100;
+        result += convert(Math.floor(num / 100)) + " cent ";
+        num %= 100;
       }
-
-      // handle tens and units
+  
+      // Handle tens and units
       if (num >= 20) {
-          var is_90_or_70 = false;
-          switch (Math.floor(num / 10)) {
-              case 9:
-                  result += "quatre-vingt";
-                  is_90_or_70 = true;
-                  break;
-              case 8:
-                  result += "quatre-vingt";
-                  break;
-              case 7:
-                  result += "soixante";
-                  is_90_or_70 = true;
-                  break;
-              case 6:
-                  result += "soixante";
-                  break;
-              case 5:
-                  result += "cinquante";
-                  break;
-              case 4:
-                  result += "quarante";
-                  break;
-              case 3:
-                  result += "trente";
-                  break;
-              case 2:
-                  result += "vingt";
-                  break;
-              default:
-                  result += "";
-          }
-
-          if (num % 10 !== 0) {
-              result += "-";
-          }
-
-          switch (num % 10) {
-              case 9:
-                  result += is_90_or_70 ? "dix-neuf" : "neuf";
-                  break;
-              case 8:
-                  result += is_90_or_70 ? "dix-huit" : "huit";
-                  break;
-              case 7:
-                  result += is_90_or_70 ? "dix-sept" : "sept";
-                  break;
-              case 6:
-                  result += is_90_or_70 ? "seize" : "six";
-                  break;
-              case 5:
-                  result += is_90_or_70 ? "quinze" : "cinq";
-                  break;
-              case 4:
-                  result += is_90_or_70 ? "quatorze" : "quatre";
-                  break;
-              case 3:
-                  result += is_90_or_70 ? "treize" : "trois";
-                  break;
-              case 2:
-                  result += is_90_or_70 ? "douze" : "deux";
-                  break;
-              case 1:
-                  result += is_90_or_70 ? "onze" : "un";
-                  break;
-              default:
-                  result += "";
-          }
+        var is_90_or_70 = false;
+        switch (Math.floor(num / 10)) {
+          case 9:
+            result += "quatre-vingt";
+            is_90_or_70 = true;
+            break;
+          case 8:
+            result += "quatre-vingt";
+            break;
+          case 7:
+            result += "soixante";
+            is_90_or_70 = true;
+            break;
+          case 6:
+            result += "soixante";
+            break;
+          case 5:
+            result += "cinquante";
+            break;
+          case 4:
+            result += "quarante";
+            break;
+          case 3:
+            result += "trente";
+            break;
+          case 2:
+            result += "vingt";
+            break;
+        }
+  
+        if (num % 10 !== 0 || is_90_or_70) {
+          result += "-dix";
+        }
+  
+        switch (num % 10) {
+          case 9:
+            result += is_90_or_70 ? "dix-neuf" : "neuf";
+            break;
+          case 8:
+            result += is_90_or_70 ? "dix-huit" : "huit";
+            break;
+          case 7:
+            result += is_90_or_70 ? "dix-sept" : "sept";
+            break;
+          case 6:
+            result += is_90_or_70 ? "seize" : "six";
+            break;
+          case 5:
+            result += is_90_or_70 ? "quinze" : "cinq";
+            break;
+          case 4:
+            result += is_90_or_70 ? "quatorze" : "quatre";
+            break;
+          case 3:
+            result += is_90_or_70 ? "treize" : "trois";
+            break;
+          case 2:
+            result += is_90_or_70 ? "douze" : "deux";
+            break;
+          case 1:
+            result += is_90_or_70 ? "onze" : "un";
+            break;
+        }
       } else {
-          switch (num) {
-              case 19:
-                  result += "dix-neuf";
-                  break;
-              case 18:
-                  result += "dix-huit";
-                  break;
-              case 17:
-                  result += "dix-sept";
-                  break;
-              case 16:
-                  result += "seize";
-                  break;
-              case 15:
-                  result += "quinze";
-                  break;
-              case 14:
-                  result += "quatorze";
-                  break;
-              case 13:
-                  result += "treize";
-                  break;
-              case 12:
-                  result += "douze";
-                  break;
-              case 11:
-                  result += "onze";
-                  break;
-              case 10:
-                  result += "dix";
-                  break;
-              case 9:
-                  result += "neuf";
-                  break;
-              case 8:
-                  result += "huit";
-                  break;
-              case 7:
-                  result += "sept";
-                  break;
-              case 6:
-                  result += "six";
-                  break;
-              case 5:
-                  result += "cinq";
-                  break;
-              case 4:
-                  result += "quatre";
-                  break;
-              case 3:
-                  result += "trois";
-                  break;
-              case 2:
-                  result += "deux";
-                  break;
-              case 1:
-                  result += "un";
-                  break;
-              default:
-                  result += "";
-          }
+        switch (num) {
+          case 19:
+            result += "dix-neuf";
+            break;
+          case 18:
+            result += "dix-huit";
+            break;
+          case 17:
+            result += "dix-sept";
+            break;
+          case 16:
+            result += "seize";
+            break;
+          case 15:
+            result += "quinze";
+            break;
+          case 14:
+            result += "quatorze";
+            break;
+          case 13:
+            result += "treize";
+            break;
+          case 12:
+            result += "douze";
+            break;
+          case 11:
+            result += "onze";
+            break;
+          case 10:
+            result += "dix";
+            break;
+          case 9:
+            result += "neuf";
+            break;
+          case 8:
+            result += "huit";
+            break;
+          case 7:
+            result += "sept";
+            break;
+          case 6:
+            result += "six";
+            break;
+          case 5:
+            result += "cinq";
+            break;
+          case 4:
+            result += "quatre";
+            break;
+          case 3:
+            result += "trois";
+            break;
+          case 2:
+            result += "deux";
+            break;
+          case 1:
+            result += "un";
+            break;
+        }
       }
-
+  
       return result;
     }
-
+  
     let dinars = Math.floor(Number(num));
     let millimes = Math.round(Number(num - dinars) * 1000);
-
+  
     let dinarsText = convert(dinars);
     let millimesText = convert(millimes);
-
+  
     if (dinarsText && millimesText) {
-        return dinarsText + " dinars et " + millimesText + " millimes";
+      return dinarsText + " dinars et " + millimesText + " millimes";
     } else if (dinarsText) {
-        return dinarsText + " dinars";
+      return dinarsText + " dinars";
     } else if (millimesText) {
-        return millimesText + " millimes";
+      return millimesText + " millimes";
     } else {
-        return "zéro";
+      return "zéro";
     }
   }
+  
 
   React.useEffect(() => {
     const date = new Date();
