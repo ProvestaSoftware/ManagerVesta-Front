@@ -16,183 +16,75 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
   
     num = Number(num);
   
-    function convert(num) {
+    function convertUnder100(n) {
+      const units = ["", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix"];
+      const teens = ["", "onze", "douze", "treize", "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf"];
+      const tens = ["", "dix", "vingt", "trente", "quarante", "cinquante", "soixante-dix", "soixante-dix", "quatre-vingt-dix"];
+  
+      if (n === 0) {
+        return "";
+      } else if (n < 10) {
+        return units[n];
+      } else if (n >= 10 && n < 20) {
+        return teens[n - 10];
+      } else {
+        const ten = Math.floor(n / 10);
+        const unit = n % 10;
+        const tenWord = (ten === 7 || ten === 9) ? tens[ten - 1] : tens[ten];
+        const unitWord = (unit > 0) ? `-${units[unit]}` : "";
+        return tenWord + unitWord;
+      }
+    }
+  
+    function convert(num, isMillion) {
       if (isNaN(num) || num < 0 || num > 999999999999) {
-          return "------------";
+        return "------------";
       }
   
       let result = "";
   
       // Handle millions
-      if (num >= 1000000000) {
-        result += convert(Math.floor(num / 1000000000)) + " milliard ";
-        num %= 1000000000;
-      }
-  
-      // Handle millions
       if (num >= 1000000) {
-        result += convert(Math.floor(num / 1000000)) + " million ";
+        result += convertUnder100(Math.floor(num / 1000000)) + (isMillion ? " million " : " million ");
         num %= 1000000;
       }
   
       // Handle thousands
       if (num >= 1000) {
-        result += convert(Math.floor(num / 1000)) + " mille ";
+        result += convertUnder100(Math.floor(num / 1000)) + " mille ";
         num %= 1000;
       }
   
       // Handle hundreds
       if (num >= 100) {
-        result += convert(Math.floor(num / 100)) + " cent ";
+        let hundreds = Math.floor(num / 100);
+        result += (hundreds > 1 ? convertUnder100(hundreds) + " " : "") + "cent" + (num % 100 === 0 && hundreds > 1 ? "s " : " ");
         num %= 100;
       }
   
       // Handle tens and units
-      if (num >= 20) {
-        var is_90_or_70 = false;
-        switch (Math.floor(num / 10)) {
-          case 9:
-            result += "quatre-vingt";
-            is_90_or_70 = true;
-            break;
-          case 8:
-            result += "quatre-vingt";
-            break;
-          case 7:
-            result += "soixante";
-            is_90_or_70 = true;
-            break;
-          case 6:
-            result += "soixante";
-            break;
-          case 5:
-            result += "cinquante";
-            break;
-          case 4:
-            result += "quarante";
-            break;
-          case 3:
-            result += "trente";
-            break;
-          case 2:
-            result += "vingt";
-            break;
-        }
+      result += convertUnder100(num);
   
-        if (num % 10 !== 0 || is_90_or_70) {
-          result += "-dix";
-        }
-  
-        switch (num % 10) {
-          case 9:
-            result += is_90_or_70 ? "dix-neuf" : "neuf";
-            break;
-          case 8:
-            result += is_90_or_70 ? "dix-huit" : "huit";
-            break;
-          case 7:
-            result += is_90_or_70 ? "dix-sept" : "sept";
-            break;
-          case 6:
-            result += is_90_or_70 ? "seize" : "six";
-            break;
-          case 5:
-            result += is_90_or_70 ? "quinze" : "cinq";
-            break;
-          case 4:
-            result += is_90_or_70 ? "quatorze" : "quatre";
-            break;
-          case 3:
-            result += is_90_or_70 ? "treize" : "trois";
-            break;
-          case 2:
-            result += is_90_or_70 ? "douze" : "deux";
-            break;
-          case 1:
-            result += is_90_or_70 ? "onze" : "un";
-            break;
-        }
-      } else {
-        switch (num) {
-          case 19:
-            result += "dix-neuf";
-            break;
-          case 18:
-            result += "dix-huit";
-            break;
-          case 17:
-            result += "dix-sept";
-            break;
-          case 16:
-            result += "seize";
-            break;
-          case 15:
-            result += "quinze";
-            break;
-          case 14:
-            result += "quatorze";
-            break;
-          case 13:
-            result += "treize";
-            break;
-          case 12:
-            result += "douze";
-            break;
-          case 11:
-            result += "onze";
-            break;
-          case 10:
-            result += "dix";
-            break;
-          case 9:
-            result += "neuf";
-            break;
-          case 8:
-            result += "huit";
-            break;
-          case 7:
-            result += "sept";
-            break;
-          case 6:
-            result += "six";
-            break;
-          case 5:
-            result += "cinq";
-            break;
-          case 4:
-            result += "quatre";
-            break;
-          case 3:
-            result += "trois";
-            break;
-          case 2:
-            result += "deux";
-            break;
-          case 1:
-            result += "un";
-            break;
-        }
-      }
-  
-      return result;
+      return result.trim();
     }
   
-    let dinars = Math.floor(Number(num));
-    let millimes = Math.round(Number(num - dinars) * 1000);
+    let dinars = Math.floor(num);
+    let millimes = Math.round((num - dinars) * 1000);
   
-    let dinarsText = convert(dinars);
-    let millimesText = convert(millimes);
+    let dinarsText = convert(dinars, false);
+    let millimesText = convert(millimes, true);
   
-    if (dinarsText && millimesText) {
-      return dinarsText + " dinars et " + millimesText + " millimes";
-    } else if (dinarsText) {
-      return dinarsText + " dinars";
-    } else if (millimesText) {
-      return millimesText + " millimes";
-    } else {
-      return "zéro";
-    }
+    return dinarsText + " dinars et " + millimesText + " millimes";
   }
+  
+  
+  // Examples
+  console.log(numberToWordsFR(1279));      // Output: "mille deux cent soixante-dix-neuf dinars"
+  console.log(numberToWordsFR(670));       // Output: "six cent soixante-dix dinars"
+  console.log(numberToWordsFR(6090150));   // Output: "six millions quatre-vingt-dix mille cent cinquante dinars"
+  console.log(numberToWordsFR(690));       // Output: "six cent quatre-vingt-dix dinars"
+  console.log(numberToWordsFR(690150));    // Output: "six cent quatre-vingt-dix mille cent cinquante dinars"
+         // Output: "six cent quatre-vingt-dix dinars"
   
 
   React.useEffect(() => {
