@@ -113,6 +113,9 @@ const PrintModal = ({ item, handleModal, fournisseurs, settings,showBottom,setti
               case 1:
                   result += is_90_or_70 ? "onze" : "un";
                   break;
+              case 0:
+                result += is_90_or_70 ? "-dix" : "";
+                break;
               default:
                   result += "";
           }
